@@ -780,6 +780,18 @@ dialog.lightbox::backdrop { background: rgba(10, 14, 20, 0.78); }
   padding-left: 16px; border-left: 3px solid var(--accent);
 }
 .epigraph cite { display: block; font: 500 0.72rem/var(--u) var(--f-mono); font-style: normal; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-3); }
+/* floating character decoration (decorative, never affects layout) */
+.page-head .wrap { position: relative; }
+.deco {
+  position: absolute; right: 8px; top: 8px; z-index: 1; width: 84px; pointer-events: none; user-select: none; rotate: 6deg;
+  animation: deco-in 0.7s cubic-bezier(.2,.9,.3,1) 0.5s both, deco-float 6s ease-in-out 1.3s infinite alternate;
+}
+.deco img { display: block; width: 100%; height: auto; filter: drop-shadow(0 5px 0 color-mix(in srgb, var(--ink) 12%, transparent)); }
+@media (min-width: 768px) { .deco { width: 150px; top: 16px; right: 12px; } }
+@media (min-width: 1180px) { .deco { width: 232px; top: 4px; right: 8px; } }
+@keyframes deco-in { from { opacity: 0; scale: 0.7; } }
+@keyframes deco-float { from { translate: 0 0; } to { translate: 0 -9px; } }
+@media (prefers-reduced-motion: reduce) { .deco { animation: none; } }
 .p-lede { font-size: clamp(1.1rem, 1rem + 0.5vw, 1.3rem); line-height: var(--u); max-width: 40em; color: var(--ink-2); }
 
 /* ---------- Project layout ---------- */
