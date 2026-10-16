@@ -365,8 +365,12 @@
   /* ---------- Project tag stamps ---------- */
   /* The tags in a project's header stamp down once, in order, the first time they scroll into view. */
   function initStamps(scope) {
-    var els = $$('.hero-card .tag', scope).filter(function (el) { return !el.__st; });
-    els.forEach(function (el, i) { el.__st = true; el.style.setProperty('--stamp-delay', (0.25 + i * 0.14) + 's'); });
+    var els = $$('.hero-card .tag, .work .tags .tag', scope).filter(function (el) { return !el.__st; });
+    els.forEach(function (el) {
+      el.__st = true;
+      var i = Array.prototype.indexOf.call(el.parentNode.children, el);
+      el.style.setProperty('--stamp-delay', (0.25 + i * 0.14) + 's');
+    });
     if (reduce || !hasIO) { els.forEach(function (el) { el.classList.add('in'); }); return; }
     var io = new IntersectionObserver(function (entries) {
       entries.forEach(function (e) {
