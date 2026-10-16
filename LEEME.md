@@ -44,7 +44,7 @@ La última columna apunta a la imagen original que tenés en el Wix, para que la
 | `santi-portrait.jpg` | index.html | 1000 × 1250 px | Your portrait, 4:5, at least 900 px wide | [original en Wix](https://static.wixstatic.com/media/fda098_02693df8adea4f3392c3dda167fa219a~mv2.jpg) |
 | `forgotten-runiverse-cover.jpg` | index.html | 1600 × 1000 px | Key art or in-game shot of Forgotten Runiverse | [original en Wix](https://static.wixstatic.com/media/fda098_f99a0c4b857b461b938f267a9138c66b~mv2.png) |
 | `civ-royale-cover.jpg` | index.html | 1600 × 1000 px | Key art or in-game shot of Civ Royale | [original en Wix](https://static.wixstatic.com/media/fda098_e6fd2756482a4f7c8a422efb619a9fd2~mv2.jpg) |
-| `frozen-adventures-cover.jpg` | index.html | 1600 × 1000 px | Own material or approved screens only (avoid Disney key art) | — |
+| `frozen-adventures-cover.jpg` | index.html | 1600 × 1000 px | Cover image | — |
 | `prototype-1.jpg` | index.html | 1600 × 1000 px | GIF or screenshot of the prototype | — |
 | `santi-about.jpg` | about.html | 1000 × 1250 px | A second portrait, 4:5, at least 900 px wide | [original en Wix](https://static.wixstatic.com/media/fda098_ddf9bfef14fc437fab445f1e77355328~mv2.jpg) |
 | `civ-royale-1.jpg` | civ-royale.html | 1600 × 900 px | Screenshot 1 of 6 | [original en Wix](https://static.wixstatic.com/media/fda098_f75f6658f712443eaedf3d44fa74e328~mv2.png) |
