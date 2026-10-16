@@ -241,36 +241,6 @@ mark {
   color: var(--ink-2);
   white-space: nowrap;
 }
-/* Status tag as a rubber stamp: blue ink, double rule, a few degrees off-square, with a worn
-   speckle eaten out of the ink (alpha mask from SVG noise). main.js adds .in the first time it
-   scrolls into view and it stamps down once. Height stays 24px + 2px margins = one 28px cell,
-   so the tag row keeps its rhythm; the rotation is a transform and never changes layout. */
-.tag--status {
-  --rot: -3.5deg;
-  --stamp-delay: 0.3s;
-  height: 24px; margin-block: 2px; padding: 0 0.7em;
-  font-weight: 700; letter-spacing: 0.12em;
-  color: var(--accent);
-  background: transparent;
-  border: 4px double currentColor;
-  border-radius: 3px 5px 3px 6px / 5px 3px 6px 3px;
-  transform: rotate(var(--rot));
-  -webkit-mask-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='64'><filter id='w' x='0' y='0' width='100%' height='100%'><feTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='2' seed='7' stitchTiles='stitch'/><feColorMatrix type='matrix' values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 -9 6.4'/></filter><rect width='100%' height='100%' filter='url(%23w)'/></svg>");
-  mask-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='64'><filter id='w' x='0' y='0' width='100%' height='100%'><feTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='2' seed='7' stitchTiles='stitch'/><feColorMatrix type='matrix' values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 -9 6.4'/></filter><rect width='100%' height='100%' filter='url(%23w)'/></svg>");
-  -webkit-mask-size: 160px 64px; mask-size: 160px 64px;
-}
-.tag--status.chip { background: color-mix(in srgb, var(--card) 88%, transparent); --stamp-delay: 0.55s; }
-.work:nth-child(2) .tag--status.chip { --rot: 2.5deg; }
-.work:nth-child(3) .tag--status.chip { --rot: -2deg; }
-
-.js .tag--status:not(.in) { opacity: 0; }
-.js .tag--status.in { animation: stamp-in 0.5s cubic-bezier(0.2, 0.9, 0.3, 1) var(--stamp-delay) both; }
-@keyframes stamp-in {
-  0%   { opacity: 0; transform: rotate(calc(var(--rot) - 9deg)) scale(1.9); }
-  55%  { opacity: 1; transform: rotate(var(--rot)) scale(0.92); }
-  75%  { opacity: 1; transform: rotate(var(--rot)) scale(1.04); }
-  100% { opacity: 1; transform: rotate(var(--rot)) scale(1); }
-}
 
 .todo {
   display: inline-block;
@@ -518,7 +488,6 @@ dialog.lightbox::backdrop { background: rgba(10, 14, 20, 0.78); }
 }
 .work:hover { transform: translate(-2px, -2px); box-shadow: 9px 9px 0 var(--action-soft); }
 .work-media { position: relative; }
-.work-media .chip { position: absolute; left: 10px; top: 10px; z-index: 2; margin: 0; }
 .work-body { display: flex; flex-direction: column; gap: 12px; align-items: flex-start; }
 .meta { font: 500 0.74rem/1.4 var(--f-mono); letter-spacing: 0.05em; text-transform: uppercase; color: var(--ink-3); margin: 0; }
 .work h3 a { color: var(--ink); text-decoration: none; }
@@ -535,7 +504,7 @@ dialog.lightbox::backdrop { background: rgba(10, 14, 20, 0.78); }
    card's own 1.5px top border under it. On a real pointer, hovering (or focusing inside) a card slides
    its cover up out of its slot, past the top edge, like a document pulled half out of the folder; the
    slot it left stays behind as a dashed outline. The lift uses the separate `translate` and `rotate`
-   properties, so it never fights the stamp's `transform` animation on the chip. */
+   properties, so it never fights other `transform` effects. */
 .work-list { counter-reset: folder; }
 .work::before {
   counter-increment: folder; content: "0" counter(folder);
@@ -549,12 +518,11 @@ dialog.lightbox::backdrop { background: rgba(10, 14, 20, 0.78); }
   content: ""; position: absolute; inset: 0; z-index: -1;
   border: 1.5px dashed var(--line); border-radius: 4px; opacity: 0; transition: opacity 0.25s ease;
 }
-.work-media .shot, .work-media .chip { transition: translate 0.4s cubic-bezier(0.2, 0.8, 0.2, 1), rotate 0.4s cubic-bezier(0.2, 0.8, 0.2, 1); }
+.work-media .shot { transition: translate 0.4s cubic-bezier(0.2, 0.8, 0.2, 1), rotate 0.4s cubic-bezier(0.2, 0.8, 0.2, 1); }
 .work-media .shot-frame { transition: box-shadow 0.4s ease; }
 @media (hover: hover) and (pointer: fine) {
   .work:hover .work-media::before, .work:focus-within .work-media::before { opacity: 1; }
   .work:hover .work-media .shot, .work:focus-within .work-media .shot { translate: 0 -30px; rotate: -1.2deg; }
-  .work:hover .work-media .chip, .work:focus-within .work-media .chip { translate: 0 -30px; }
   .work:hover .work-media .shot-frame, .work:focus-within .work-media .shot-frame { box-shadow: 0 14px 16px -10px rgba(23, 33, 43, 0.5); }
 }
 
@@ -1028,7 +996,7 @@ body::before {
   .btn:hover, .work:hover, .vid:hover { transform: none; }
   .quote:nth-child(odd), .quote:nth-child(even) { transform: none; }
   .polaroid:hover, .polaroid:hover::before { transform: none; }
-  .work:hover .work-media .shot, .work:focus-within .work-media .shot, .work:hover .work-media .chip, .work:focus-within .work-media .chip { translate: none; rotate: none; }
+  .work:hover .work-media .shot, .work:focus-within .work-media .shot { translate: none; rotate: none; }
   ::view-transition-group(*), ::view-transition-old(*), ::view-transition-new(*) { animation: none !important; }
 }
 
