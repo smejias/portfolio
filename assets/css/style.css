@@ -242,6 +242,32 @@ mark {
   white-space: nowrap;
 }
 
+/* Project tags as rubber stamps: three inks, double rule, a few degrees off-square, with a worn speckle eaten out of the ink
+   (alpha mask from SVG noise). main.js adds .in as each one scrolls into view and it stamps down once, staggered. Height stays
+   24px + 2px margins = one 28px cell, so the row keeps its rhythm; the rotation is a transform and never changes layout. */
+.hero-card .tags { gap: 0 12px; }
+.hero-card .tag {
+  --rot: -3deg; --ink-c: var(--accent); --stamp-delay: 0.3s;
+  height: 24px; margin-block: 2px; padding: 0 0.7em; font-weight: 700; letter-spacing: 0.12em;
+  color: var(--ink-c); background: transparent; border: 4px double currentColor; border-radius: 3px 5px 3px 6px / 5px 3px 6px 3px;
+  transform: rotate(var(--rot));
+  -webkit-mask-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='64'><filter id='w' x='0' y='0' width='100%' height='100%'><feTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='2' seed='7' stitchTiles='stitch'/><feColorMatrix type='matrix' values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 -9 6.4'/></filter><rect width='100%' height='100%' filter='url(%23w)'/></svg>");
+  mask-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='64'><filter id='w' x='0' y='0' width='100%' height='100%'><feTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='2' seed='7' stitchTiles='stitch'/><feColorMatrix type='matrix' values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 -9 6.4'/></filter><rect width='100%' height='100%' filter='url(%23w)'/></svg>");
+  -webkit-mask-size: 160px 64px; mask-size: 160px 64px;
+}
+.hero-card .tag:nth-child(4n+1) { --ink-c: var(--ok); --rot: -3.5deg; }
+.hero-card .tag:nth-child(4n+2) { --ink-c: var(--accent); --rot: 2deg; }
+.hero-card .tag:nth-child(4n+3) { --ink-c: var(--action); --rot: -2deg; }
+.hero-card .tag:nth-child(4n+4) { --ink-c: var(--accent); --rot: 3deg; }
+.js .hero-card .tag:not(.in) { opacity: 0; }
+.js .hero-card .tag.in { animation: stamp-in 0.5s cubic-bezier(0.2, 0.9, 0.3, 1) var(--stamp-delay) both; }
+@keyframes stamp-in {
+  0%   { opacity: 0; transform: rotate(calc(var(--rot) - 9deg)) scale(1.9); }
+  55%  { opacity: 1; transform: rotate(var(--rot)) scale(0.92); }
+  75%  { opacity: 1; transform: rotate(var(--rot)) scale(1.04); }
+  100% { opacity: 1; transform: rotate(var(--rot)) scale(1); }
+}
+
 .todo {
   display: inline-block;
   font: 500 0.72rem/1.5 var(--f-mono);
@@ -721,27 +747,6 @@ dialog.lightbox::backdrop { background: rgba(10, 14, 20, 0.78); }
   padding-left: 16px; border-left: 3px solid var(--accent);
 }
 .epigraph cite { display: block; font: 500 0.72rem/var(--u) var(--f-mono); font-style: normal; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-3); }
-/* key art as a faded backdrop behind the page header (set --banner inline on the section; the url is relative to this stylesheet) */
-.page-head--banner { position: relative; overflow: hidden; isolation: isolate; padding-bottom: calc(var(--u) * 8); }
-.page-head--banner::before {
-  content: ""; position: absolute; z-index: -1; pointer-events: none;
-  background: var(--banner) 50% 40% / cover no-repeat; opacity: 0.85;
-  inset: auto 0 0 0; height: calc(var(--u) * 8);
-  -webkit-mask-image: linear-gradient(180deg, transparent, #000 45%); mask-image: linear-gradient(180deg, transparent, #000 45%);
-}
-@media (min-width: 900px) {
-  .page-head--banner::before {
-    inset: 0 0 0 var(--banner-inset, 42%); height: auto; background-position: var(--banner-pos, 68% 30%); background-size: var(--banner-size, cover); opacity: 0.62;
-    -webkit-mask-image: linear-gradient(90deg, transparent, #000 55%), linear-gradient(0deg, transparent, #000 20%);
-    -webkit-mask-composite: source-in; mask-image: linear-gradient(90deg, transparent, #000 55%), linear-gradient(0deg, transparent, #000 20%); mask-composite: intersect;
-  }
-  .page-head--banner { padding-bottom: calc(var(--u) * 2); }
-  .page-head--banner .p-lede { max-width: 31em; }
-}
-.page-head--banner .deco { display: none; }
-@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .page-head--banner::before { filter: saturate(0.65) brightness(0.65); } }
-:root[data-theme="dark"] .page-head--banner::before { filter: saturate(0.65) brightness(0.65); }
-
 /* hero card: the title block sits in a paper card (like the home case-study card); key art lives inside it (--card variant) or behind it, full-bleed (--panel variant) */
 .hero-card {
   position: relative; isolation: isolate; display: flex; flex-direction: column; align-items: flex-start; width: 100%;
@@ -751,7 +756,7 @@ dialog.lightbox::backdrop { background: rgba(10, 14, 20, 0.78); }
 .hero-card > * { margin: 0 0 var(--u); }
 .hero-card > :last-child { margin-bottom: 0; }
 .hero-card > .back { margin-bottom: 0; }
-.page-head--card .deco, .page-head--panel .deco { display: none; }
+.page-head--card .deco { display: none; }
 /* --card: art inside the card, fading in from the right */
 .page-head--card .hero-card { overflow: hidden; padding-bottom: calc(var(--u) * 7); }
 .page-head--card .hero-card::before {
@@ -767,26 +772,10 @@ dialog.lightbox::backdrop { background: rgba(10, 14, 20, 0.78); }
     -webkit-mask-image: linear-gradient(90deg, transparent, #000 40%); mask-image: linear-gradient(90deg, transparent, #000 40%);
   }
   .page-head--card .p-lede { max-width: 26em; }
+  .page-head--card h1 { max-width: var(--title-max, none); }
 }
-/* --panel: art full-bleed behind a narrower card; capped width so it never upscales on wide monitors */
-.page-head--panel { position: relative; overflow: hidden; isolation: isolate; padding-block: calc(var(--u) * 3); }
-.page-head--panel::before {
-  content: ""; position: absolute; z-index: -1; pointer-events: none; top: 0; height: calc(var(--u) * 12); left: 0; right: 0; margin-inline: auto; width: min(100%, 1700px);
-  background: var(--banner) var(--banner-pos-m, 58% 20%) / cover no-repeat;
-  -webkit-mask-image: linear-gradient(0deg, transparent, #000 35%); mask-image: linear-gradient(0deg, transparent, #000 35%);
-}
-.page-head--panel .hero-card { max-width: 34rem; margin-top: calc(var(--u) * 8); }
-@media (min-width: 900px) {
-  .page-head--panel::before {
-    margin-inline: 0; left: calc(50% - 220px); right: auto; width: min(1500px, 50% + 220px); top: 0; height: auto; bottom: 0; background-position: var(--banner-pos, 60% 30%);
-    -webkit-mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent), linear-gradient(0deg, transparent, #000 22%);
-    -webkit-mask-composite: source-in;
-    mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent), linear-gradient(0deg, transparent, #000 22%); mask-composite: intersect;
-  }
-  .page-head--panel { padding-block: calc(var(--u) * 3) calc(var(--u) * 4); } .page-head--panel .hero-card { margin-top: 0; max-width: 31rem; }
-}
-@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) :is(.page-head--card .hero-card, .page-head--panel)::before { filter: saturate(0.65) brightness(0.65); } }
-:root[data-theme="dark"] :is(.page-head--card .hero-card, .page-head--panel)::before { filter: saturate(0.65) brightness(0.65); }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .page-head--card .hero-card::before { filter: saturate(0.65) brightness(0.65); } }
+:root[data-theme="dark"] .page-head--card .hero-card::before { filter: saturate(0.65) brightness(0.65); }
 
 /* floating character decoration (decorative, never affects layout) */
 .page-head .wrap { position: relative; }
@@ -837,6 +826,11 @@ dialog.lightbox::backdrop { background: rgba(10, 14, 20, 0.78); }
 .side-block h2 { font: 500 0.72rem/var(--u) var(--f-mono); text-transform: uppercase; letter-spacing: 0.09em; color: var(--ink-3); }
 .chips { display: flex; flex-wrap: wrap; gap: 0 8px; list-style: none; }
 .chips li { display: inline-flex; align-items: center; height: 24px; margin-block: 2px; padding: 0 0.75em; border: 1.5px solid var(--ink); border-radius: 999px; font-size: 0.85rem; line-height: 1; font-weight: 600; background: var(--card); }
+
+.chips li:nth-child(4n+1) { background: color-mix(in srgb, var(--accent) 16%, var(--card)); }
+.chips li:nth-child(4n+2) { background: color-mix(in srgb, var(--action) 18%, var(--card)); }
+.chips li:nth-child(4n+3) { background: color-mix(in srgb, var(--ok) 20%, var(--card)); }
+.chips li:nth-child(4n+4) { background: color-mix(in srgb, var(--mark) 90%, var(--card)); }
 
 .p-main { display: flex; flex-direction: column; gap: calc(var(--u) * 3); min-width: 0; }
 @media (min-width: 640px) { .p-main { gap: calc(var(--u) * 2); } }

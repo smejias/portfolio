@@ -362,6 +362,20 @@
     below.forEach(function (el) { io.observe(el); });
   }
 
+  /* ---------- Project tag stamps ---------- */
+  /* The tags in a project's header stamp down once, in order, the first time they scroll into view. */
+  function initStamps(scope) {
+    var els = $$('.hero-card .tag', scope).filter(function (el) { return !el.__st; });
+    els.forEach(function (el, i) { el.__st = true; el.style.setProperty('--stamp-delay', (0.25 + i * 0.14) + 's'); });
+    if (reduce || !hasIO) { els.forEach(function (el) { el.classList.add('in'); }); return; }
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+      });
+    }, { threshold: 0.6 });
+    els.forEach(function (el) { io.observe(el); });
+  }
+
   /* ---------- Table of contents: current section + ruler needle ---------- */
   /* Marks the section you are reading (aria-current) and, on wide screens where the index is a
      ruler, slides the orange needle along it. The needle sits on a link's tick when that section
@@ -504,6 +518,7 @@
         if (/flex|grid/.test(display) && owner === el) continue;   /* anonymous flex item */
         if (!isRendered(owner) || !onPaper(el) || isTilted(el)) continue;
         if (owner.parentElement && owner.parentElement.classList.contains('cta-row')) continue;  /* sits beside buttons */
+        if (owner.matches('.side-block h2')) continue;  /* small caps label: the 28px nudge would push it into the chips below */
         owners.push({ el: owner, node: tn });
       }
     });
@@ -584,6 +599,7 @@
     initTilt(scope);
     initDraw(scope);
     initCounters(scope);
+    initStamps(scope);
     initToc(scope);
     scheduleRhythm();
   }
