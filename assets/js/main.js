@@ -136,6 +136,8 @@
     var fig = img.closest('.shot');
     bigImg.src = img.currentSrc || img.src;
     bigImg.alt = img.alt || '';
+    stage.classList.toggle('tall', img.naturalHeight > img.naturalWidth * 1.8);
+    stage.scrollTop = 0;
     var cap = fig && fig.querySelector('figcaption');
     capEl.textContent = cap ? cap.textContent : '';
     capEl.hidden = !cap;
