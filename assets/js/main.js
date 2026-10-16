@@ -435,7 +435,7 @@
           `translate`, which never changes the layout.
      Text inside boxes with a solid background hides the rules, so it is left alone. */
 
-  var SNAP = '.work, .teaser, .quote, .pull, .koster, .facts, .principles li, .stage-card, ' +
+  var SNAP = '.work, .teaser, .hero-card, .quote, .pull, .koster, .facts, .principles li, .stage-card, ' +
              '.games li, .contact-cta, .stats, .polaroid, .shot-frame, .vid, .cta-band, .email-box';
   var BASELINE_GAP = 2;   /* px between a baseline and the rule under it */
   var nudged = [];
