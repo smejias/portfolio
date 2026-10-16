@@ -740,6 +740,8 @@ dialog.lightbox::backdrop { background: rgba(10, 14, 20, 0.78); }
 .cta-band .btn { background: var(--paper); color: var(--ink); border-color: var(--ink); }
 .cta-band .btn--primary { background: var(--band-action); color: var(--on-band-action); border-color: var(--ink); }
 .cta-band .btn:hover { box-shadow: 3px 3px 0 var(--ink); }
+.cta-band .link-quiet { color: inherit; text-decoration-color: currentColor; }
+.cta-band .actions .link-quiet { margin-bottom: var(--u); }
 .cta-band .email-box { background: color-mix(in srgb, var(--on-accent) 12%, transparent); border-color: var(--on-accent); color: var(--on-accent); }
 .cta-band .email-box a { color: inherit; }
 .cta-band .email-box .copy-btn { background: var(--band-action); color: var(--on-band-action); border-color: var(--band-action); }
