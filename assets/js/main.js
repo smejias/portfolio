@@ -362,20 +362,6 @@
     below.forEach(function (el) { io.observe(el); });
   }
 
-  /* ---------- Status stamps ---------- */
-  /* The "Retired 2026" tags stamp down once, the first time they scroll into view. */
-  function initStamps(scope) {
-    var els = $$('.tag--status', scope).filter(function (el) { return !el.__st; });
-    els.forEach(function (el) { el.__st = true; });
-    if (reduce || !hasIO) { els.forEach(function (el) { el.classList.add('in'); }); return; }
-    var io = new IntersectionObserver(function (entries) {
-      entries.forEach(function (e) {
-        if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
-      });
-    }, { threshold: 0.6 });
-    els.forEach(function (el) { io.observe(el); });
-  }
-
   /* ---------- Table of contents: current section + ruler needle ---------- */
   /* Marks the section you are reading (aria-current) and, on wide screens where the index is a
      ruler, slides the orange needle along it. The needle sits on a link's tick when that section
@@ -598,7 +584,6 @@
     initTilt(scope);
     initDraw(scope);
     initCounters(scope);
-    initStamps(scope);
     initToc(scope);
     scheduleRhythm();
   }

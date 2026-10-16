@@ -25,7 +25,7 @@ Abrí una terminal en esta carpeta y ejecutá `python3 -m http.server 8000`. Des
 Lo que falta se ve en el sitio como recuadros punteados ("Image slot"). Ninguno de estos datos lo inventé.
 
 - [ ] **Imágenes.** Tabla en la sección 3. Mientras falten, el sitio muestra el recuadro con el nombre del archivo esperado.
-- [ ] **Estado de cada juego.** Los tres proyectos dicen "Retired 2026". Si querés más precisión (servidores apagados, retirado de las tiendas), cambialo en la home y en la ficha de cada proyecto.
+- [ ] **Estado de cada juego.** Las fichas de cada proyecto dicen "Status: Retired in 2026" (ya no hay etiquetas "Retired 2026"). Si querés más precisión (servidores apagados, retirado de las tiendas), cambialo en la ficha de cada proyecto.
 - [ ] **Case study, "Key design decisions".** Las cuatro tarjetas las armé con lo que ya escribís en el resto del case study, porque en el Wix esa sección era una sola imagen. Revisalas. Podés subir tu imagen original o borrar ese recuadro.
 - [ ] **Diagramas de "Into the Wild".** El mapa animado lo redibujé con la estructura que ya contás. Tu borrador original va en `into-the-wild-draft` con su leyenda ("Illustrative only").
 - [ ] **Frozen Adventures.** Usá capturas propias o aprobadas. Evitá el arte oficial de Disney.
