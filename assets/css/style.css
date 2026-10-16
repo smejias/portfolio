@@ -805,8 +805,8 @@ dialog.lightbox::backdrop { background: rgba(10, 14, 20, 0.78); }
 .page-head .wrap > * { margin: 0 0 var(--u); }
 .page-head .wrap > :last-child { margin-bottom: 0; }
 .page-head .wrap > .back, .page-head .wrap > .eyebrow { margin-bottom: 0; }
-.back { font: 500 0.78rem/var(--u) var(--f-mono); text-transform: uppercase; letter-spacing: 0.08em; color: var(--action); text-decoration: none; }
-.back:hover { text-decoration: underline; }
+.back:not(.btn) { font: 500 0.78rem/var(--u) var(--f-mono); text-transform: uppercase; letter-spacing: 0.08em; color: var(--action); text-decoration: none; }
+.back:not(.btn):hover { text-decoration: underline; }
 .epigraph {
   max-width: 40ch; font: 600 clamp(1.3rem, 1.1rem + 0.8vw, 1.7rem)/var(--u) var(--f-hand); color: var(--accent);
   padding-left: 16px; border-left: 3px solid var(--accent);
@@ -821,6 +821,7 @@ dialog.lightbox::backdrop { background: rgba(10, 14, 20, 0.78); }
 .hero-card > * { margin: 0 0 var(--u); }
 .hero-card > :last-child { margin-bottom: 0; }
 .hero-card > .back { margin-bottom: 0; }
+.page-head .wrap > .back.btn, .hero-card > .back.btn { margin-block: 2px; }
 .page-head--card .deco { display: none; }
 /* --card: art inside the card, fading in from the right */
 .page-head--card .hero-card { overflow: hidden; padding-bottom: calc(var(--u) * 7); }
