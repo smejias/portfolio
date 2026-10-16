@@ -592,6 +592,22 @@ dialog.lightbox::backdrop { background: rgba(10, 14, 20, 0.78); }
   padding: clamp(20px, 3vw, 36px); background: var(--card); border: 1.5px solid var(--ink); border-radius: 6px;
 }
 @media (min-width: 900px) { .teaser { grid-template-columns: minmax(0, 6fr) minmax(0, 5fr); align-items: center; gap: 48px; } }
+/* quest map as a faded backdrop */
+.teaser { position: relative; overflow: hidden; isolation: isolate; }
+.teaser::before { content: ""; position: absolute; z-index: -1; pointer-events: none; background: url("../img/into-the-wild-2.jpg") center / cover no-repeat; }
+.teaser--fade::before {
+  inset: auto 0 0 0; height: 58%; opacity: 0.42; filter: saturate(0.7);
+  -webkit-mask-image: linear-gradient(180deg, transparent, #000 45%); mask-image: linear-gradient(180deg, transparent, #000 45%);
+}
+.teaser--fade .trail { background: color-mix(in srgb, var(--card) 70%, transparent); border-radius: 6px; padding: 14px 16px; margin: -14px -16px; }
+@media (min-width: 900px) {
+  .teaser--fade::before {
+    inset: 0 0 0 38%; height: auto; opacity: 0.4;
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 55%); mask-image: linear-gradient(90deg, transparent, #000 55%);
+  }
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .teaser::before { filter: saturate(0.6) brightness(0.65); } }
+:root[data-theme="dark"] .teaser::before { filter: saturate(0.6) brightness(0.65); }
 .teaser-copy { display: flex; flex-direction: column; gap: 14px; align-items: flex-start; }
 .teaser-copy p, .teaser-copy .label { margin: 0; }
 .teaser-copy p { max-width: 46ch; line-height: 1.6; }
