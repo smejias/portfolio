@@ -363,37 +363,6 @@ mark {
 .role b { font: 400 1.5rem/var(--u) var(--f-display); }
 .role span { font: 500 0.75rem/var(--u) var(--f-mono); text-transform: uppercase; letter-spacing: 0.09em; color: var(--ink-3); }
 
-/* A hand-written list next to the role, crossed off in order: QA, product, then design. The
-   final state (first two struck, "design" highlighted) is the default, so it is what you get
-   without JS or with reduced motion; with JS it plays once (initSwap in main.js adds .run).
-   Every word is always in the layout (only its opacity animates), so nothing shifts. The
-   selectors start with .role to beat `.role span` above, which would make it small mono caps. */
-.role .swap {
-  flex-basis: 100%;   /* always its own line, so it never wraps by accident at some widths */
-  display: inline-flex; align-items: baseline; gap: 0 0.5em;
-  font: 600 1.45rem/var(--u) var(--f-hand); text-transform: none; letter-spacing: 0; color: var(--accent);
-  transform: rotate(-2deg); transform-origin: left center;
-}
-.role .swap .w { position: relative; display: inline-block; font: inherit; text-transform: none; letter-spacing: 0; color: inherit; }
-.role .swap s { position: relative; display: inline-block; text-decoration: none; color: var(--ink-3); }
-.role .swap s::after {
-  content: ""; position: absolute; left: -0.12em; right: -0.12em; top: 54%; height: 2px; border-radius: 2px;
-  background: var(--accent); transform: rotate(-5deg); transform-origin: left center;
-}
-.role .swap .w-design {
-  padding-inline: 0.1em;
-  background-image: linear-gradient(transparent 50%, var(--mark) 50% 95%, transparent 95%);
-  background-repeat: no-repeat; background-size: 100% 100%;
-}
-.js .swap:not(.run):not(.done) .w { opacity: 0; }
-.js .swap:not(.run):not(.done) s::after { transform: rotate(-5deg) scaleX(0); }
-.js .swap:not(.run):not(.done) .w-design { background-size: 0% 100%; }
-.js .swap.run .w { animation: swap-in 0.32s ease var(--t, 0s) both; }
-.js .swap.run s::after { animation: swap-strike 0.28s ease var(--ts, 0s) both; }
-.js .swap.run .w-design { animation: swap-in 0.32s ease var(--t, 0s) both, swap-mark 0.5s cubic-bezier(0.65, 0, 0.35, 1) var(--tm, 0s) both; }
-@keyframes swap-in { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
-@keyframes swap-strike { from { transform: rotate(-5deg) scaleX(0); } to { transform: rotate(-5deg) scaleX(1); } }
-@keyframes swap-mark { from { background-size: 0% 100%; } to { background-size: 100% 100%; } }
 .lede { font-size: clamp(1.08rem, 1rem + 0.5vw, 1.3rem); line-height: var(--u); max-width: 34em; }
 .lede + .lede { color: var(--ink-2); font-size: clamp(1rem, 0.95rem + 0.3vw, 1.12rem); margin-top: var(--u); }
 .avail {

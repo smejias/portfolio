@@ -362,21 +362,6 @@
     below.forEach(function (el) { io.observe(el); });
   }
 
-  /* ---------- Hero crossed-off list ---------- */
-  /* Plays once when the list is on screen. With reduced motion (or no IntersectionObserver) it
-     just shows its final state. */
-  function initSwap(scope) {
-    var els = $$('.swap', scope).filter(function (el) { return !el.__sw; });
-    els.forEach(function (el) { el.__sw = true; });
-    if (reduce || !hasIO) { els.forEach(function (el) { el.classList.add('done'); }); return; }
-    var io = new IntersectionObserver(function (entries) {
-      entries.forEach(function (e) {
-        if (e.isIntersecting) { e.target.classList.add('run'); io.unobserve(e.target); }
-      });
-    }, { threshold: 0.9 });
-    els.forEach(function (el) { io.observe(el); });
-  }
-
   /* ---------- Status stamps ---------- */
   /* The "Retired 2026" tags stamp down once, the first time they scroll into view. */
   function initStamps(scope) {
@@ -614,7 +599,6 @@
     initDraw(scope);
     initCounters(scope);
     initStamps(scope);
-    initSwap(scope);
     initToc(scope);
     scheduleRhythm();
   }
