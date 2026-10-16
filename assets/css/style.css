@@ -364,14 +364,34 @@ mark {
 .avail {
   display: flex; align-items: flex-start; gap: 0.6em; width: fit-content; max-width: 100%;
   min-height: var(--u); padding: 0 1em;
-  font: 500 0.78rem/var(--u) var(--f-mono); color: var(--ink-2);
-  outline: 1px dashed var(--ink-3); outline-offset: -1px; border-radius: 14px; background: var(--card);
+  font: 600 0.78rem/var(--u) var(--f-mono); color: var(--ink);
+  outline: 1.5px dashed var(--ok); outline-offset: -1.5px; border-radius: 14px;
+  background: color-mix(in srgb, var(--ok) 50%, var(--card));
+  transform-origin: 20% 60%; animation: avail-wiggle 6s ease-in-out 2.5s infinite;
 }
 .avail > span { text-wrap: balance; }
 .nowrap { white-space: nowrap; }
 /* align-items: flex-start (not center) so the dot stays pinned to the first line even when
    the badge wraps to two lines; this margin centers it on that one line specifically. */
-.avail i { width: 9px; height: 9px; margin-top: calc((var(--u) - 9px) / 2); border-radius: 50%; background: var(--ok); flex: none; box-shadow: 0 0 0 3px color-mix(in srgb, var(--ok) 25%, transparent); }
+.avail i { width: 9px; height: 9px; margin-top: calc((var(--u) - 9px) / 2); border-radius: 50%; background: var(--ok); flex: none; box-shadow: 0 0 0 3px color-mix(in srgb, var(--card) 55%, transparent); }
+/* a little wiggle every few seconds, like a notification badge */
+@keyframes avail-wiggle {
+  0%, 14%, 100% { rotate: 0deg; scale: 1; }
+  2%  { rotate: -2.2deg; scale: 1.03; }
+  4%  { rotate: 2deg; scale: 1.03; }
+  6%  { rotate: -1.6deg; scale: 1.02; }
+  8%  { rotate: 1.2deg; scale: 1.01; }
+  10% { rotate: -0.6deg; scale: 1; }
+  12% { rotate: 0.3deg; scale: 1; }
+}
+/* narrow screens: two or three lines, so tighten the line height (the rhythm pass pads the box up to whole cells) */
+@media (max-width: 600px) {
+  .avail { line-height: 18px; padding-block: 9px; }
+  .avail i { margin-top: 4.5px; }
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .avail { background: color-mix(in srgb, var(--ok) 38%, var(--card)); } }
+:root[data-theme="dark"] .avail { background: color-mix(in srgb, var(--ok) 38%, var(--card)); }
+@media (prefers-reduced-motion: reduce) { .avail { animation: none; } }
 
 .hero-photo { display: flex; justify-content: center; width: 100%; }
 .hero-stats { margin-top: calc(var(--u) * 2); }

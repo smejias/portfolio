@@ -454,7 +454,7 @@
      Text inside boxes with a solid background hides the rules, so it is left alone. */
 
   var SNAP = '.work, .teaser, .hero-card, .quote, .pull, .koster, .facts, .principles li, .stage-card, ' +
-             '.games li, .t-card, .contact-cta, .stats, .polaroid, .shot-frame, .vid, .cta-band, .email-box';
+             '.games li, .t-card, .avail, .contact-cta, .stats, .polaroid, .shot-frame, .vid, .cta-band, .email-box';
   var BASELINE_GAP = 2;   /* px between a baseline and the rule under it */
   var nudged = [];
 
@@ -484,10 +484,17 @@
   }
 
   function paintsBackground(el) {
-    var m = getComputedStyle(el).backgroundColor.match(/rgba?\(([^)]+)\)/);
-    if (!m) return false;
-    var p = m[1].split(',');
-    return (p.length > 3 ? parseFloat(p[3]) : 1) > 0.3;
+    var bg = getComputedStyle(el).backgroundColor;
+    var m = bg.match(/rgba?\(([^)]+)\)/);
+    if (m) {
+      var p = m[1].split(',');
+      return (p.length > 3 ? parseFloat(p[3]) : 1) > 0.3;
+    }
+    /* color-mix() and friends compute to color(srgb r g b / a) */
+    var c = bg.match(/^color\(.*?(?:\/\s*([\d.]+%?))?\)$/);
+    if (!c) return false;
+    var al = c[1] === undefined ? 1 : (/%$/.test(c[1]) ? parseFloat(c[1]) / 100 : parseFloat(c[1]));
+    return al > 0.3;
   }
 
   function onPaper(el) {
