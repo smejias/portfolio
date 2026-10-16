@@ -241,7 +241,36 @@ mark {
   color: var(--ink-2);
   white-space: nowrap;
 }
-.tag--status { border-style: dashed; border-color: var(--ink-3); color: var(--ink); }
+/* Status tag as a rubber stamp: blue ink, double rule, a few degrees off-square, with a worn
+   speckle eaten out of the ink (alpha mask from SVG noise). main.js adds .in the first time it
+   scrolls into view and it stamps down once. Height stays 24px + 2px margins = one 28px cell,
+   so the tag row keeps its rhythm; the rotation is a transform and never changes layout. */
+.tag--status {
+  --rot: -3.5deg;
+  --stamp-delay: 0.3s;
+  height: 24px; margin-block: 2px; padding: 0 0.7em;
+  font-weight: 700; letter-spacing: 0.12em;
+  color: var(--accent);
+  background: transparent;
+  border: 4px double currentColor;
+  border-radius: 3px 5px 3px 6px / 5px 3px 6px 3px;
+  transform: rotate(var(--rot));
+  -webkit-mask-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='64'><filter id='w' x='0' y='0' width='100%' height='100%'><feTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='2' seed='7' stitchTiles='stitch'/><feColorMatrix type='matrix' values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 -9 6.4'/></filter><rect width='100%' height='100%' filter='url(%23w)'/></svg>");
+  mask-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='64'><filter id='w' x='0' y='0' width='100%' height='100%'><feTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='2' seed='7' stitchTiles='stitch'/><feColorMatrix type='matrix' values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 -9 6.4'/></filter><rect width='100%' height='100%' filter='url(%23w)'/></svg>");
+  -webkit-mask-size: 160px 64px; mask-size: 160px 64px;
+}
+.tag--status.chip { background: color-mix(in srgb, var(--card) 88%, transparent); --stamp-delay: 0.55s; }
+.work:nth-child(2) .tag--status.chip { --rot: 2.5deg; }
+.work:nth-child(3) .tag--status.chip { --rot: -2deg; }
+
+.js .tag--status:not(.in) { opacity: 0; }
+.js .tag--status.in { animation: stamp-in 0.5s cubic-bezier(0.2, 0.9, 0.3, 1) var(--stamp-delay) both; }
+@keyframes stamp-in {
+  0%   { opacity: 0; transform: rotate(calc(var(--rot) - 9deg)) scale(1.9); }
+  55%  { opacity: 1; transform: rotate(var(--rot)) scale(0.92); }
+  75%  { opacity: 1; transform: rotate(var(--rot)) scale(1.04); }
+  100% { opacity: 1; transform: rotate(var(--rot)) scale(1); }
+}
 
 .todo {
   display: inline-block;
@@ -411,6 +440,24 @@ mark {
 .shot--video video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; background: var(--ink); }
 .shot--small { max-width: min(100%, 440px); }
 .shot--narrow { max-width: min(100%, 340px); }
+
+/* Hand annotations: circles, arrows and a note in blue ink drawn over a screenshot, the way you
+   would mark up a printout. The SVG viewBox is the IMAGE's own size and the SVG uses `slice`,
+   the same mapping as object-fit: cover, so a mark stays on the thing it points at however the
+   frame is cropped or stretched by the rhythm pass. Every mark is an ink stroke over a paper
+   halo so it reads on both light and dark screenshots. main.js (initDraw) adds .in on scroll. */
+.annot { position: absolute; inset: 0; z-index: 2; pointer-events: none; display: none; }
+.shot.has-img .annot { display: block; }
+.annot svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+.annot .stroke { fill: none; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 1; stroke-dashoffset: 0; transition: stroke-dashoffset var(--t, 0.8s) cubic-bezier(0.65, 0, 0.35, 1) var(--d, 0s); }
+.annot .halo { stroke: var(--card); stroke-opacity: 0.92; stroke-width: 2.4; }
+.annot .ink { stroke: var(--accent); stroke-width: 0.95; }
+/* Thin variant for a loop drawn inside a tight list: it must not paint over neighbouring lines. */
+.annot .halo.thin { stroke-width: 1.5; }
+.annot .ink.thin { stroke-width: 0.8; }
+.annot text { font-family: var(--f-hand); font-weight: 600; fill: var(--accent); paint-order: stroke; stroke: var(--card); stroke-width: 1.6; stroke-linejoin: round; transition: opacity 0.4s ease var(--d, 0s); }
+.js .annot:not(.in) .stroke { stroke-dashoffset: 1.05; }
+.js .annot:not(.in) text { opacity: 0; }
 
 dialog.lightbox {
   border: 1.5px solid var(--ink); padding: 10px; background: var(--card); color: var(--ink);
@@ -662,10 +709,31 @@ dialog.lightbox p { margin: 10px 0 0; font: 500 0.8rem/1.4 var(--f-mono); color:
 .toc { list-style: none; display: flex; flex-wrap: wrap; gap: 0 6px; }
 .toc a { display: inline-flex; align-items: center; height: 24px; margin-block: 2px; padding: 0 0.75rem; border: 1px solid var(--line); border-radius: 999px; color: var(--action); text-decoration: none; font-size: 0.85rem; line-height: 1; font-weight: 600; background: var(--card); }
 .toc a[aria-current="true"] { border-color: var(--accent); color: var(--ink); background: var(--accent-soft); }
+/* Wide screens: the index becomes a vertical ruler. Ticks every 7px (minor) and one longer tick at
+   the centre of every link (major), like millimetres and centimetres. An orange needle slides
+   along it as you read: it sits on a link's tick when that section starts and travels toward the
+   next one as the section scrolls by (--toc-y is set by initToc in main.js). Ticks live on a
+   pseudo-element so .toc itself keeps a transparent background (the rhythm pass treats text on a
+   painted background as "inside a card" and would stop aligning it). */
 @media (min-width: 960px) {
-  .toc { display: grid; gap: 0; }
-  .toc a { display: block; height: auto; margin: 0; padding: 0 0.8rem; line-height: var(--u); font-size: 0.92rem; border: 0; border-left: 2px solid var(--line); border-radius: 0; background: transparent; }
-  .toc a[aria-current="true"] { border-left-color: var(--accent); background: transparent; }
+  .toc { display: grid; gap: 0; position: relative; padding-left: 30px; }
+  .toc a { display: block; height: auto; margin: 0; padding: 0 0.4rem; line-height: var(--u); font-size: 0.92rem; border: 0; border-radius: 0; background: transparent; }
+  .toc a[aria-current="true"] { background: transparent; color: var(--ink); }
+  .toc::before {
+    content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 20px;
+    background:
+      linear-gradient(to bottom, transparent 13px, var(--ink) 13px 14.5px, transparent 14.5px) 0 0 / 18px var(--u) repeat-y,
+      linear-gradient(to bottom, var(--ink-3) 1px, transparent 1px) 0 0 / 8px 7px repeat-y,
+      linear-gradient(var(--ink), var(--ink)) 0 0 / 1.5px 100% no-repeat;
+    transform: translateY(var(--toc-shift, 0px));
+  }
+  .toc::after {
+    content: ""; position: absolute; left: -6px; top: -6px; width: 30px; height: 12px;
+    background: var(--action);
+    clip-path: polygon(0 0, 10px 5px, 30px 5px, 30px 7px, 10px 7px, 0 12px);
+    transform: translateY(var(--toc-y, 14px));
+    will-change: transform;
+  }
 }
 
 .principles { display: grid; gap: var(--u); grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr)); list-style: none; max-width: none !important; }

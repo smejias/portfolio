@@ -254,29 +254,79 @@
     els.forEach(function (el) { io.observe(el); });
   }
 
-  /* ---------- Table of contents highlighting ---------- */
-  function initToc(scope) {
-    var toc = $('[data-toc]', scope);
-    if (!toc || toc.__ts || !hasIO) return;
-    toc.__ts = true;
-    var links = $$('a[href^="#"]', toc);
-    var map = {};
-    var targets = [];
-    links.forEach(function (a) {
-      var id = a.getAttribute('data-target') || a.getAttribute('href').slice(1);
-      var el = doc.getElementById(id);
-      if (el) { map[id] = a; targets.push(el); }
-    });
+  /* ---------- Status stamps ---------- */
+  /* The "Retired 2026" tags stamp down once, the first time they scroll into view. */
+  function initStamps(scope) {
+    var els = $$('.tag--status', scope).filter(function (el) { return !el.__st; });
+    els.forEach(function (el) { el.__st = true; });
+    if (reduce || !hasIO) { els.forEach(function (el) { el.classList.add('in'); }); return; }
     var io = new IntersectionObserver(function (entries) {
       entries.forEach(function (e) {
-        if (e.isIntersecting) {
-          links.forEach(function (a) { a.removeAttribute('aria-current'); });
-          var a = map[e.target.id];
-          if (a) a.setAttribute('aria-current', 'true');
-        }
+        if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
       });
-    }, { rootMargin: '-20% 0px -70% 0px' });
-    targets.forEach(function (el) { io.observe(el); });
+    }, { threshold: 0.6 });
+    els.forEach(function (el) { io.observe(el); });
+  }
+
+  /* ---------- Table of contents: current section + ruler needle ---------- */
+  /* Marks the section you are reading (aria-current) and, on wide screens where the index is a
+     ruler, slides the orange needle along it. The needle sits on a link's tick when that section
+     reaches the reading line and moves toward the next tick as the section scrolls past, so it
+     doubles as a reading-progress bar. The reading line is 28% down the viewport. */
+  function initToc(scope) {
+    var toc = $('[data-toc]', scope);
+    if (!toc || toc.__ts) return;
+    toc.__ts = true;
+    var items = [];
+    $$('a[href^="#"]', toc).forEach(function (a) {
+      var id = a.getAttribute('data-target') || a.getAttribute('href').slice(1);
+      var el = doc.getElementById(id);
+      if (el) items.push({ a: a, el: el });
+    });
+    if (!items.length) return;
+    var wide = window.matchMedia ? window.matchMedia('(min-width: 960px)') : { matches: false };
+    var pending = false;
+
+    function update() {
+      pending = false;
+      var ref = window.innerHeight * 0.28;
+      var cur = -1;
+      for (var k = 0; k < items.length; k++) {
+        if (items[k].el.getBoundingClientRect().top <= ref) cur = k; else break;
+      }
+      items.forEach(function (it, k) {
+        if (k === cur) it.a.setAttribute('aria-current', 'true');
+        else it.a.removeAttribute('aria-current');
+      });
+      if (!wide.matches) { toc.style.removeProperty('--toc-y'); return; }
+
+      var top = toc.getBoundingClientRect().top;
+      var centers = items.map(function (it) {
+        var r = it.a.getBoundingClientRect();
+        return r.top + r.height / 2 - top;
+      });
+      /* The rhythm pass nudges link text a few px so it rests on the paper rules. The ruler ticks
+         follow the same nudge, so each major tick stays level with its link. */
+      var shift = centers[0] - (items[0].a.offsetTop + items[0].a.offsetHeight / 2);
+      toc.style.setProperty('--toc-shift', shift.toFixed(1) + 'px');
+      var i = Math.max(cur, 0);
+      var start = items[i].el.getBoundingClientRect().top;
+      var end = i + 1 < items.length ? items[i + 1].el.getBoundingClientRect().top : items[i].el.getBoundingClientRect().bottom;
+      var f = cur < 0 || end <= start ? 0 : Math.min(1, Math.max(0, (ref - start) / (end - start)));
+      var next = i + 1 < items.length ? centers[i + 1] : centers[i] + cellSize() / 2;
+      toc.style.setProperty('--toc-y', (centers[i] + f * (next - centers[i])).toFixed(1) + 'px');
+    }
+
+    function schedule() {
+      if (pending) return;
+      pending = true;
+      window.requestAnimationFrame(update);
+    }
+    window.addEventListener('scroll', schedule, { passive: true });
+    window.addEventListener('resize', schedule);
+    window.addEventListener('load', schedule);
+    if (doc.fonts && doc.fonts.ready) doc.fonts.ready.then(function () { schedule(); window.setTimeout(schedule, 400); });
+    schedule();
   }
 
   /* ---------- Public init (also used by the single-file preview) ---------- */
@@ -440,6 +490,7 @@
     initTilt(scope);
     initDraw(scope);
     initCounters(scope);
+    initStamps(scope);
     initToc(scope);
     scheduleRhythm();
   }
