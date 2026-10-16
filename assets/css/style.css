@@ -493,11 +493,42 @@ mark {
 
 dialog.lightbox {
   border: 1.5px solid var(--ink); padding: 10px; background: var(--card); color: var(--ink);
-  max-width: min(96vw, 1200px); max-height: 94vh; border-radius: 6px;
+  max-width: min(96vw, 1200px); max-height: 94vh; border-radius: 6px; overflow: visible;
 }
+dialog.lightbox:focus { outline: none; }
 dialog.lightbox::backdrop { background: rgba(10, 14, 20, 0.78); }
-dialog.lightbox img { display: block; max-width: 100%; max-height: 82vh; margin: 0 auto; }
-dialog.lightbox p { margin: 10px 0 0; font: 500 0.8rem/1.4 var(--f-mono); color: var(--ink-2); }
+.lb-stage { position: relative; width: fit-content; max-width: 100%; margin: 0 auto; }
+.lb-stage img { display: block; max-width: 100%; max-height: 78vh; margin: 0 auto; }
+.lb-stage .annot { display: block; }
+.lb-stage.go-next img { animation: lb-in-r .28s ease both; }
+.lb-stage.go-prev img { animation: lb-in-l .28s ease both; }
+@keyframes lb-in-r { from { opacity: 0; translate: 24px 0; } }
+@keyframes lb-in-l { from { opacity: 0; translate: -24px 0; } }
+.lb-bar { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; margin-top: 8px; min-height: 28px; }
+.lb-cap { margin: 0; font: 600 1.45rem/1.1 var(--f-hand); color: var(--ink); rotate: -0.8deg; }
+.lb-cap[hidden] { display: none; }
+.lb-count { margin-left: auto; font: 500 0.75rem/1 var(--f-mono); color: var(--ink-3); white-space: nowrap; }
+.lb-nav, .lb-close {
+  position: absolute; display: grid; place-items: center; width: 44px; height: 44px; padding: 0;
+  font: 600 1.2rem/1 var(--f-body); color: var(--ink); background: var(--card);
+  border: 1.5px solid var(--ink); border-radius: 50%; cursor: pointer;
+}
+.lb-nav { top: 38%; }
+.lb-prev { left: -22px; }
+.lb-next { right: -22px; }
+.lb-close { top: -22px; right: -22px; width: 36px; height: 36px; font-size: 0.95rem; }
+.lb-nav[hidden] { display: none; }
+.lb-nav:hover, .lb-close:hover { box-shadow: 2px 2px 0 var(--ink); }
+@media (max-width: 640px) {
+  .lb-prev { left: 4px; } .lb-next { right: 4px; } .lb-close { top: 4px; right: 4px; }
+  .lb-nav { top: 30%; opacity: 0.92; }
+}
+.shot.has-img .shot-frame:focus-visible { outline: 3px solid var(--action); outline-offset: 3px; }
+
+/* theme switch: colours cross-fade only while toggling */
+.theme-fade, .theme-fade *, .theme-fade *::before, .theme-fade *::after {
+  transition: background-color .45s ease, color .45s ease, border-color .45s ease, fill .45s ease, stroke .45s ease, box-shadow .45s ease !important;
+}
 
 /* ---------- Work cards ---------- */
 
@@ -646,7 +677,31 @@ dialog.lightbox p { margin: 10px 0 0; font: 500 0.8rem/1.4 var(--f-mono); color:
   font: 650 0.8rem/1 var(--f-body); padding: 0.7em 0.9em; color: var(--on-action); background: var(--action);
   border: 1.5px solid var(--action); border-radius: 4px; cursor: pointer;
 }
+.copy-btn { position: relative; }
 .copy-btn:hover { filter: brightness(1.08); }
+.copy-status { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+
+/* paper slip: pops out of the button, then peels off and falls */
+.slip {
+  position: absolute; left: 50%; bottom: calc(100% + 2px); z-index: 3; pointer-events: none;
+  padding: 6px 12px 10px; font: 600 1.2rem/1 var(--f-hand); white-space: nowrap;
+  color: var(--ink); background: color-mix(in srgb, var(--mark) 70%, var(--card)); border: 1.5px solid var(--ink); border-bottom: 0;
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 5px), 88% 100%, 76% calc(100% - 4px), 64% 100%, 52% calc(100% - 4px), 40% 100%, 28% calc(100% - 4px), 16% 100%, 0 calc(100% - 4px));
+  translate: -50% 0; rotate: -3deg; transform-origin: 20% 100%;
+  animation: slip 1.9s cubic-bezier(.3,.7,.3,1) both;
+}
+.slip--hint { background: var(--card); }
+@keyframes slip {
+  0%   { opacity: 0; translate: -50% 14px; rotate: 0deg; }
+  14%  { opacity: 1; translate: -50% -2px; rotate: -3deg; }
+  22%  { translate: -50% 0; rotate: -3deg; }
+  58%  { opacity: 1; translate: -50% 0; rotate: -3deg; }
+  100% { opacity: 0; translate: -10% 70px; rotate: 24deg; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .slip { animation: slip-fade 1.6s linear both !important; rotate: 0deg; }
+  @keyframes slip-fade { 0%, 80% { opacity: 1; } 100% { opacity: 0; } }
+}
 .email-box a { color: var(--action); }
 
 /* ---------- Footer ---------- */
