@@ -365,7 +365,7 @@
   /* ---------- Project tag stamps ---------- */
   /* The tags in a project's header stamp down once, in order, the first time they scroll into view. */
   function initStamps(scope) {
-    var els = $$('.hero-card .tag, .work .tags .tag', scope).filter(function (el) { return !el.__st; });
+    var els = $$('.hero-card .tag, .work .tags .tag, .t-roles .tag', scope).filter(function (el) { return !el.__st; });
     els.forEach(function (el) {
       el.__st = true;
       var i = Array.prototype.indexOf.call(el.parentNode.children, el);
