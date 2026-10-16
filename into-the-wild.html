@@ -1,0 +1,313 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Into the Wild, a quest design case study | Santi Mejías</title>
+<meta name="description" content="Case study of an optional exploration quest in Forgotten Runiverse: pitch, structure, interaction design and a hidden layer for curious players.">
+<meta name="theme-color" content="#F1F0E9" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#10151C" media="(prefers-color-scheme: dark)">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Into the Wild, a quest design case study | Santi Mejías">
+<meta property="og:description" content="Case study of an optional exploration quest in Forgotten Runiverse: pitch, structure, interaction design and a hidden layer for curious players.">
+<meta name="twitter:card" content="summary">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@600&family=Figtree:wght@400..700&family=JetBrains+Mono:wght@400..500&family=Young+Serif&display=swap">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body id="top">
+<a class="skip" href="#main">Skip to content</a>
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="index.html" aria-label="Santi Mejías, home"><b>Santi Mejías</b><span>Game Designer</span></a>
+    <nav class="nav" aria-label="Main">
+      <ul>
+        <li><a href="index.html#work" data-nav="work" aria-current="page">Work</a></li>
+        <li><a href="about.html" data-nav="about">About</a></li>
+        <li><a href="contact.html" data-nav="contact">Contact</a></li>
+      </ul>
+      <button class="theme-btn" type="button" data-theme-toggle aria-label="Switch between light and dark theme">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 3.5v17a8.5 8.5 0 0 0 0-17z" fill="currentColor"/></svg>
+      </button>
+    </nav>
+  </div>
+</header>
+<main id="main">
+
+  <section class="page-head">
+    <div class="wrap">
+      <a class="back" href="forgotten-runiverse.html">← Forgotten Runiverse</a>
+      <h1>Into the Wild</h1>
+      <p class="label">A quest design case study</p>
+      <blockquote class="epigraph">“By the Ouroboros, you found me! I was starting to lose hope.”</blockquote>
+      <ul class="tags">
+        <li class="tag">Shipped</li>
+        <li class="tag">MMORPG</li>
+        <li class="tag">Quest design</li>
+        <li class="tag tag--status">Game retired 2026</li>
+      </ul>
+    </div>
+  </section>
+
+  <div class="wrap p-layout">
+    <aside class="p-side">
+      <dl class="facts">
+        <div><dt>Role</dt><dd>Quest design and implementation</dd></div>
+        <div><dt>Game</dt><dd>Forgotten Runiverse</dd></div>
+        <div><dt>Studio</dt><dd>Bisonic</dd></div>
+        <div><dt>Year</dt><dd>2024</dd></div>
+      </dl>
+      <nav class="side-block" aria-label="On this page">
+        <h2>On this page</h2>
+        <ul class="toc" data-toc>
+          <li><a href="#overview" data-target="overview">Overview</a></li>
+          <li><a href="#challenge" data-target="challenge">The challenge</a></li>
+          <li><a href="#philosophy" data-target="philosophy">Design philosophy</a></li>
+          <li><a href="#process" data-target="process">The process</a></li>
+          <li><a href="#decisions" data-target="decisions">Key design decisions</a></li>
+          <li><a href="#learned" data-target="learned">What I learned</a></li>
+          <li><a href="#tools" data-target="tools">Tools and credits</a></li>
+        </ul>
+      </nav>
+    </aside>
+
+    <div class="p-main">
+
+      <section id="overview">
+        <h2>Overview</h2>
+        <p>“Into the Wild” is an optional exploration quest in Forgotten Runiverse, an open-world MMORPG (read more about my work on this project <a href="forgotten-runiverse.html">here</a>). The quest takes place in The Wild, a region defined by untamed magic and dangerous creatures. Players discover a yellow wizard trapped behind a time portal and must find a way to free them.</p>
+        <p>This case study walks through my design process from initial concept to final implementation, showing how I approached quest design to reinforce core mechanics, reward player curiosity, and build a world that feels alive.</p>
+        <figure class="shot" style="--ratio:720 / 391">
+  <div class="shot-frame">
+    <div class="shot-empty"><span class="tag">Image slot</span><span>Opening image of the case study</span><code>assets/img/into-the-wild-1.jpg</code></div>
+    <img data-base="assets/img/into-the-wild-1" src="assets/img/into-the-wild-1.jpg" alt="Into the Wild quest image" loading="lazy" decoding="async">
+  </div>
+</figure>
+      </section>
+
+      <section id="challenge">
+        <h2>The challenge</h2>
+        <p>Forgotten Runiverse had a few design constraints I needed to work within:</p>
+        <ul class="checklist">
+          <li><strong>Limited lore documentation.</strong> The IP had broad strokes but not deep detail. I had to create within that space while staying true to the world's tone and rules.</li>
+          <li><strong>The game's tutorial was long and text-heavy.</strong> Players often forgot core mechanics like crafting, exploration, and the magic color system. I wanted quests to serve as organic reminders without feeling like tutorials.</li>
+          <li><strong>Optional content needed to feel worthwhile.</strong> Most quests in the game were optional. My goal was to give players reasons to engage with them beyond just XP. I wanted them to see the impact of their choices in the world.</li>
+          <li><strong>Stakeholder approval process.</strong> Every quest pitch needed approval from the creative director, narrative designer, and the IP owner. Character selection was especially important to the client, who wanted us to feature player-owned NFT characters and community-created lore when possible.</li>
+        </ul>
+        <p>This wasn't my first experience working with IP stakeholders. I'd previously worked with Disney at Jam City on <a href="frozen-adventures.html">Frozen Adventures</a>, where every piece of content needed brand approval. That experience taught me how to pitch within constraints and iterate based on feedback.</p>
+      </section>
+
+      <section id="philosophy">
+        <h2>Design philosophy</h2>
+        <p>I approached every quest with a few guiding principles:</p>
+        <ul class="principles" data-reveal>
+          <li><b>Make the world react to player choices.</b><span>If a player completes a quest, I want them to see the effects when they return to that area. The world should remember what they did.</span></li>
+          <li><b>Reinforce mechanics through <mark>narrative</mark>.</b><span>Instead of telling players to craft or explore, I designed quests that required them to do it naturally. The story becomes the reason to engage with <mark>systems</mark>.</span></li>
+          <li><b>Reward curiosity.</b><span>Not everything has a quest marker. Players who talk to NPCs, explore off the beaten path, or return to locations after quests should find hidden dialogue, secret rewards, and deeper lore.</span></li>
+          <li><b>Reuse and repurpose.</b><span>I'm conscious of how much work every request creates for other teams. If I can give new meaning to an existing asset, item, or character instead of requesting new ones, that's a better design.</span></li>
+        </ul>
+      </section>
+
+      <section id="process">
+        <h2>The process</h2>
+        <ol class="steps">
+
+          <li class="step">
+            <h3>Research &amp; pitch</h3>
+            <p>I started by understanding what made The Wild unique. This region was defined by wild magic: unpredictable, dangerous, untamed. The area had a Wild Zone (a maze-like section with stronger enemies and better loot) that most players avoided unless they had a reason to enter.</p>
+            <p>I looked at existing lore and found:</p>
+            <ul>
+              <li>The game already had time rifts as a concept (used in a dungeon).</li>
+              <li>Yellow magic was associated with time manipulation.</li>
+              <li>There was a community-created creature that could open small portals.</li>
+            </ul>
+            <p>I pitched the concept: a yellow wizard trapped behind a time portal, researching time rifts. The player would need to find a way to free them using yellow magic. The quest would take players through the Wild Zone, encourage crafting or social interaction, and connect to an earlier quest in a different region.</p>
+            <p>The pitch was approved by the creative director, narrative designer, and the IP owner (who approved the character selection).</p>
+          </li>
+
+          <li class="step">
+            <h3>Structure &amp; flow</h3>
+            <p>Once approved, I mapped out the quest structure. This map is redrawn for this page from the same structure.</p>
+            <ol class="flow" aria-label="Structure of the quest">
+              <li class="stage" style="--i:0">
+                <span class="label">Stage 1</span>
+                <h4>Discovery hooks</h4>
+                <div class="stage-grid">
+                  <div class="stage-card"><b>Paper trail</b><span>Notes from the wizard scattered in the area.</span></div>
+                  <div class="stage-card"><b>Environmental breadcrumbs</b><span>Portal-traveling creatures placed along the path.</span></div>
+                  <div class="stage-card"><b>NPC placement</b><span>The wizard's friend appears in 3 locations asking “Have you seen my friend? He's a yellow hat, he's never late.”</span></div>
+                </div>
+              </li>
+              <li class="stage" style="--i:1">
+                <span class="label">Stage 2</span>
+                <h4>Core objective</h4>
+                <div class="stage-grid">
+                  <div class="stage-card"><span>Find the trapped wizard behind the time portal.</span></div>
+                  <div class="stage-card"><span>Cast a yellow magic spell to stabilize the time portal and free them.</span></div>
+                </div>
+              </li>
+              <li class="stage" style="--i:2">
+                <span class="label">Stage 3</span>
+                <h4>Multiple solution paths</h4>
+                <div class="stage-grid">
+                  <div class="stage-card"><b>Ask an earlier NPC</b><span>If the player completed the earlier Yellow Hat quest in the first region, they can ask that NPC for the spell recipe. If they haven't, they discover a new yellow hat quest in that region.</span></div>
+                  <div class="stage-card"><b>Check the forges</b><span>Players can explore forges (player-built crafting stations) to find recipes shared by other players.</span></div>
+                  <div class="stage-card"><b>Explore the region</b><span>Players can find materials and recipes on their own. I made sure the recipes for the needed spells were included in the loot tables of that region.</span></div>
+                </div>
+              </li>
+              <li class="stage" style="--i:3">
+                <span class="label">Stage 4</span>
+                <h4>Reward</h4>
+                <div class="stage-card"><span>Recipe for ancient armor, reusing an existing asset that fit the time traveling narrative.</span></div>
+              </li>
+              <li class="stage is-hidden" style="--i:4">
+                <span class="label">Stage 5&nbsp;· no quest marker</span>
+                <h4>The hidden layer</h4>
+                <div class="stage-card"><span>Optional dialogue at the Blue Wizards Academy for players who go back to talk. Details in step 5.</span></div>
+                <span class="aside">only the curious find this</span>
+              </li>
+            </ol>
+            <figure class="shot shot--small" style="--ratio:389 / 265">
+  <div class="shot-frame">
+    <div class="shot-empty"><span class="tag">Image slot</span><span>Quest icon or in-game shot</span><code>assets/img/into-the-wild-2.jpg</code></div>
+    <img data-base="assets/img/into-the-wild-2" src="assets/img/into-the-wild-2.jpg" alt="Into the Wild quest icon" loading="lazy" decoding="async">
+  </div>
+</figure>
+          </li>
+
+          <li class="step">
+            <h3>Interaction design</h3>
+            <p>This was where I spent most of my time. For each interaction, I created:</p>
+            <ul>
+              <li>Unique ID/code for engine implementation.</li>
+              <li>Dialogue flow with branching options.</li>
+              <li>Conditions (e.g., “if player has yellow spell equipped, show this option”).</li>
+              <li>Item requirements and rewards (discussed and reviewed by other team members in charge of items).</li>
+              <li>Draft dialogue establishing tone, flow, and character personality.</li>
+            </ul>
+            <p>I wrote all dialogue drafts, journal entries and item descriptions, which were then reviewed and polished by Jon Olson, the narrative designer. Some stayed as written; others were rewritten for language and tone.</p>
+          </li>
+
+          <li class="step">
+            <h3>Coordination &amp; implementation</h3>
+            <ul class="rows">
+              <li><b>Level design</b><span>I worked closely with level designers to place the interactable items and NPCs in the world. We chose locations that would require players to travel through enemy territory, naturally exposing them to the Wild Zone's challenges and rewards.</span></li>
+              <li><b>Art team</b><span>I created Jira tickets specifying asset and animation needs. For this quest, most assets were reused: the portal effects from the dungeon, the existing creature models, the ancient armor already in the item database.</span></li>
+              <li><b>Engineering</b><span>I implemented the interactions directly in the engine. Over time, I became the team's go-to for interaction implementation and bug fixing. I also worked with engineers to improve our narrative design tools, making the workflow faster for future content.</span></li>
+              <li><b>QA</b><span>I wrote test documentation and worked directly with QA to find and fix bugs, especially interaction-related issues.</span></li>
+            </ul>
+            <figure class="shot shot--contain shot--narrow" style="--ratio:284 / 762">
+  <div class="shot-frame">
+    <div class="shot-empty"><span class="tag">Image slot</span><span>Early draft of the interaction structure</span><code>assets/img/into-the-wild-draft.jpg</code></div>
+    <img data-base="assets/img/into-the-wild-draft" src="assets/img/into-the-wild-draft.jpg" alt="Early draft diagram of an open-world quest interaction timeline" loading="lazy" decoding="async">
+  </div>
+  <figcaption>Early draft of the interaction structure for an open-world quest. Illustrative only: the official document came later and is not shown here.</figcaption>
+</figure>
+          </li>
+
+          <li class="step">
+            <h3>The hidden layer</h3>
+            <p>After the quest objective is complete, the wizard reunites with their friend at the Blue Wizards Academy. If the player visits them there, with no quest marker pointing them to do so, they find optional dialogue:</p>
+            <p>The yellow wizard thanks the player and mentions they sold their research on time rifts to the Blue Wizards (the academic/techno-magic faction), and the player receives a small extra reward for their help.</p>
+            <p>This interaction has no quest marker. No objective. It exists purely to reward players who stay curious, who talk to NPCs after quests are “done.” It also reinforces the world-building: different wizard factions collaborate, research has value, the world keeps moving even after the player's involvement ends.</p>
+            <figure class="shot" style="--ratio:720 / 339">
+  <div class="shot-frame">
+    <div class="shot-empty"><span class="tag">Image slot</span><span>Image from the hidden layer section</span><code>assets/img/into-the-wild-3.jpg</code></div>
+    <img data-base="assets/img/into-the-wild-3" src="assets/img/into-the-wild-3.jpg" alt="Into the Wild hidden dialogue" loading="lazy" decoding="async">
+  </div>
+</figure>
+          </li>
+
+        </ol>
+      </section>
+
+      <section id="decisions">
+        <h2>Key design decisions</h2>
+        <ul class="principles" data-reveal>
+          <li><b>Three ways to solve it</b><span>The spell recipe can come from an earlier quest NPC, from recipes other players share at forges, or from exploring. The recipes sit in the region's loot tables, so the quest can always be finished.</span></li>
+          <li><b>Reuse before requesting</b><span>Most assets were reused: the portal effects from the dungeon, the existing creature models, and the ancient armor already in the item database.</span></li>
+          <li><b>Connect to an earlier quest</b><span>The quest builds on the Yellow Hat quest in the first region. Players who skipped it find a new one when they arrive.</span></li>
+          <li><b>A reward with no marker</b><span>The dialogue at the Blue Wizards Academy exists only for players who keep talking to NPCs after the quest is done.</span></li>
+        </ul>
+        <figure class="shot shot--contain" style="--ratio:838 / 244">
+  <div class="shot-frame">
+    <div class="shot-empty"><span class="tag">Image slot</span><span>Your original Key Design Decisions image (optional)</span><code>assets/img/into-the-wild-decisions.jpg</code></div>
+    <img data-base="assets/img/into-the-wild-decisions" src="assets/img/into-the-wild-decisions.jpg" alt="Key design decisions overview" loading="lazy" decoding="async">
+  </div>
+</figure>
+      </section>
+
+      <section id="learned">
+        <h2>What I learned</h2>
+        <ul class="checklist">
+          <li><strong>Small quests can carry big ideas.</strong> “Into the Wild” is optional content, but it reinforces core mechanics, connects regions, rewards exploration, and builds world lore. Scope doesn't determine impact.</li>
+          <li><strong>Constraints breed creativity.</strong> Limited lore meant I had to find meaning in what existed.</li>
+          <li><strong>Design for the curious player.</strong> Not everyone will find the hidden dialogue. That's okay. The players who do will feel like the world has depth, and that feeling spreads through communities.</li>
+          <li><strong>Process matters.</strong> Clear pitches, structured documentation, and close collaboration with level design, art, QA, and engineering made implementation smoother. I also contributed to improving our tools and workflows, which made future content faster to produce.</li>
+        </ul>
+      </section>
+
+      <section id="tools">
+        <h2>Tools and credits</h2>
+        <ul class="chips">
+          <li>Proprietary engine (interaction implementation)</li>
+          <li>Confluence (documentation)</li>
+          <li>Miro (flow mapping)</li>
+          <li>Jira (tickets and coordination)</li>
+          <li>Google Sheets/Docs (design specs, dialogue drafts)</li>
+        </ul>
+        <ul class="credits">
+          <li><span>Quest design &amp; implementation</span><span>Santiago Mejias</span></li>
+          <li><span>Narrative design</span><span>Jon Olson</span></li>
+          <li><span>Level design</span><span>Thomas Guana</span></li>
+          <li><span>Creative direction</span><span>Tanilo Errazuriz</span></li>
+        </ul>
+      </section>
+
+      <figure class="pull" data-reveal><blockquote>“Santiago is one of the best game designers I know. At every decision point he considers player experience and how each action integrates into the larger experience. He's also highly organized, a real wizard with a spreadsheet, and good at developing clear communication between departments.”</blockquote><figcaption><b>Jon Olson</b>, Narrative Designer/Writer, colleague at Bisonic</figcaption></figure>
+
+      <nav class="p-next" aria-label="More projects">
+        <a href="forgotten-runiverse.html"><span class="label">Project page</span><b>← Forgotten Runiverse</b></a>
+        <a href="civ-royale.html"><span class="label">Next project</span><b>Civ Royale →</b></a>
+      </nav>
+
+    </div>
+  </div>
+
+</main>
+<footer class="site-footer">
+  <div class="wrap">
+    <div>
+      <h2>Santi Mejías</h2>
+      <p>Game designer based in Buenos Aires, Argentina (UTC−3). Open to remote work worldwide.</p>
+    </div>
+    <nav aria-label="Footer">
+      <p class="label">Pages</p>
+      <ul>
+        <li><a href="index.html#work">Work</a></li>
+        <li><a href="into-the-wild.html">Case study: Into the Wild</a></li>
+        <li><a href="school-work.html">School work</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </nav>
+    <div>
+      <p class="label">Elsewhere</p>
+      <ul>
+        <li><a href="https://www.linkedin.com/in/santiago-javier-mejias-/" target="_blank" rel="noopener">LinkedIn ↗</a></li>
+        <li><a href="https://calendar.app.google/2KfUpY6mjVkL8NZu5" target="_blank" rel="noopener">Book a meeting ↗</a></li>
+        <li><a href="assets/Santiago-Mejias-CV.pdf">Download CV (PDF)</a></li>
+      </ul>
+      <p class="mono addr">santiagojmejias@gmail.com</p>
+    </div>
+    <div class="fine">
+      <p>© 2026 Santi Mejías</p>
+      <p><a href="#top">Back to top ↑</a></p>
+    </div>
+  </div>
+</footer>
+<script src="assets/js/main.js" defer></script>
+</body>
+</html>
