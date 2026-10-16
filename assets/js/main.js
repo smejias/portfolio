@@ -446,16 +446,18 @@
   function initProjectStick(scope) {
     var hero = scope.querySelector('.page-head--card .hero-card');
     var side = scope.querySelector('.p-layout .p-side');
-    var h1 = hero && hero.querySelector('h1');
-    if (!hero || !side || !h1 || side.querySelector('.pf-head') || !('IntersectionObserver' in window)) return;
+    if (!side || side.querySelector('.pf-head')) return;
+    var title = hero && hero.querySelector('h1') ? hero.querySelector('h1').textContent : side.getAttribute('data-pf-title');
+    if (!title || (hero && !('IntersectionObserver' in window))) return;
     var head = doc.createElement('div');
     head.className = 'pf-head';
     head.setAttribute('aria-hidden', 'true');
-    head.style.cssText = hero.closest('.page-head').getAttribute('style') || '';
+    head.style.cssText = (hero ? hero.closest('.page-head') : side).getAttribute('style') || '';
     var t = doc.createElement('span');
-    t.textContent = h1.textContent;
+    t.textContent = title;
     head.appendChild(t);
     side.insertBefore(head, side.firstChild);
+    if (!hero) { side.classList.add('is-stuck'); return; } /* pages without a hero card: header always on */
     new IntersectionObserver(function (e) {
       var r = e[0];
       side.classList.toggle('is-stuck', !r.isIntersecting && r.boundingClientRect.bottom < 0);

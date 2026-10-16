@@ -958,9 +958,16 @@ dialog.lightbox::backdrop { background: rgba(10, 14, 20, 0.78); }
 
 .p-next { padding-top: var(--u); background: var(--dash) top / 100% 1.5px no-repeat; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 0 16px; max-width: none !important; }
 .p-next a { display: flex; flex-direction: column; gap: 0; color: var(--ink); text-decoration: none; max-width: 48%; }
-.p-next a:hover b { text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 0.2em; }
-.p-next a b { font: 400 1.4rem/var(--u) var(--f-display); color: var(--action); }
-.p-next a:last-child { text-align: right; margin-left: auto; }
+.p-next a { align-items: flex-start; }
+.p-next a b {
+  display: inline-flex; align-items: center; min-height: 44px; margin-block: 6px; padding: 0.55em 1.1em;
+  font: 650 0.95rem/1.25 var(--f-body); color: var(--action); background: var(--card);
+  border: 1.5px solid var(--action); border-radius: 6px 10px 7px 11px;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.p-next a:hover b { transform: translate(-2px, -2px); box-shadow: 3px 3px 0 var(--action); }
+@media (prefers-reduced-motion: reduce) { .p-next a:hover b { transform: none; } }
+.p-next a:last-child { text-align: right; margin-left: auto; align-items: flex-end; }
 
 /* ---------- Flow (vertical timeline / quest map) ---------- */
 
