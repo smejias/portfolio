@@ -595,14 +595,46 @@ dialog.lightbox::backdrop { background: rgba(10, 14, 20, 0.78); }
 .teaser-copy { display: flex; flex-direction: column; gap: 14px; align-items: flex-start; }
 .teaser-copy p, .teaser-copy .label { margin: 0; }
 .teaser-copy p { max-width: 46ch; line-height: 1.6; }
+.cta-row { position: relative; width: fit-content; max-width: 100%; }
+.start-note { display: none; }
+@media (min-width: 560px) {
+  .start-note { display: flex; align-items: flex-end; gap: 4px; position: absolute; left: calc(100% + 10px); top: 50%; margin-top: -4px; white-space: nowrap; pointer-events: none; rotate: -3deg; color: var(--accent); }
+  .start-note span { font: 600 1.35rem/1 var(--f-hand); }
+  .start-note svg { width: 44px; height: 26px; order: -1; margin-bottom: 8px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; overflow: visible; }
+  .start-note path { stroke-dasharray: 1.02; stroke-dashoffset: 0; }
+  .js .teaser:has(.trail:not(.in)) .start-note path { stroke-dashoffset: 1.02; }
+  .js .teaser:has(.trail:not(.in)) .start-note span { opacity: 0; }
+  .js .start-note path { transition: stroke-dashoffset 0.5s ease 1.9s; }
+  .js .start-note path.head { transition-delay: 2.35s; transition-duration: 0.2s; }
+  .js .start-note span { transition: opacity 0.4s ease 1.7s; }
+}
 .trail { list-style: none; display: grid; gap: 0; position: relative; margin: 0; padding: 0; }
 .trail li { position: relative; padding: 0 0 18px 34px; font-weight: 600; line-height: 1.5; }
 .trail li:last-child { padding-bottom: 0; }
-.trail li::before { content: ""; position: absolute; left: 0; top: 0.35em; width: 16px; height: 16px; border: 2px solid var(--accent); border-radius: 50%; background: var(--card); }
-.trail li::after { content: ""; position: absolute; left: 7px; top: calc(0.35em + 16px); bottom: -0.35em; border-left: 2px dashed var(--accent); }
+.trail li::before {
+  content: ""; position: absolute; left: 0; top: 0.35em; width: 16px; height: 16px; border: 2px solid var(--accent); border-radius: 50%; background: var(--card);
+  display: grid; place-items: center; font: 700 0.72rem/1 var(--f-mono); color: var(--accent); box-sizing: border-box;
+}
+.trail li:first-child::before { content: "!"; background: var(--accent); color: var(--card); }
+.trail li.is-hidden::before { content: "?"; border-style: dashed; }
+/* hand-drawn path between nodes */
+.trail li::after {
+  content: ""; position: absolute; left: 0; width: 16px; top: calc(0.35em + 16px); bottom: -0.35em; background: var(--accent);
+  -webkit-mask: var(--seg) 0 0 / 100% 100% no-repeat; mask: var(--seg) 0 0 / 100% 100% no-repeat;
+  --seg: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 100' preserveAspectRatio='none'%3E%3Cpath d='M8 0C5 22 11 40 8 58S5 85 8 100' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-dasharray='5 4' vector-effect='non-scaling-stroke'/%3E%3C/svg%3E");
+}
+.trail li:nth-child(even)::after {
+  --seg: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 100' preserveAspectRatio='none'%3E%3Cpath d='M8 0C11 20 5 45 8 62S11 88 8 100' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-dasharray='5 4' vector-effect='non-scaling-stroke'/%3E%3C/svg%3E");
+}
 .trail li:last-child::after { display: none; }
+.trail li:nth-child(2) { --k: 1; } .trail li:nth-child(3) { --k: 2; } .trail li:nth-child(4) { --k: 3; } .trail li:nth-child(5) { --k: 4; }
+.js .trail li::before { transition: scale 0.35s cubic-bezier(.3,1.6,.5,1) calc(var(--k, 0) * 0.32s + 0.1s); }
+.js .trail li::after { clip-path: inset(0); transition: clip-path 0.4s ease calc(var(--k, 0) * 0.32s + 0.3s); }
+.js .trail:not(.in) li::before { scale: 0; }
+.js .trail:not(.in) li::after { clip-path: inset(0 0 100% 0); }
+.trail.in li.is-hidden::before { animation: ping 2.6s ease-out 1.8s infinite; }
+@keyframes ping { 0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--accent) 45%, transparent); } 70%, 100% { box-shadow: 0 0 0 9px transparent; } }
 .trail li small { display: block; font: 500 0.78rem/1.4 var(--f-mono); color: var(--ink-3); font-weight: 500; }
-.trail li.is-hidden::before { border-style: dashed; }
 .trail li.is-hidden { color: var(--ink-2); }
 
 /* ---------- Ledger (all titles) ---------- */
@@ -986,6 +1018,7 @@ body::before {
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
+  .trail.in li.is-hidden::before { animation: none; }
   *, *::before, *::after { transition-duration: 0.001ms !important; animation-duration: 0.001ms !important; transition-delay: 0s !important; }
   .js [data-reveal].pre:not(.in) { opacity: 1; transform: none; }
   .js .flow:not(.in)::before { transform: none; }
