@@ -544,6 +544,8 @@ dialog.lightbox::backdrop { background: rgba(10, 14, 20, 0.78); }
 .work .tags { margin-block: -2px; }
 .more { margin-top: 4px; font-weight: 650; color: var(--action); display: inline-flex; gap: 0.5em; align-items: center; }
 .work:hover .more span { transform: translateX(4px); }
+.more.btn { margin-block: 2px; }
+.work:hover .more.btn, .work:focus-within .more.btn { transform: translate(-2px, -2px); box-shadow: 3px 3px 0 var(--action); }
 .more span { transition: transform 0.2s ease; display: inline-block; }
 
 /* Work cards as manila folders. The tab (numbered by a CSS counter, so no HTML to maintain) merges
