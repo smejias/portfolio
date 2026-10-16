@@ -886,6 +886,29 @@ dialog.lightbox::backdrop { background: rgba(10, 14, 20, 0.78); }
   .facts--project > div + div { border-top: 1.5px dashed var(--line); }
   .facts--project > div { padding-block: 11px; }
 }
+/* sticky project card: header with key art + title, shown once the hero card has scrolled away (desktop) */
+.pf-head { display: none; }
+@media (min-width: 960px) {
+  .pf-head {
+    display: flex; align-items: flex-end; position: relative; isolation: isolate; overflow: hidden; box-sizing: border-box;
+    height: calc(var(--u) * 3); max-height: 0; opacity: 0; margin: 0 0 -1px; padding: 0 18px 10px;
+    background: var(--card); border: 0 solid var(--ink); border-radius: 6px 6px 0 0;
+    box-shadow: 5px 0 0 var(--accent-soft);
+    transition: max-height 0.35s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.25s ease;
+  }
+  .pf-head::before {
+    content: ""; position: absolute; inset: 0 0 0 40%; z-index: -1; background: var(--banner) var(--banner-pos, 70% 30%) / cover no-repeat;
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 60%); mask-image: linear-gradient(90deg, transparent, #000 60%);
+  }
+  .pf-head span { font: 400 1.35rem/1.15 var(--f-display); color: var(--ink); max-width: 11em; text-shadow: 0 0 6px var(--card), 0 0 6px var(--card), 0 0 2px var(--card); }
+  .p-side.is-stuck .pf-head { max-height: calc(var(--u) * 3); opacity: 1; border-width: 1.5px 1.5px 0; }
+  .p-side.is-stuck .facts--project { margin-top: calc(var(--u) * -1); border-radius: 0 0 6px 6px; }
+  .p-side.is-stuck .facts--project::before { display: none; }
+  .facts--project { transition: margin-top 0.35s cubic-bezier(0.2, 0.8, 0.2, 1); }
+}
+@media (min-width: 960px) and (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .pf-head::before { filter: saturate(0.65) brightness(0.65); } }
+@media (min-width: 960px) { :root[data-theme="dark"] .pf-head::before { filter: saturate(0.65) brightness(0.65); } }
+@media (prefers-reduced-motion: reduce) { .pf-head, .facts--project { transition: none; } }
 .side-block h2 { font: 500 0.72rem/var(--u) var(--f-mono); text-transform: uppercase; letter-spacing: 0.09em; color: var(--ink-3); }
 .chips { display: flex; flex-wrap: wrap; gap: 0 8px; list-style: none; }
 .chips li { display: inline-flex; align-items: center; height: 24px; margin-block: 2px; padding: 0 0.75em; border: 1.5px solid var(--ink); border-radius: 999px; font-size: 0.85rem; line-height: 1; font-weight: 600; background: var(--card); }

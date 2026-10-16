@@ -441,6 +441,27 @@
     schedule();
   }
 
+  /* Project pages: once the hero card scrolls away, the sticky Project File card grows a header
+     (key art + game title) so you always know which game you are reading about. */
+  function initProjectStick(scope) {
+    var hero = scope.querySelector('.page-head--card .hero-card');
+    var side = scope.querySelector('.p-layout .p-side');
+    var h1 = hero && hero.querySelector('h1');
+    if (!hero || !side || !h1 || side.querySelector('.pf-head') || !('IntersectionObserver' in window)) return;
+    var head = doc.createElement('div');
+    head.className = 'pf-head';
+    head.setAttribute('aria-hidden', 'true');
+    head.style.cssText = hero.closest('.page-head').getAttribute('style') || '';
+    var t = doc.createElement('span');
+    t.textContent = h1.textContent;
+    head.appendChild(t);
+    side.insertBefore(head, side.firstChild);
+    new IntersectionObserver(function (e) {
+      var r = e[0];
+      side.classList.toggle('is-stuck', !r.isIntersecting && r.boundingClientRect.bottom < 0);
+    }).observe(hero);
+  }
+
   /* ---------- Public init (also used by the single-file preview) ---------- */
   /* ---------- Rhythm ----------
      The paper behind the page is ruled every --u pixels (28). The CSS gives every line of
@@ -611,6 +632,7 @@
     initDraw(scope);
     initCounters(scope);
     initStamps(scope);
+    initProjectStick(scope);
     initToc(scope);
     scheduleRhythm();
   }
