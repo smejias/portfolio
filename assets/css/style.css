@@ -362,6 +362,38 @@ mark {
 .role { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 0 16px; }
 .role b { font: 400 1.5rem/var(--u) var(--f-display); }
 .role span { font: 500 0.75rem/var(--u) var(--f-mono); text-transform: uppercase; letter-spacing: 0.09em; color: var(--ink-3); }
+
+/* A hand-written list next to the role, crossed off in order: QA, product, then design. The
+   final state (first two struck, "design" highlighted) is the default, so it is what you get
+   without JS or with reduced motion; with JS it plays once (initSwap in main.js adds .run).
+   Every word is always in the layout (only its opacity animates), so nothing shifts. The
+   selectors start with .role to beat `.role span` above, which would make it small mono caps. */
+.role .swap {
+  flex-basis: 100%;   /* always its own line, so it never wraps by accident at some widths */
+  display: inline-flex; align-items: baseline; gap: 0 0.5em;
+  font: 600 1.45rem/var(--u) var(--f-hand); text-transform: none; letter-spacing: 0; color: var(--accent);
+  transform: rotate(-2deg); transform-origin: left center;
+}
+.role .swap .w { position: relative; display: inline-block; font: inherit; text-transform: none; letter-spacing: 0; color: inherit; }
+.role .swap s { position: relative; display: inline-block; text-decoration: none; color: var(--ink-3); }
+.role .swap s::after {
+  content: ""; position: absolute; left: -0.12em; right: -0.12em; top: 54%; height: 2px; border-radius: 2px;
+  background: var(--accent); transform: rotate(-5deg); transform-origin: left center;
+}
+.role .swap .w-design {
+  padding-inline: 0.1em;
+  background-image: linear-gradient(transparent 50%, var(--mark) 50% 95%, transparent 95%);
+  background-repeat: no-repeat; background-size: 100% 100%;
+}
+.js .swap:not(.run):not(.done) .w { opacity: 0; }
+.js .swap:not(.run):not(.done) s::after { transform: rotate(-5deg) scaleX(0); }
+.js .swap:not(.run):not(.done) .w-design { background-size: 0% 100%; }
+.js .swap.run .w { animation: swap-in 0.32s ease var(--t, 0s) both; }
+.js .swap.run s::after { animation: swap-strike 0.28s ease var(--ts, 0s) both; }
+.js .swap.run .w-design { animation: swap-in 0.32s ease var(--t, 0s) both, swap-mark 0.5s cubic-bezier(0.65, 0, 0.35, 1) var(--tm, 0s) both; }
+@keyframes swap-in { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+@keyframes swap-strike { from { transform: rotate(-5deg) scaleX(0); } to { transform: rotate(-5deg) scaleX(1); } }
+@keyframes swap-mark { from { background-size: 0% 100%; } to { background-size: 100% 100%; } }
 .lede { font-size: clamp(1.08rem, 1rem + 0.5vw, 1.3rem); line-height: var(--u); max-width: 34em; }
 .lede + .lede { color: var(--ink-2); font-size: clamp(1rem, 0.95rem + 0.3vw, 1.12rem); margin-top: var(--u); }
 .avail {
@@ -493,6 +525,34 @@ dialog.lightbox p { margin: 10px 0 0; font: 500 0.8rem/1.4 var(--f-mono); color:
 .more { margin-top: 4px; font-weight: 650; color: var(--action); display: inline-flex; gap: 0.5em; align-items: center; }
 .work:hover .more span { transform: translateX(4px); }
 .more span { transition: transform 0.2s ease; display: inline-block; }
+
+/* Work cards as manila folders. The tab (numbered by a CSS counter, so no HTML to maintain) merges
+   with the card's top edge: it is 24px tall and sits exactly above the padding box, which covers the
+   card's own 1.5px top border under it. On a real pointer, hovering (or focusing inside) a card slides
+   its cover up out of its slot, past the top edge, like a document pulled half out of the folder; the
+   slot it left stays behind as a dashed outline. The lift uses the separate `translate` and `rotate`
+   properties, so it never fights the stamp's `transform` animation on the chip. */
+.work-list { counter-reset: folder; }
+.work::before {
+  counter-increment: folder; content: "0" counter(folder);
+  position: absolute; left: 22px; top: -24px; height: 24px; padding: 0 14px;
+  display: flex; align-items: center;
+  font: 500 0.7rem/1 var(--f-mono); letter-spacing: 0.1em; color: var(--ink-3);
+  background: var(--card); border: 1.5px solid var(--ink); border-bottom: 0; border-radius: 8px 8px 0 0;
+}
+.work-media { isolation: isolate; }
+.work-media::before {
+  content: ""; position: absolute; inset: 0; z-index: -1;
+  border: 1.5px dashed var(--line); border-radius: 4px; opacity: 0; transition: opacity 0.25s ease;
+}
+.work-media .shot, .work-media .chip { transition: translate 0.4s cubic-bezier(0.2, 0.8, 0.2, 1), rotate 0.4s cubic-bezier(0.2, 0.8, 0.2, 1); }
+.work-media .shot-frame { transition: box-shadow 0.4s ease; }
+@media (hover: hover) and (pointer: fine) {
+  .work:hover .work-media::before, .work:focus-within .work-media::before { opacity: 1; }
+  .work:hover .work-media .shot, .work:focus-within .work-media .shot { translate: 0 -30px; rotate: -1.2deg; }
+  .work:hover .work-media .chip, .work:focus-within .work-media .chip { translate: 0 -30px; }
+  .work:hover .work-media .shot-frame, .work:focus-within .work-media .shot-frame { box-shadow: 0 14px 16px -10px rgba(23, 33, 43, 0.5); }
+}
 
 /* ---------- Case study teaser ---------- */
 
@@ -878,6 +938,7 @@ body::before {
   .btn:hover, .work:hover, .vid:hover { transform: none; }
   .quote:nth-child(odd), .quote:nth-child(even) { transform: none; }
   .polaroid:hover, .polaroid:hover::before { transform: none; }
+  .work:hover .work-media .shot, .work:focus-within .work-media .shot, .work:hover .work-media .chip, .work:focus-within .work-media .chip { translate: none; rotate: none; }
   ::view-transition-group(*), ::view-transition-old(*), ::view-transition-new(*) { animation: none !important; }
 }
 
