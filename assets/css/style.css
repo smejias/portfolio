@@ -245,8 +245,8 @@ mark {
 /* Project tags as rubber stamps: three inks, double rule, a few degrees off-square, with a worn speckle eaten out of the ink
    (alpha mask from SVG noise). main.js adds .in as each one scrolls into view and it stamps down once, staggered. Height stays
    24px + 2px margins = one 28px cell, so the row keeps its rhythm; the rotation is a transform and never changes layout. */
-.hero-card .tags { gap: 0 12px; }
-.hero-card .tag {
+:is(.hero-card, .work) .tags { gap: 0 12px; }
+:is(.hero-card, .work) .tag {
   --rot: -3deg; --ink-c: var(--accent); --stamp-delay: 0.3s;
   height: 24px; margin-block: 2px; padding: 0 0.7em; font-weight: 700; letter-spacing: 0.12em;
   color: var(--ink-c); background: transparent; border: 4px double currentColor; border-radius: 3px 5px 3px 6px / 5px 3px 6px 3px;
@@ -255,12 +255,12 @@ mark {
   mask-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='64'><filter id='w' x='0' y='0' width='100%' height='100%'><feTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='2' seed='7' stitchTiles='stitch'/><feColorMatrix type='matrix' values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 -9 6.4'/></filter><rect width='100%' height='100%' filter='url(%23w)'/></svg>");
   -webkit-mask-size: 160px 64px; mask-size: 160px 64px;
 }
-.hero-card .tag:nth-child(4n+1) { --ink-c: var(--ok); --rot: -3.5deg; }
-.hero-card .tag:nth-child(4n+2) { --ink-c: var(--accent); --rot: 2deg; }
-.hero-card .tag:nth-child(4n+3) { --ink-c: var(--action); --rot: -2deg; }
-.hero-card .tag:nth-child(4n+4) { --ink-c: var(--accent); --rot: 3deg; }
-.js .hero-card .tag:not(.in) { opacity: 0; }
-.js .hero-card .tag.in { animation: stamp-in 0.5s cubic-bezier(0.2, 0.9, 0.3, 1) var(--stamp-delay) both; }
+:is(.hero-card, .work) .tag:nth-child(4n+1) { --ink-c: var(--ok); --rot: -3.5deg; }
+:is(.hero-card, .work) .tag:nth-child(4n+2) { --ink-c: var(--accent); --rot: 2deg; }
+:is(.hero-card, .work) .tag:nth-child(4n+3) { --ink-c: var(--action); --rot: -2deg; }
+:is(.hero-card, .work) .tag:nth-child(4n+4) { --ink-c: var(--accent); --rot: 3deg; }
+.js :is(.hero-card, .work) .tag:not(.in) { opacity: 0; }
+.js :is(.hero-card, .work) .tag.in { animation: stamp-in 0.5s cubic-bezier(0.2, 0.9, 0.3, 1) var(--stamp-delay) both; }
 @keyframes stamp-in {
   0%   { opacity: 0; transform: rotate(calc(var(--rot) - 9deg)) scale(1.9); }
   55%  { opacity: 1; transform: rotate(var(--rot)) scale(0.92); }
@@ -520,7 +520,7 @@ dialog.lightbox::backdrop { background: rgba(10, 14, 20, 0.78); }
 .work h3 a::after { content: ""; position: absolute; inset: 0; border-radius: 6px; }
 .role-line { font-weight: 650; margin: 0; line-height: 1.4; }
 .work p { margin: 0; color: var(--ink-2); line-height: 1.6; }
-.work .tags { margin-block: -3px; }
+.work .tags { margin-block: -2px; }
 .more { margin-top: 4px; font-weight: 650; color: var(--action); display: inline-flex; gap: 0.5em; align-items: center; }
 .work:hover .more span { transform: translateX(4px); }
 .more span { transition: transform 0.2s ease; display: inline-block; }
@@ -622,7 +622,8 @@ dialog.lightbox::backdrop { background: rgba(10, 14, 20, 0.78); }
 
 /* ---------- Titles timeline (every title, oldest first) ---------- */
 /* Same dashed spine as the About page. On wide screens the spine moves to the centre and the cards alternate left and
-   right, each overlapping the one before it a little, with the years as pills sitting on the line. */
+   right, each overlapping the one before it a little. The pill on the spine is the year the job STARTED (one per year;
+   later titles from the same year get a plain dot); the full span of years is printed inside each card. */
 
 .titles { gap: var(--u); }
 .t-item { position: relative; padding-left: 54px; }
@@ -632,10 +633,15 @@ dialog.lightbox::backdrop { background: rgba(10, 14, 20, 0.78); }
 }
 .t-item.is-design::before { background: var(--accent); }
 .t-when { display: block; font: 500 0.72rem/var(--u) var(--f-mono); letter-spacing: 0.08em; color: var(--accent); }
-.t-card { display: flex; flex-direction: column; gap: 0; padding: 14px 16px 12px; background: var(--card); border: 1.5px solid var(--ink); border-radius: 4px; line-height: 1.5; }
+.t-item.is-cont .t-when { display: none; }
+.t-card { display: flex; flex-direction: column; gap: 0; padding: 0 16px 12px; background: var(--card); border: 1.5px solid var(--ink); border-radius: 4px; line-height: 1.5; }
 .t-item.is-design .t-card { box-shadow: 5px 5px 0 var(--accent-soft); }
+.t-media { aspect-ratio: 2.2 / 1; margin: 0 -16px 10px; overflow: hidden; border-bottom: 1.5px solid var(--ink); border-radius: 2.5px 2.5px 0 0; background: var(--accent-soft); }
+.t-media img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.t-top { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
 .t-kind { font: 500 0.68rem/1.6 var(--f-mono); text-transform: uppercase; letter-spacing: 0.09em; color: var(--ink-3); }
 .t-item.is-design .t-kind { color: var(--accent); }
+.t-range { font: 500 0.72rem/1.6 var(--f-mono); letter-spacing: 0.06em; color: var(--ink-2); white-space: nowrap; }
 .t-card h3 { font-size: 1.3rem; line-height: 1.25; }
 .t-card h3 a { color: var(--action); text-decoration-color: var(--action); text-decoration-thickness: 2px; }
 .t-card h3 a::after { content: " →"; }
@@ -652,11 +658,12 @@ dialog.lightbox::backdrop { background: rgba(10, 14, 20, 0.78); }
   .t-item { width: 50%; padding-left: 0; }
   .t-item::before { display: none; }
   .t-item:nth-child(odd) { justify-self: start; padding-right: 60px; }
-  .t-item:nth-child(even) { justify-self: end; padding-left: 60px; margin-top: calc(var(--u) * -4); }
-  .t-when {
-    position: absolute; top: 2px; z-index: 1; padding: 0 0.7em; height: 24px; line-height: 21px; white-space: nowrap;
+  .t-item:nth-child(even) { justify-self: end; padding-left: 60px; margin-top: calc(var(--u) * -6); }
+  .t-when, .t-item.is-cont .t-when {
+    display: block; position: absolute; top: 2px; z-index: 1; min-width: 64px; padding: 0 0.7em; height: 24px; line-height: 21px; text-align: center;
     background: var(--paper); border: 1.5px solid var(--accent); border-radius: 999px;
   }
+  .t-item.is-cont .t-when { top: 6px; min-width: 0; width: 16px; height: 16px; padding: 0; font-size: 0; }
   .t-item:nth-child(odd) .t-when { right: 0; translate: 50% 0; }
   .t-item:nth-child(even) .t-when { left: 0; translate: -50% 0; }
   .t-item.is-design .t-when { background: var(--accent); color: var(--on-accent); }
