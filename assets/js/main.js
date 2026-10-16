@@ -228,29 +228,57 @@
     var els = $$('[data-count]', scope).filter(function (el) { return !el.__ct; });
     els.forEach(function (el) { el.__ct = true; });
     if (reduce || !hasIO) return;
-    /* Numbers already visible on load stay final, so a first frame is never mid-count. */
-    els = els.filter(function (el) { return el.getBoundingClientRect().top > window.innerHeight * 0.98; });
+
+    function suffixOf(el) { return el.getAttribute('data-suffix') || ''; }
+    function finalText(el) { return el.getAttribute('data-count') + suffixOf(el); }
 
     function run(el) {
       var end = parseFloat(el.getAttribute('data-count'));
-      var suffix = el.getAttribute('data-suffix') || '';
       var t0 = null, dur = 1100;
       function frame(t) {
         if (t0 === null) t0 = t;
         var p = Math.min(1, (t - t0) / dur);
         var eased = 1 - Math.pow(1 - p, 3);
-        el.textContent = Math.round(end * eased) + suffix;
+        el.textContent = Math.round(end * eased) + suffixOf(el);
         if (p < 1) window.requestAnimationFrame(frame);
       }
-      el.textContent = '0' + suffix;
       window.requestAnimationFrame(frame);
     }
 
+    /* Every counter starts at zero and counts up exactly once. The ones already on screen at
+       load used to be skipped (so on a desktop-sized window the strip never moved); now they
+       count a moment after load, one after another. The ones below the fold wait until they are
+       mostly in view. The real number stays in data-count and is restored for printing. */
+    els.forEach(function (el) { el.textContent = '0' + suffixOf(el); });
+    window.addEventListener('beforeprint', function () { els.forEach(function (el) { el.textContent = finalText(el); }); });
+
+    var onScreen = els.filter(function (el) { return el.getBoundingClientRect().top < window.innerHeight * 0.98; });
+    var below = els.filter(function (el) { return onScreen.indexOf(el) === -1; });
+
+    onScreen.forEach(function (el, i) { window.setTimeout(function () { run(el); }, 450 + i * 130); });
+
     var io = new IntersectionObserver(function (entries) {
-      entries.forEach(function (e) {
-        if (e.isIntersecting) { run(e.target); io.unobserve(e.target); }
+      var hit = entries.filter(function (e) { return e.isIntersecting; });
+      hit.forEach(function (e, i) {
+        io.unobserve(e.target);
+        window.setTimeout(function () { run(e.target); }, i * 130);
       });
     }, { threshold: 0.6 });
+    below.forEach(function (el) { io.observe(el); });
+  }
+
+  /* ---------- Hero crossed-off list ---------- */
+  /* Plays once when the list is on screen. With reduced motion (or no IntersectionObserver) it
+     just shows its final state. */
+  function initSwap(scope) {
+    var els = $$('.swap', scope).filter(function (el) { return !el.__sw; });
+    els.forEach(function (el) { el.__sw = true; });
+    if (reduce || !hasIO) { els.forEach(function (el) { el.classList.add('done'); }); return; }
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) { e.target.classList.add('run'); io.unobserve(e.target); }
+      });
+    }, { threshold: 0.9 });
     els.forEach(function (el) { io.observe(el); });
   }
 
@@ -491,6 +519,7 @@
     initDraw(scope);
     initCounters(scope);
     initStamps(scope);
+    initSwap(scope);
     initToc(scope);
     scheduleRhythm();
   }
