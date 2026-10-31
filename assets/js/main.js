@@ -301,11 +301,17 @@
     els.forEach(function (el) { el.__dr = true; });
     if (reduce || !hasIO) { els.forEach(function (el) { el.classList.add('in'); }); return; }
 
+    /* A flow can be taller than the screen (on a phone, a long one is several
+       screens high), so "22% visible" may never happen. Also count it as seen
+       once it fills a good part of the viewport. */
+    var steps = [];
+    for (var s = 0; s <= 20; s++) steps.push(s / 20);
     var io = new IntersectionObserver(function (entries) {
       entries.forEach(function (e) {
-        if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+        var tall = e.intersectionRect.height >= window.innerHeight * 0.3;
+        if (e.isIntersecting && (e.intersectionRatio >= 0.22 || tall)) { e.target.classList.add('in'); io.unobserve(e.target); }
       });
-    }, { threshold: 0.22 });
+    }, { threshold: steps });
 
     els.forEach(function (el) {
       if (el.hasAttribute('data-draw-now')) {
