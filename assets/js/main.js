@@ -631,8 +631,15 @@
   }
 
   /* ---------- Public init (also used by the single-file preview) ---------- */
+  /* Looping clips that stand in for GIFs: they stay still for people who ask for less motion. */
+  function initLoopVideos(scope) {
+    if (!window.matchMedia || !window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    $$('video[data-loop]', scope).forEach(function (v) { v.removeAttribute('autoplay'); v.pause(); });
+  }
+
   function init(scope) {
     scope = scope || doc;
+    initLoopVideos(scope);
     initSlots(scope);
     initReveal(scope);
     initMarks(scope);

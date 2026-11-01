@@ -5,6 +5,8 @@
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var logEl = document.getElementById('mr-log');
   var st;
+  var compact = false;       // phones: cards take their natural height, notes sit behind a button
+  var notesOpen = true;      // phones: whether the design note is showing (kept from card to card)
   var found = {};          // endings found, kept across restarts
 
   function fresh() {
@@ -492,7 +494,7 @@
     return out;
   }
 
-  function makeTurn(box, note, animate) {
+  function makeTurn(box, note, animate, label) {
     var turn = document.createElement('div');
     turn.className = 'turn';
     turn.appendChild(box);
@@ -500,16 +502,29 @@
     area.className = 'notes';
     if (note) {
       var parts = chunks(note), before = 0;
+      label = label || 'Design note';
       parts.forEach(function (part, i) {
         var pi = document.createElement('aside');
         pi.className = 'postit postit--' + (i % 3);
-        pi.setAttribute('aria-label', 'Design note');
-        pi.innerHTML = '<b>Design note' + (parts.length > 1 ? ' ' + (i + 1) + '/' + parts.length : '') + '</b><p></p>';
+        pi.setAttribute('aria-label', label);
+        pi.innerHTML = '<b>' + label + (parts.length > 1 ? ' ' + (i + 1) + '/' + parts.length : '') + '</b><p></p>';
         var np = pi.querySelector('p');
         if (animate) typeNote(np, part, 160 + before * 1000 / CPS); else np.textContent = part;
         before += part.length;
         area.appendChild(pi);
       });
+      var tg = document.createElement('button');
+      tg.type = 'button';
+      tg.className = 'notes-toggle';
+      tg.setAttribute('aria-expanded', notesOpen ? 'true' : 'false');
+      tg.innerHTML = '<span aria-hidden="true">' + (notesOpen ? '\u25BE' : '\u25B8') + '</span> ' + (notesOpen ? 'Hide' : 'Show') + ' design note' + (parts.length > 1 ? 's' : '');
+      tg.addEventListener('click', function () {
+        notesOpen = !notesOpen;
+        mrEl.classList.toggle('notes-open', notesOpen);
+        tg.setAttribute('aria-expanded', notesOpen ? 'true' : 'false');
+        tg.innerHTML = '<span aria-hidden="true">' + (notesOpen ? '\u25BE' : '\u25B8') + '</span> ' + (notesOpen ? 'Hide' : 'Show') + ' design note' + (parts.length > 1 ? 's' : '');
+      });
+      turn.appendChild(tg);
     }
     turn.appendChild(area);
     return turn;
@@ -548,6 +563,10 @@
     return { box: box, note: val(p.note, st) };
   }
 
+  function startNote() {
+    return compact ? null : 'My design notes show up here as you play, one or more for each step. They are the reasons behind what you are seeing.';
+  }
+
   function buildStart() {
     var box = document.createElement('section');
     box.className = 'pass';
@@ -583,8 +602,33 @@
   function mount(turn) {
     logEl.innerHTML = '';
     logEl.appendChild(turn);
-    var ch = turn.querySelector('.pass').offsetHeight, nh = turn.querySelector('.notes').offsetHeight;
-    if (ch > cardH + 1 || nh > notesH + 1) setHeights(Math.max(ch, cardH), Math.max(nh, notesH));   // taller than predicted: grow, never shrink
+    fit(turn);
+  }
+
+  // Desktop: the stage has one fixed height. The card keeps its natural height and the sticky
+  // notes use what is left, with bigger handwriting when there is more room.
+  function fit(turn) {
+    if (compact) return;
+    var area = turn.querySelector('.notes'), pits = area.querySelectorAll('.postit');
+    var card = turn.querySelector('.pass').offsetHeight;
+    if (!pits.length) { if (card > stageH + 1) setStage(card); return; }
+    function need() {
+      var m = 0;
+      Array.prototype.forEach.call(pits, function (pi) {
+        var p = pi.querySelector('p');
+        m = Math.max(m, p.offsetTop + p.offsetHeight + 22);
+      });
+      return m;
+    }
+    area.style.setProperty('--ps', 1);
+    var n = need();
+    if (card + n - 6 > stageH + 1) { setStage(Math.ceil(card + n - 6) + 1); return; }   // taller than predicted: grow, never shrink
+    var left = stageH - card + 6;
+    for (var k = 1.35; k > 1.001; k -= 0.05) {
+      area.style.setProperty('--ps', k.toFixed(2));
+      if (need() <= left) return;
+    }
+    area.style.setProperty('--ps', 1);
   }
 
   function focusFirst(turn) {
@@ -619,7 +663,7 @@
   function showStart() {
     hist = [];
     st = fresh();
-    mount(makeTurn(buildStart(), null, false));
+    mount(makeTurn(buildStart(), startNote(), false, 'How this works'));
     document.getElementById('go').addEventListener('click', function () {
       st.tree = true;
       st.curse = true;
@@ -634,12 +678,11 @@
     draw();
   }
 
-  // ---- every card gets the same height, so the page below never moves ----
-  var cardH = 0, notesH = 0;
-  function setHeights(c, n) {
-    cardH = c; notesH = n;
-    logEl.style.setProperty('--mr-card-h', c + 'px');
-    logEl.style.setProperty('--mr-notes-h', n + 'px');
+  // ---- the stage has one height, so the page below never moves (desktop) ----
+  var stageH = 0;
+  function setStage(h) {
+    stageH = h;
+    logEl.style.setProperty('--mr-stage-h', h ? h + 'px' : 'auto');
   }
 
   function variants() {
@@ -664,9 +707,20 @@
     return out;
   }
 
+  function redrawIf(was) {
+    if (!logEl.firstChild) return;
+    if (was !== compact) { if (hist.length) draw(); else showStart(); }
+    else fit(logEl.firstChild);
+  }
+
   function measure() {
     var width = logEl.clientWidth;
     if (!width) return;
+    var was = compact;
+    compact = width <= 520;
+    mrEl.classList.toggle('mr--compact', compact);
+    mrEl.classList.toggle('notes-open', notesOpen);
+    if (compact) { setStage(0); redrawIf(was); return; }
     var probe = document.createElement('div');
     probe.setAttribute('aria-hidden', 'true');
     probe.style.cssText = 'position:absolute;left:0;top:0;visibility:hidden;pointer-events:none;width:' + width + 'px';
@@ -683,11 +737,11 @@
       });
     });
     hist = [{}, {}];                      // so the Back button is counted
-    var maxCard = 0, maxNotes = 0;
+    var maxStage = 0;
     function take(turn) {
       probe.appendChild(turn);
-      maxCard = Math.max(maxCard, turn.querySelector('.pass').offsetHeight);
-      maxNotes = Math.max(maxNotes, turn.querySelector('.notes').offsetHeight);
+      var c = turn.querySelector('.pass').offsetHeight, a = turn.querySelector('.notes');
+      maxStage = Math.max(maxStage, c + (a.children.length ? a.offsetHeight - 6 : 0));
       probe.removeChild(turn);
     }
 
@@ -706,11 +760,12 @@
     take(makeTurn(buildEnd(), null, false));
     st = savedSt; hist = savedHist; found = savedFound;
     st = fresh();
-    take(makeTurn(buildStart(), null, false));
+    take(makeTurn(buildStart(), startNote(), false, 'How this works'));
     st = savedSt;
 
     mrEl.removeChild(probe);
-    setHeights(Math.ceil(maxCard) + 1, Math.ceil(maxNotes) + 1);
+    setStage(Math.ceil(maxStage) + 1);
+    redrawIf(was);
   }
 
   var resizeTimer = 0;
