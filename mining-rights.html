@@ -1,0 +1,684 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Mining Rights, playable | Santi Mejías</title>
+<meta name="description" content="Play Mining Rights, a branching quest I designed for Forgotten Runiverse, with design notes explaining the reasoning behind each decision.">
+<meta name="theme-color" content="#F1F0E9" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#10151C" media="(prefers-color-scheme: dark)">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Mining Rights, playable | Santi Mejías">
+<meta property="og:description" content="Play Mining Rights, a branching quest I designed for Forgotten Runiverse, with design notes explaining the reasoning behind each decision.">
+<meta name="twitter:card" content="summary">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@600&family=Figtree:wght@400..700&family=JetBrains+Mono:wght@400..500&family=Young+Serif&display=swap">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body id="top">
+<a class="skip" href="#main">Skip to content</a>
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="index.html" aria-label="Santi Mejías, home"><b>Santi Mejías</b><span>Game Designer &amp; Producer</span></a>
+    <nav class="nav" aria-label="Main">
+      <ul>
+        <li><a href="index.html#work" data-nav="work">Work</a></li>
+        <li><a href="about.html" data-nav="about">About</a></li>
+        <li><a href="contact.html" data-nav="contact">Contact</a></li>
+      </ul>
+      <button class="theme-btn" type="button" data-theme-toggle aria-label="Switch between light and dark theme">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 3.5v17a8.5 8.5 0 0 0 0-17z" fill="currentColor"/></svg>
+      </button>
+    </nav>
+  </div>
+</header>
+<main id="main">
+
+  <section class="page-head">
+    <div class="wrap">
+      <a class="btn btn--sm back" href="forgotten-runiverse.html#mining-rights">← Forgotten Runiverse</a>
+      <h1>Mining Rights</h1>
+      <ul class="tags">
+        <li class="tag">Forgotten Runiverse</li>
+        <li class="tag">Quest design</li>
+        <li class="tag">Playable</li>
+      </ul>
+      <p class="p-lede">A quest I designed for the game, rebuilt so you can play it. Keep the design notes on to read the reasoning behind each decision.</p>
+    </div>
+  </section>
+
+  <div class="wrap">
+    <section class="mr" id="mr" aria-label="Mining Rights, playable quest">
+      <div class="mr-bar">
+        <div class="mr-hud" id="hud" aria-label="Your status"></div>
+        <label><input type="checkbox" id="notes" checked> Design notes</label>
+        <button class="mr-link" id="back" type="button" disabled>Back</button>
+        <button class="mr-link" id="restart" type="button">Restart</button>
+      </div>
+      <div id="log" aria-live="polite"></div>
+    </section>
+  </div>
+
+</main>
+<footer class="site-footer">
+  <div class="wrap">
+    <div>
+      <h2>Santi Mejías</h2>
+      <p>Game designer and producer based in Buenos Aires, Argentina (UTC−3). Open to remote work worldwide.</p>
+    </div>
+    <nav aria-label="Footer">
+      <p class="label">Pages</p>
+      <ul>
+        <li><a href="index.html#work">Work</a></li>
+        <li><a href="into-the-wild.html">Case study: Into the Wild</a></li>
+        <li><a href="school-work.html">School work</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </nav>
+    <div>
+      <p class="label">Elsewhere</p>
+      <ul>
+        <li><a href="https://www.linkedin.com/in/santiago-javier-mejias-/" target="_blank" rel="noopener">LinkedIn ↗</a></li>
+        <li><a href="https://calendar.app.google/2KfUpY6mjVkL8NZu5" target="_blank" rel="noopener">Book a meeting ↗</a></li>
+        <li><a href="assets/Santiago-Mejias-CV.pdf">Download CV (PDF)</a></li>
+      </ul>
+      <p class="mono addr">santiagojmejias@gmail.com</p>
+    </div>
+    <div class="fine">
+      <p>© 2026 Santi Mejías</p>
+      <p><a href="#top">Back to top ↑</a></p>
+    </div>
+  </div>
+</footer>
+<script src="assets/js/main.js" defer></script>
+<script>
+(function () {
+  'use strict';
+  var mrEl = document.getElementById('mr');
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var logEl = document.getElementById('log');
+  var hudEl = document.getElementById('hud');
+  var st;
+  var found = {};          // endings found, kept across restarts
+
+  function fresh() {
+    return { tree: true, curse: false, heat: false, contract: false, tents: false, guardDone: false, bandit: false, captain: false, entry: null,
+             gaines: null, answer: null, gold: 0, items: [] };
+  }
+  // where the front door leads once the guard is down: you resume where you left off
+  function resume(s) {
+    if (s.captain) return 'gaines';
+    if (s.tents && !s.bandit) return 'grunts';
+    if (s.tents && s.bandit) return 'captain';
+    return 'inside';
+  }
+  function addItem(s, name) { if (s.items.indexOf(name) < 0) s.items.push(name); }
+
+  // ----- line builders -----
+  function say(who, t) { return ['say', who, t]; }
+  function narr(t) { return ['narr', t]; }
+  function sys(kind, t) { return ['sys', kind, t]; }
+
+  var ALF = 'Alfus, the Red Emissary';
+  var PITCH_Q = "What do you say? I'll make it worth your while, and believe me—I'm a good friend to have.";
+
+  // ----- passages -----
+  // lines: array or fn(state). choices: array or fn(state) of {t, to, fx, show, off}
+  var P = {
+    a1: {
+      lines: [
+        narr('You find Alfus, the Red Emissary, at the starting camp.'),
+        say(ALF, "Hello there, fair Wizard. I'm Alfus, an Emissary from the Red Capital."),
+        say(ALF, 'The emissaries are here for one reason, and one reason only: opportunity.'),
+        say(ALF, 'That portal you came through represents the biggest influx of magic to the world since who knows when.'),
+        say(ALF, 'But the only way to seize this particular opportunity is by offering some in return. And have I got an opportunity for you!'),
+        say(ALF, PITCH_Q)
+      ],
+      note: 'Alfus sells the job as an opportunity, not a favor. I wanted players to hear how the Red Mages talk before they learn anything about their rules: ambitious, businesslike, a little cyberpunk.',
+      choices: [
+        { t: '“I’m not interested.”', to: 'decline' },
+        { t: 'Hear him out', to: 'pitch' }
+      ]
+    },
+    decline: {
+      lines: [say(ALF, "You'll be back...")],
+      note: 'Saying no never closes the quest. I didn\'t want to punish players for not being ready, so Alfus is still there when they come back.',
+      choices: [{ t: 'Walk away, then come back later', to: 'a2' }]
+    },
+    a2: {
+      lines: [
+        narr('You return to Alfus.'),
+        say(ALF, "Ah, I knew you'd be back eventually! These guys doubted you, but I had faith."),
+        say(ALF, PITCH_Q)
+      ],
+      note: 'The second time, Alfus acts like he expected it. A small change in his lines, so coming back feels like it was noticed.',
+      choices: [
+        { t: '“I’m not interested.”', to: 'decline2' },
+        { t: 'Hear him out', to: 'pitch' }
+      ]
+    },
+    decline2: {
+      lines: [say(ALF, "I'll be here if you change your mind.")],
+      note: 'Same idea as before: no is never a dead end. The offer stays open for as long as the player needs.',
+      choices: [{ t: 'Think it over', to: 'a2' }]
+    },
+    pitch: {
+      lines: [
+        say(ALF, 'What I need is for you to check in on a man named Gaines, one of my attendants, whose ambition has gotten the better of his senses.'),
+        say(ALF, 'He has seized an "abandoned" mine to the southwest of here in hopes of easy resources.'),
+        say(ALF, 'But the law of the Red Capital recognized the local territory as "locally sovereign", which makes his seizure explicitly illegal.'),
+        say(ALF, "I want to offer you a contract to remove the opportunist from the mine. I need a word with him. I'm offering a recipe for Heat Wave up front and 50 gold and a mount upon completion."),
+        say(ALF, 'What do you say? Do we have a deal?')
+      ],
+      note: 'The pitch is where I plant the Red Mages\' own law ("locally sovereign"). Alfus wants a man removed, but he makes it sound like a legal matter, which is how a Red Mage would frame it.',
+      choices: [
+        { t: 'Sign the contract', to: 'contract' },
+        { t: '\u201cI\u2019m not ready.\u201d', to: 'notReady' }
+      ]
+    },
+    notReady: {
+      lines: [say(ALF, "You'll be back...")],
+      note: 'This is the last chance to step back before signing. I wanted the player to be able to hesitate here and not be pushed into the contract.',
+      choices: [{ t: 'Walk away, then come back later', to: 'a2' }]
+    },
+    contract: {
+      fx: function (s) { s.contract = true; addItem(s, 'Contract with Alfus'); addItem(s, 'Heat Wave recipe'); },
+      lines: [
+        sys('item', 'Quest item: Contract with Alfus. “A contract you made with Alfus with a lot fine print.”'),
+        say(ALF, 'Here\'s the recipe. It details my first "cleaning" job... I can still smell the smoke. Never underestimate what a little fire can accomplish.'),
+        sys('reward', 'Recipe: Heat Wave'),
+        say(ALF, 'Now, go southwest, find that mine, and show my former assistant exactly who the real boss is.')
+      ],
+      note: 'The contract has no mechanical use at first, and that was on purpose. Its fine print pays off at the end. Alfus also hands over Heat Wave up front, which is the spell the tent shortcut asks for.',
+      choices: [{ t: 'Leave Alfus', to: 'camp' }]
+    },
+    camp: {
+      lines: [narr('Before you go, there are a few things you can do at the camp.')],
+      choices: function (s) {
+        return [
+          { t: 'Listen to the Red Attendants', to: 'attendants' },
+          { t: 'Craft Heat Wave', to: 'craft', show: !s.heat },
+          { t: 'Ask Alfus where the mine is', to: 'dirs' },
+          { t: 'Head for the mine', to: 'entrance' }
+        ];
+      }
+    },
+    attendants: {
+      lines: [
+        say('Red Attendant A', 'I tried to warn the Emissary, Attendant Gaines only cares about himself.'),
+        say('Red Attendant B', "I don't know how someone could waste the opportunity of working with the Emissary.")
+      ],
+      note: 'I wanted the player to hear two opinions about Gaines before ever meeting him. The quest asks them to decide what to do with him, so they should have something to decide with.',
+      choices: [{ t: 'Back to the camp', to: 'camp' }]
+    },
+    craft: {
+      fx: function (s) { s.heat = true; addItem(s, 'Heat Wave'); s.items = s.items.filter(function (i) { return i !== 'Heat Wave recipe'; }); },
+      lines: [sys('progress', 'You craft Heat Wave.')],
+      note: 'Equipping the spell is the player\'s choice. Without it the tent shortcut is not available, and I preferred that to an automatic reward.',
+      choices: [{ t: 'Back to the camp', to: 'camp' }]
+    },
+    dirs: {
+      lines: [say(ALF, 'Just head a bit south and a fair way east to find the mine entrance.')],
+      choices: [{ t: 'Back to the camp', to: 'camp' }]
+    },
+    entrance: {
+      lines: function (s) {
+        if (s.guardDone) return [narr('You are back at the mine entrance. The guard is still down.')];
+        return [
+          narr('You head south and a fair way east. In the middle of the forest, a guard stands at the mine\u2019s door.'),
+          say('Mine entrance guard', 'This area is off-limits.'),
+          say('Mine entrance guard', 'Leave. Now.')
+        ];
+      },
+      note: 'The front door is the simplest way in: one guard, one fight. Players who explored an earlier quest get a different option.',
+      choices: function (s) {
+        var c = s.guardDone
+          ? [{ t: 'Go back into the mine', to: resume(s) }, { t: 'Walk away', to: 'camp' }]
+          : [{ t: 'Fight your way in', to: 'guardFight' }, { t: 'Walk away', to: 'camp' }];
+        if (s.curse) c.push({ t: 'Look around the entrance first', to: 'animal' });
+        return c;
+      }
+    },
+    guardFight: {
+      lines: [say('Mine entrance guard', 'Come at me... bro!'), sys('battle', 'Battle: the mine entrance guard')],
+      note: 'In the game, combat decides this. In this demo you choose the result so you can see both.',
+      choices: [
+        { t: 'Win the battle', to: 'inside', fx: function (s) { s.entry = 'front'; s.guardDone = true; } },
+        { t: 'Lose the battle', to: 'guardLost' }
+      ]
+    },
+    guardLost: {
+      lines: [say('Mine entrance guard', 'Pfff, pathetic.')],
+      choices: [{ t: 'Try again', to: 'entrance' }]
+    },
+    animal: {
+      lines: [
+        narr('Near the entrance, an animal looks up at you.'),
+        say('Talking animal', "Hey, I recognize you! You're one of the humans that broke the curse on the wood!"),
+        say('Talking animal', 'Is there anything I can help you with?'),
+        say('Talking animal', 'You need to get into the mine? I used to hang out there myself, until those jerks moved in.'),
+        say('Talking animal', "Follow me, I'll show you my private entrance."),
+        say('Talking animal', 'Ready to go in?')
+      ],
+      note: 'One quest rewards the player for finishing another. I like when the world remembers what you did, and here it also gives the shortest route to Gaines.',
+      choices: [
+        { t: 'Go in', to: 'gaines', fx: function (s) { s.entry = 'secret'; } },
+        { t: 'Walk away', to: 'camp' }
+      ]
+    },
+    inside: {
+      lines: [
+        narr('Inside the mine there is a camp you can interact with.'),
+        narr('The tents, though thick, look like they might burn with a strong enough flame, causing a distraction.'),
+        narr('What will you do?')
+      ],
+      note: 'This is where the Heat Wave from the contract matters. A player who connects the two gets an easier fight, and the choice feels smart instead of lucky.',
+      choices: function (s) {
+        return [
+          { t: 'Use Heat Wave to burn the tents', to: 'tents', off: s.heat ? null : 'You need Heat Wave' },
+          { t: 'Leave the tents alone', to: 'captain' }
+        ];
+      }
+    },
+    tents: {
+      fx: function (s) { s.tents = true; },
+      lines: [
+        narr('The tents immediately catch fire, alerting two of the guards who come running to deal with the flames.'),
+        say('Bandit grunt', 'You there! Did you think you could destroy our stuff and get away with it?'),
+        sys('battle', 'Battle: the two grunts')
+      ],
+      note: 'Burning the tents splits the group: first the grunts, then the captain alone. Skip the tents and you face the captain and both grunts together.',
+      choices: [
+        { t: 'Win the battle', to: 'captain', fx: function (s) { s.bandit = true; } },
+        { t: 'Lose the battle (you are teleported to the mine entrance)', to: 'entrance' }
+      ]
+    },
+    grunts: {
+      lines: [
+        narr('The fire is still burning. The two guards are waiting for you.'),
+        say('Bandit grunt', 'You there! Did you think you could destroy our stuff and get away with it?'),
+        sys('battle', 'Battle: the two grunts')
+      ],
+      choices: [
+        { t: 'Win the battle', to: 'captain', fx: function (s) { s.bandit = true; } },
+        { t: 'Lose the battle (you are teleported to the mine entrance)', to: 'entrance' }
+      ]
+    },
+    captain: {
+      lines: [
+        narr('At the door to the last room, the bandit captain steps forward.'),
+        say('Bandit captain', 'Who in the Void are you? And how did you get past the other guards?'),
+        say('Bandit captain', "All right, I'll give you one opportunity to leave with your life. Take it, or die."),
+        say('Bandit captain', 'What will you do?')
+      ],
+      note: 'Even the captain offers a way out. I wanted every fight to have a way back, so the player is never trapped in the mine.',
+      choices: [
+        { t: 'Fight your way in', to: 'captainFight' },
+        { t: 'Leave', to: 'entrance' }
+      ]
+    },
+    captainFight: {
+      lines: function (s) {
+        return [sys('battle', s.tents ? 'Battle: the captain alone' : 'Battle: the captain and his two grunts')];
+      },
+      choices: [
+        { t: 'Win the battle', to: 'gaines', fx: function (s) { s.captain = true; } },
+        { t: 'Lose the battle (you are teleported to the mine entrance)', to: 'entrance' }
+      ]
+    },
+    gaines: {
+      lines: function (s) {
+        return [
+          narr(s.entry === 'secret' ? 'The burrow lets you out in the last chamber, skipping everything in between.' : 'You push through the door into the last chamber of the mine.'),
+          say('Gaines', 'How did you get in here? I swear, the Quantum Shadow has swallowed up all the good help.'),
+          say('Gaines', "There's only one person with the discretionary budget to hire you. But that doesn't mean he offered you the best deal."),
+          say('Gaines', "How about this, I'll walk away from this venture, as it's proving to be more trouble than it's worth, and you can have what I've found here."),
+          say('Gaines', 'You can probably even collect on your contract to expel me? If not, I will be forced to defend myself to the fullest. What do you say?'),
+          say('Gaines', 'Do we have a deal?')
+        ];
+      },
+      note: 'The last boss does not have to be fought. Taking his deal is a choice that suits a Red Mage: negotiate, don\'t just push through.',
+      choices: [
+        { t: '“No deal, Alfus wants to see you.”', to: 'gFight' },
+        { t: '“Alright, show me what you’ve got.”', to: 'gDeal' }
+      ]
+    },
+    gFight: {
+      lines: [sys('battle', 'Battle: Gaines’s bodyguards')],
+      choices: [
+        { t: 'Win the battle', to: 'gWon' },
+        { t: 'Lose the battle', to: 'gLost' }
+      ]
+    },
+    gLost: {
+      lines: [narr('You lose, and you are teleported away from the fight.')],
+      choices: [{ t: 'Go back to the mine entrance', to: 'entrance' }]
+    },
+    gWon: {
+      fx: function (s) { s.gaines = 'turnedIn'; },
+      lines: [
+        say('Gaines', "Alright alright! I'll go! Just don't hurt me."),
+        say('Gaines', "The mine is yours, I'll report to Alfus immediately."),
+        say('Gaines', "You really can't find good help these days...")
+      ],
+      note: 'Fighting him is the direct route. Gaines gives up and says he will report to Alfus himself, so this branch finishes cleanly.',
+      choices: [{ t: 'Go back to Alfus', to: 'report' }]
+    },
+    gDeal: {
+      fx: function (s) { s.gaines = 'letGo'; addItem(s, 'Materials'); },
+      lines: [
+        say('Gaines', 'Finally, someone with some sense. Here, take this stash.'),
+        sys('reward', 'Materials'),
+        say('Gaines', "Perhaps our paths will cross again someday. I'd love to do some proper business with you."),
+        say('Gaines', 'Until then, I bid thee well.')
+      ],
+      note: 'Taking the deal is the Red Mage move, so I made it pay. A player who negotiates is not worse off, they just earn it differently.',
+      choices: [{ t: 'Go back to Alfus', to: 'report' }]
+    },
+    report: {
+      lines: [
+        narr('You head back to the Red camp.'),
+        say(ALF, 'Welcome back, friend! News of your success has in fact preceded you.'),
+        say(ALF, 'But I want to hear it from you.'),
+        say(ALF, 'Do tell, how did events play out?')
+      ],
+      note: 'What Alfus asks, and what you can answer, depends on what you did with Gaines. Turn him in and there is one answer. Let him go and you can lie or tell the truth.',
+      choices: function (s) {
+        if (s.gaines === 'turnedIn') {
+          return [{ t: '“I defeated the brigands and your former attendant. The mine is yours.”', to: 'rTruth' }];
+        }
+        return [
+          { t: '“Your attendant was gone by time I got there.” (a lie)', to: 'rLie' },
+          { t: '“I let your attendant go, but the mine is yours.”', to: 'rLetGo' }
+        ];
+      }
+    },
+    rTruth: {
+      fx: function (s) { s.answer = 'turnedIn'; s.gold += 150; addItem(s, 'Hip Shades recipe'); },
+      lines: [
+        say(ALF, 'Indeed! The scoundrel came grovelling back for forgiveness. I sent him to Capital Review Board for punishment.'),
+        say(ALF, 'I did admire his ambition, but a true businessman turns the rules to their favor, rather than breaking blatantly them.'),
+        say(ALF, 'Anyway, here is your agreed upon payment, plus a little bonus for convincing Gaines to hand himself over.'),
+        sys('reward', '150 gold + Hip Shades (one-time recipe)'),
+        say(ALF, 'Red Hats always honor their contracts.'),
+        say(ALF, "You did well here. I'll be keeping you in mind if future opportunities should arise.")
+      ],
+      note: 'Honesty with a clean result gets the best reward, a recipe on top of the gold. Every branch pays, and none ends the quest badly.',
+      choices: [{ t: 'Continue', to: 'hedge' }]
+    },
+    rLie: {
+      fx: function (s) { s.answer = 'lie'; s.gold += 150; },
+      lines: [
+        say(ALF, 'Hmmm? I wonder what could have driven him to abandon his investment.'),
+        say(ALF, 'Perhaps further investigation is needed...'),
+        say(ALF, "Anyway, that's nothing to do with you. Your end of the contract is complete, the mine is clear."),
+        say(ALF, 'Here is your payment, in full.'),
+        sys('reward', '150 gold'),
+        say(ALF, 'Red Hats always honor their contracts.'),
+        say(ALF, "You did well here. I'll be keeping you in mind if future opportunities should arise.")
+      ],
+      note: 'Lying pays the same as full success, and Alfus is not fooled. I wanted bending the truth to feel like what a Red Mage would do, and to be safe.',
+      choices: [{ t: 'Continue', to: 'hedge' }]
+    },
+    rLetGo: {
+      fx: function (s) { s.answer = 'letGo'; s.gold += 50; },
+      lines: [
+        say(ALF, 'You did what!?'),
+        say(ALF, 'I should! Should...'),
+        say(ALF, 'Pay you, I suppose. It seems you read your contract well. There was no clause demanding his return.'),
+        say(ALF, 'How careless of me. But.. shrewd of you.'),
+        say(ALF, 'Here is your payment.'),
+        sys('reward', '50 gold'),
+        say(ALF, "The Red Hats never break a contract. Next time, I'll make sure I pay more attention to the fine print.")
+      ],
+      note: 'This is where the contract\'s fine print pays off. It looked like a joke item, but it decides the argument: there was no clause demanding his return.',
+      choices: [{ t: 'Continue', to: 'hedge' }]
+    },
+    hedge: {
+      lines: [
+        say(ALF, 'You know, there was a Hedge Wizard just over there who was trying to contract me for help with a grant bird or something. Seems like something you could handle.'),
+        sys('progress', 'Quest complete')
+      ],
+      note: 'Alfus ends by pointing to another job nearby. I wanted the quest to lead somewhere, not stop at a payment.',
+      choices: [
+        { t: 'Walk around the Red camp', to: 'epilogue' },
+        { t: 'See how it went', to: 'end' }
+      ]
+    },
+    epilogue: {
+      lines: [narr('Back at the Red camp, news has travelled.')],
+      note: 'The camp reacts to what the player did. I like small changes in what NPCs say afterwards, because they cost little and show the choice mattered.',
+      choices: [
+        { t: 'Talk to Red Attendant A', to: 'epA' },
+        { t: 'Talk to Red Attendant B', to: 'epB' },
+        { t: 'Talk to Alfus again', to: 'epAlfus' },
+        { t: 'See how it went', to: 'end' }
+      ]
+    },
+    epA: {
+      lines: function (s) {
+        return s.gaines === 'turnedIn'
+          ? [say('Red Attendant A', 'I hope the Review Board gives Gaines exactly what he deserves; a one way trip straight to the mail room.')]
+          : [say('Red Attendant A', "I can't believe Gaines evaded justice."), say('Red Attendant A', 'Maybe I misjudged the risk/reward ratio of the situation...')];
+      },
+      choices: [{ t: 'Back', to: 'epilogue' }]
+    },
+    epB: {
+      lines: [say('Red Attendant B', 'Hopefully this means things will go back to business as usual around here.')],
+      choices: [{ t: 'Back', to: 'epilogue' }]
+    },
+    epAlfus: {
+      lines: [say(ALF, "The Red Hats could use an enterprising Wizard like yourself. I trust you'll consider the Red path as you continue your journey.")],
+      choices: [{ t: 'Back', to: 'epilogue' }]
+    },
+    end: { custom: true }
+  };
+
+  var NOTES = {
+  "a1": "The Red Hats are bureaucrats, merchants and lawyers, driven by rank, money and power. That was already part of the lore, so Alfus's voice follows it. I kept the lines short but made each one carry the personality of the faction. The idea was to do a lot with a little, so the world feels alive and coherent.",
+  "decline": "I never lock the quest behind a first “no”. A player who just wasn't ready would lose content for no reason.",
+  "a2": "When the player comes back, Alfus reacts to it instead of repeating his pitch. It is a small line, but it tells the player the world noticed.",
+  "decline2": "Every refusal loops back to the offer. Nobody can get stuck here.",
+  "pitch": "The contract only asks me to remove Gaines. It says nothing about what happens to him afterwards. That gap is deliberate, because the last step plays with it.",
+  "notReady": "Even “I'm not ready” returns to the offer. It costs the player nothing to read the terms and walk away.",
+  "contract": "The contract has no mechanical use, and I like that. It looks like a joke item, but its fine print decides the argument at the end. Alfus also hands over the Heat Wave recipe up front, on purpose: it is the spell the camp inside the mine asks for, so the quest gives the player the tool before they know they will need it. Heat Wave already existed in the game, so the quest reuses it instead of asking for a new item.",
+  "attendants": "Two short lines that show the hierarchy: the Emissary, his attendants and the people below them. They also give the camp an opinion about Gaines before the player meets him.",
+  "craft": "Crafting was a core part of the game's loop. Players grinded materials to get recipes and craft them, each craft had a quality roll like a gacha, and recipes could be shared with other players. I wanted crafting to have another use besides combat and selling, so here a crafted spell opens a different way through the quest.",
+  "dirs": "Directions only come after signing. The mine shouldn't feel like something the player stumbles into before taking the contract.",
+  "entrance": "The mine has two ways in. The front is a fight. The other is a reward for having helped the forest animals earlier.",
+  "guardFight": "Combat decides this in the game. In this demo you choose the result so you can see both.",
+  "guardLost": "In the open world, losing a fight teleports you to the last hub, because HP only exists in combat. Inside a quest I could decide what happens, so I made the guards throw you out at the entrance. It is a small nod to the Team Rocket hideouts, and it makes narrative sense. There was no teleport nearby, so sending the player back to the camp would have meant a long walk. HP refills after every fight anyway, so there is nothing to heal.",
+  "animal": "I like it when one quest quietly pays off another. The animal recognises you, so helping the forest wasn't only for that quest's own rewards. The burrow also skips the whole camp. One of the core pillars we had was that we wanted players to explore, interact with everything and be curious about the world, so rewarding players that do it felt like a natural choice for me.",
+  "inside": "Until then, spells were only used in combat. That never made sense to me: a wizard should be able to use their powers in the world too, and I wanted the world to feel magical. So in most of my quests, spells and crafted items matter outside combat. It also rewards crafting everything you find, since you never know what will be useful. The camp's description is the hint that sends a player off to craft Heat Wave. It had to be Heat Wave, a wide-area spell that throws flames around you and sets the tents on fire. And it cost me almost nothing: one rule on an interaction.",
+  "tents": "The enemies in the mine are static, because NPCs couldn't walk. I would have loved a Pokémon-style stealth puzzle, but the system didn't allow it, and touching an enemy just starts a fight, like in the open world. I wanted this scene to be more than fighting, so I added the tents: burn them and the group splits, grunts first, then the captain alone. If the player comes back later, the camp is still burned. The check for this interaction needed an inventory requirement that didn't exist at first. The developers added it because I asked, and many features of the interaction system grew that way.",
+  "captain": "The captain gives the player one more clear chance to leave. Nothing in the mine forces a fight.",
+  "gaines": "The boss doesn't have to be fought. Taking his deal is the Red Mage answer, so I didn't make it the weaker choice. It is another way through the same quest.",
+  "gFight": "Gaines fights through his bodyguards, which keeps the last fight in line with the rest of the mine.",
+  "gLost": "Same rule as the guard: a defeat sends you to the entrance, but nothing is undone. The fights you already won stay won, and going back in leaves you where you were. I never wanted a player to get trapped or frustrated.",
+  "gWon": "Turning Gaines in is the straightforward result, and the only one where Alfus can send him to the Capital Review Board.",
+  "gDeal": "Gaines pays and leaves. He is still free, and that decides which answers Alfus can hear later. My plan was to bring Gaines back in future content for the Red Hats' city, so what the player decides here would have an impact on that later quest.",
+  "report": "What the player can say depends on what they did with Gaines. If they turned him in, there is one honest answer. If they let him go, they can lie or tell the truth. I wanted the answers to match what actually happened. The game never showed rewards in advance, not in the quest menu and not as a promise to the player. That was a design decision for the whole game: I wanted players to explore the world because they were curious about the story, not to finish quests for the reward shown in a menu. It also meant I never had to match the story to a payment I had already promised.",
+  "rTruth": "Turning him in and telling the truth pays the most: 150 gold plus a one-time Hip Shades recipe. The shades already existed as an item, and they fit the Red Mages, since Gaines wears dark glasses himself, so I reused them as the reward. Balancing items was already hard in an MMO, so I tried to give new meaning to what existed before asking the item designer for more. I learned that from earlier projects like Frozen.",
+  "rLie": "Alfus is happy whether you turn Gaines in or say he was already gone, so the lie pays the full amount. He suspects (“further investigation is needed”), but he has no proof, so the camp still reacts later. From here the lie rejoins the lines of the first branch. When the result is the same, I don't think every branch needs its own full set of dialogue.",
+  "rLetGo": "Alfus is annoyed that you let him go, but you did complete the contract, so he has to honor it. He finds a way to pay a little less, as if some clause let him adjust the amount. I kept that implicit. Because the player never saw the rewards beforehand, the payout could follow the story instead of a promise. This is also the branch where the contract's fine print gets the last word, since there was no clause demanding Gaines's return.",
+  "hedge": "Every ending points to the next job. Some quests can direct the player to the next one through a line of dialogue, because we barely used quest markers and wanted a world with few indications. If the player talks to the character again, they get a small hint about where to find more. That was a guideline from the creative director. This is also where all three branches rejoin. I check where a branch can come back and still make narrative sense, so I don't write extra interactions when every branch ends up in the same place.",
+  "epilogue": "The camp remembers. In many quests I liked to leave things changed by what the player did, like a burned camp you find again when you return to the mine to gather. I want the player to have that moment of remembering what they did, like recalling a campaign with friends. I think it makes the world feel more alive and gives weight to the player's choices, even on a small scale.",
+  "epA": "Attendant A reacts differently depending on what the player did with Gaines.",
+  "epB": "This one doesn't change. Not every NPC needs a branch.",
+  "epAlfus": "Alfus ends by pointing at the Red path. It is an invitation, and it commits the player to nothing."
+};
+  NOTES.captainFight = function (s) {
+    return s.tents
+      ? 'Because the tents burned, the grunts are already down and the captain fights alone. This is where the earlier choice shows up as a shortcut.'
+      : 'The tents were left alone, so the captain and both grunts attack together. This is where the earlier choice shows up as a cost.';
+  };
+  Object.keys(NOTES).forEach(function (k) { if (P[k]) P[k].note = NOTES[k]; });
+
+  var ENDINGS = {
+    turnedIn: ['Turned in', 'Gaines goes to the Capital Review Board. Alfus pays 150 gold and a bonus recipe.'],
+    lie: ['The lie', 'You say he was already gone. Alfus suspects, and pays the full 150 gold anyway.'],
+    letGo: ['The small print', 'You admit you let him go. The contract had no clause for it, so Alfus pays 50 gold.']
+  };
+
+  // ----- engine -----
+  var hist = [];
+  function clone(o) { return JSON.parse(JSON.stringify(o)); }
+  var backBtn = document.getElementById('back');
+  function val(x, s) { return typeof x === 'function' ? x(s) : x; }
+
+  function updateHud() {
+    var items = st.items.length ? st.items.join(', ') : 'nothing yet';
+    backBtn.disabled = hist.length < 2;
+    hudEl.innerHTML = '<span><b>GOLD</b> ' + st.gold + '</span><span><b>ITEMS</b> ' + esc(items) + '</span>';
+  }
+  function esc(t) { return String(t).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+
+  function renderLines(lines) {
+    var out = '', lastWho = null;
+    lines.forEach(function (l) {
+      if (l[0] === 'say') {
+        if (l[1] !== lastWho) { if (lastWho !== null) out += '</div>'; out += '<div class="say"><span class="who">' + esc(l[1]) + '</span>'; lastWho = l[1]; }
+        out += '<p>' + esc(l[2]) + '</p>';
+      } else {
+        if (lastWho !== null) { out += '</div>'; lastWho = null; }
+        if (l[0] === 'narr') out += '<p class="narr">' + esc(l[1]) + '</p>';
+        else if (l[0] === 'sys') out += '<span class="sysrow"><span class="sys ' + l[1] + '">' + esc(l[2]) + '</span></span>';
+      }
+    });
+    if (lastWho !== null) out += '</div>';
+    return out;
+  }
+
+  function swap(box, note) {
+    var turn = document.createElement('div');
+    turn.className = 'turn';
+    turn.appendChild(box);
+    if (note) {
+      var pi = document.createElement('aside');
+      pi.className = 'postit';
+      pi.setAttribute('aria-label', 'Design note');
+      pi.innerHTML = '<b>Design note</b><p>' + esc(note) + '</p>';
+      turn.appendChild(pi);
+    }
+    logEl.innerHTML = '';
+    logEl.appendChild(turn);
+  }
+
+  function show(id, said) {
+    var p = P[id];
+    if (!p) { throw new Error('Missing passage: ' + id); }
+    if (id === 'end' && st.answer) found[st.answer] = true;
+    if (p.fx) p.fx(st);
+    hist.push({ id: id, said: said, st: clone(st) });
+    draw();
+  }
+
+  function draw() {
+    var h = hist[hist.length - 1], id = h.id, said = h.said, p = P[id];
+    updateHud();
+    if (p.custom) { return showEnd(); }
+    var box = document.createElement('section');
+    box.className = 'pass';
+    box.innerHTML = (said ? '<p class="trail">You chose: <b>' + esc(said) + '</b></p>' : '') + renderLines(val(p.lines, st));
+    var note = val(p.note, st);
+    var choices = val(p.choices, st).filter(function (c) { return c.show !== false; });
+    var wrap = document.createElement('div');
+    wrap.className = 'choices';
+    choices.forEach(function (c) {
+      var b = document.createElement('button');
+      b.type = 'button';
+      if (c.off) { b.className = 'off'; b.setAttribute('aria-disabled', 'true'); b.innerHTML = esc(c.t) + '<small>' + esc(c.off) + '</small>'; b.addEventListener('click', function (e) { e.preventDefault(); }); }
+      else {
+        b.textContent = c.t;
+        b.addEventListener('click', function () {
+          if (c.fx) c.fx(st);
+          show(c.to, c.t);
+        });
+      }
+      wrap.appendChild(b);
+    });
+    if (hist.length > 1) {
+      var bb = document.createElement('button');
+      bb.type = 'button';
+      bb.className = 'back-inline';
+      bb.textContent = '\u2190 Back';
+      bb.addEventListener('click', goBack);
+      wrap.appendChild(bb);
+    }
+    box.appendChild(wrap);
+    swap(box, note);
+    reveal(box, wrap);
+  }
+
+  function reveal(box, wrap) {
+    var first = wrap.querySelector('button:not(.off)');
+    var top = mrEl.getBoundingClientRect().top;
+    var headerH = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--header-h')) || 56;
+    if (top < headerH || top > window.innerHeight * 0.4) {
+      window.scrollTo({ top: window.pageYOffset + top - headerH - 12, behavior: reduce ? 'auto' : 'smooth' });
+    }
+    if (first) first.focus({ preventScroll: true });
+  }
+
+  function showStart() {
+    hist = [];
+    logEl.innerHTML = '';
+    st = fresh();
+    updateHud();
+    var box = document.createElement('section');
+    box.className = 'pass';
+    box.innerHTML =
+      '<p class="eyebrow">Forgotten Runiverse</p><h2>Mining Rights</h2>' +
+      '<p class="lead">Play one of the quests I designed. The Red Mages’ emissary wants a mine back from one of his own attendants. Every choice here is one the game offered, and the design notes explain why I built it that way.</p>' +
+      '<p class="lead">In the game, this quest unlocks after the tutorial quest, The Gathering Tree. Here you play it as someone who finished it and helped the forest animals.</p>' +
+      '<p class="lead">I wrote a draft of all the dialogue, along with each character\u2019s intentions and personality. Jon Olson, the narrative designer, then reviewed it. Some lines were rewritten completely or partly, and he approved the final dialogue.</p>' +
+      '<div class="choices"><button type="button" class="primary" id="go">Start the quest</button></div>';
+    swap(box);
+    document.getElementById('go').addEventListener('click', function () {
+      st.tree = true;
+      st.curse = true;
+      show('a1', 'Start the quest');
+    });
+    document.getElementById('go').focus({ preventScroll: true });
+  }
+
+  function showEnd() {
+    var done = Object.keys(found).length;
+    var how = [];
+    how.push('You got in through ' + (st.entry === 'secret' ? 'the secret entrance' : 'the front gate') + '.');
+    if (st.entry !== 'secret') how.push(st.tents ? 'You burned the tents to split the guards.' : 'You left the tents alone.');
+    how.push(st.gaines === 'turnedIn' ? 'You fought Gaines’s bodyguards.' : 'You took Gaines’s deal.');
+    how.push('You earned ' + st.gold + ' gold.');
+    var ends = Object.keys(ENDINGS).map(function (k) {
+      return '<li class="' + (found[k] ? 'got' : '') + '"><b>' + (found[k] ? '✓ ' : '') + esc(ENDINGS[k][0]) + '</b>' + (found[k] ? esc(ENDINGS[k][1]) : 'Not found yet.') + '</li>';
+    }).join('');
+    var box = document.createElement('section');
+    box.className = 'pass';
+    box.innerHTML = '<div class="card"><h2>The end</h2><p style="margin:0">How you played it:</p><ul class="sum">' +
+      how.map(function (h) { return '<li>' + esc(h) + '</li>'; }).join('') + '</ul></div>' +
+      '<div class="card"><h2>Endings found: ' + done + ' of 3</h2><ul class="ends">' + ends + '</ul></div>' +
+      '<div class="choices"><button type="button" class="primary" id="again">Play again</button></div>';
+    swap(box);
+    document.getElementById('again').addEventListener('click', showStart);
+    reveal(box, box.querySelector('.choices'));
+  }
+
+  function goBack() {
+    if (hist.length < 2) return;
+    hist.pop();
+    st = clone(hist[hist.length - 1].st);
+    draw();
+  }
+  backBtn.addEventListener('click', goBack);
+  document.getElementById('restart').addEventListener('click', showStart);
+  var notesBox = document.getElementById('notes');
+  notesBox.addEventListener('change', function () { mrEl.classList.toggle('notes-off', !notesBox.checked); });
+
+  showStart();
+}());
+</script>
+</body>
+</html>

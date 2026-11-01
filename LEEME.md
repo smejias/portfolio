@@ -9,6 +9,7 @@ Sitio estático de varias páginas. No necesita instalar nada ni un servidor con
 | `index.html` | Home: hero, trabajos, case study destacado, tabla de títulos, school work, testimonios |
 | `forgotten-runiverse.html`, `civ-royale.html`, `frozen-adventures.html` | Una página por proyecto |
 | `into-the-wild.html` | Case study (antes `into-the-wil-case-study`, con el typo corregido) |
+| `mining-rights.html` | Quest de Forgotten Runiverse jugable (estilo Twine, motor propio en el mismo archivo) con notas de diseño como post-its |
 | `school-work.html` | Proyectos de la facultad (Image Campus), separados del trabajo profesional |
 | `about.html`, `contact.html`, `404.html` | Sobre mí, contacto y página de error |
 | `assets/css/style.css` | Todo el diseño. Los colores y tipografías están al principio, como variables |
