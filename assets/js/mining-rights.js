@@ -473,7 +473,8 @@
     window.setTimeout(function () { window.requestAnimationFrame(step); }, 160);
   }
 
-  function swap(box, note) {
+  // ---- building a card (used both to show it and to measure it) ----
+  function makeTurn(box, note, animate) {
     var turn = document.createElement('div');
     turn.className = 'turn';
     turn.appendChild(box);
@@ -482,29 +483,18 @@
       pi.className = 'postit';
       pi.setAttribute('aria-label', 'Design note');
       pi.innerHTML = '<b>Design note</b><p></p>';
-      typeNote(pi.querySelector('p'), note);
+      var np = pi.querySelector('p');
+      if (animate) typeNote(np, note); else np.textContent = note;
       turn.appendChild(pi);
     }
-    logEl.innerHTML = '';
-    logEl.appendChild(turn);
+    return turn;
   }
 
-  function show(id, said) {
+  function buildPass(id, said) {
     var p = P[id];
-    if (!p) { throw new Error('Missing passage: ' + id); }
-    if (id === 'end' && st.answer) found[st.answer] = true;
-    if (p.fx) p.fx(st);
-    hist.push({ id: id, said: said, st: clone(st) });
-    draw();
-  }
-
-  function draw() {
-    var h = hist[hist.length - 1], id = h.id, said = h.said, p = P[id];
-    if (p.custom) { return showEnd(); }
     var box = document.createElement('section');
     box.className = 'pass';
     box.innerHTML = (said ? '<p class="trail">You chose: <b>' + esc(said) + '</b></p>' : '') + renderLines(val(p.lines, st));
-    var note = val(p.note, st);
     var choices = val(p.choices, st).filter(function (c) { return c.show !== false; });
     var wrap = document.createElement('div');
     wrap.className = 'choices';
@@ -525,50 +515,27 @@
       var bb = document.createElement('button');
       bb.type = 'button';
       bb.className = 'back-inline';
-      bb.textContent = '\u2190 Back';
+      bb.textContent = '← Back';
       bb.addEventListener('click', goBack);
       wrap.appendChild(bb);
     }
     box.appendChild(wrap);
-    swap(box, note);
-    reveal(box, wrap);
+    return { box: box, note: val(p.note, st) };
   }
 
-  function reveal(box, wrap) {
-    var first = wrap.querySelector('button:not(.off)');
-    keepInView();
-    if (first && hist.length > 0) first.focus({ preventScroll: true });
-  }
-
-  function keepInView() {
-    var top = mrEl.getBoundingClientRect().top;
-    var headerH = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--header-h')) || 56;
-    if (top < headerH || top > window.innerHeight * 0.4) {
-      window.scrollTo({ top: window.pageYOffset + top - headerH - 12, behavior: reduce ? 'auto' : 'smooth' });
-    }
-  }
-
-  function showStart() {
-    hist = [];
-    logEl.innerHTML = '';
-    st = fresh();
+  function buildStart() {
     var box = document.createElement('section');
     box.className = 'pass';
     box.innerHTML =
       '<p class="eyebrow">Playable quest</p>' +
       '<p class="lead">Play one of the quests I designed. The Red Mages’ emissary wants a mine back from one of his own attendants. Every choice here is one the game offered, and the design notes explain why I built it that way.</p>' +
       '<p class="lead">In the game, this quest unlocks after the tutorial quest, The Gathering Tree. Here you play it as someone who finished it and helped the forest animals.</p>' +
-      '<p class="lead">I wrote a draft of all the dialogue, along with each character\u2019s intentions and personality. Jon Olson, the narrative designer, then reviewed it. Some lines were rewritten completely or partly, and he approved the final dialogue.</p>' +
+      '<p class="lead">I wrote a draft of all the dialogue, along with each character’s intentions and personality. Jon Olson, the narrative designer, then reviewed it. Some lines were rewritten completely or partly, and he approved the final dialogue.</p>' +
       '<div class="choices"><button type="button" id="go">Start the quest</button></div>';
-    swap(box);
-    document.getElementById('go').addEventListener('click', function () {
-      st.tree = true;
-      st.curse = true;
-      show('a1', 'Start the quest');
-    });
+    return box;
   }
 
-  function showEnd() {
+  function buildEnd() {
     var done = Object.keys(found).length;
     var how = [];
     how.push('You got in through ' + (st.entry === 'secret' ? 'the secret entrance' : 'the front gate') + '.');
@@ -583,10 +550,55 @@
     box.innerHTML = '<div class="card"><h3>The end</h3><p style="margin:0">How you played it:</p><ul class="sum">' +
       how.map(function (h) { return '<li>' + esc(h) + '</li>'; }).join('') + '</ul></div>' +
       '<div class="card"><h3>Endings found: ' + done + ' of 3</h3><ul class="ends">' + ends + '</ul></div>' +
-      '<div class="choices"><button type="button" class="btn" id="again">Play again</button></div>';
-    swap(box);
-    document.getElementById('again').addEventListener('click', function () { showStart(); keepInView(); });
-    reveal(box, box.querySelector('.choices'));
+      '<div class="choices"><button type="button" class="primary" id="again">Play again</button></div>';
+    return box;
+  }
+
+  // ---- showing it. Nothing here scrolls the page. ----
+  function mount(turn) {
+    logEl.innerHTML = '';
+    logEl.appendChild(turn);
+    if (turn.offsetHeight > cardH + 1) setHeight(turn.offsetHeight);   // a card taller than predicted: grow once, never shrink
+  }
+
+  function focusFirst(turn) {
+    var first = turn.querySelector('.choices button:not(.off)');
+    if (first && hist.length > 0) first.focus({ preventScroll: true });
+  }
+
+  function show(id, said) {
+    var p = P[id];
+    if (!p) { throw new Error('Missing passage: ' + id); }
+    if (id === 'end' && st.answer) found[st.answer] = true;
+    if (p.fx) p.fx(st);
+    hist.push({ id: id, said: said, st: clone(st) });
+    draw();
+  }
+
+  function draw() {
+    var h = hist[hist.length - 1];
+    var turn;
+    if (P[h.id].custom) {
+      turn = makeTurn(buildEnd(), null, false);
+      mount(turn);
+      document.getElementById('again').addEventListener('click', showStart);
+    } else {
+      var b = buildPass(h.id, h.said);
+      turn = makeTurn(b.box, b.note, true);
+      mount(turn);
+    }
+    focusFirst(turn);
+  }
+
+  function showStart() {
+    hist = [];
+    st = fresh();
+    mount(makeTurn(buildStart(), null, false));
+    document.getElementById('go').addEventListener('click', function () {
+      st.tree = true;
+      st.curse = true;
+      show('a1', 'Start the quest');
+    });
   }
 
   function goBack() {
@@ -595,7 +607,87 @@
     st = clone(hist[hist.length - 1].st);
     draw();
   }
-  document.getElementById('mr-restart').addEventListener('click', function () { showStart(); keepInView(); });
 
+  // ---- every card gets the same height, so the page below never moves ----
+  var cardH = 0;
+  function setHeight(h) {
+    cardH = h;
+    logEl.style.setProperty('--mr-h', h + 'px');
+  }
+
+  function variants() {
+    var out = [];
+    [false, true].forEach(function (secret) {
+      [0, 1, 2].forEach(function (stage) {
+        [false, true].forEach(function (cap) {
+          [false, true].forEach(function (door) {
+            [false, true].forEach(function (heat) {
+              [null, 'turnedIn', 'letGo'].forEach(function (g) {
+                var s = fresh();
+                s.curse = true; s.entry = secret ? 'secret' : 'front';
+                s.tents = stage > 0; s.bandit = stage > 1; s.captain = cap;
+                s.guardDone = door; s.heat = heat; s.gaines = g; s.gold = 150;
+                out.push(s);
+              });
+            });
+          });
+        });
+      });
+    });
+    return out;
+  }
+
+  function measure() {
+    var width = logEl.clientWidth;
+    if (!width) return;
+    var probe = document.createElement('div');
+    probe.setAttribute('aria-hidden', 'true');
+    probe.style.cssText = 'position:absolute;left:0;top:0;visibility:hidden;pointer-events:none;width:' + width + 'px';
+    mrEl.appendChild(probe);
+
+    var savedSt = st, savedHist = hist, savedFound = found;
+    var longest = '';
+    Object.keys(P).forEach(function (id) {
+      var ch = P[id].choices;
+      if (typeof ch === 'function') return;
+      (ch || []).forEach(function (c) { if (c.t.length > longest.length) longest = c.t; });
+    });
+    hist = [{}, {}];                      // so the Back button is counted
+    var max = 0;
+    function take(turn) { probe.appendChild(turn); max = Math.max(max, turn.offsetHeight); probe.removeChild(turn); }
+
+    var all = variants();
+    Object.keys(P).forEach(function (id) {
+      var p = P[id];
+      if (p.custom) return;
+      var dynamic = typeof p.lines === 'function' || typeof p.choices === 'function' || typeof p.note === 'function';
+      (dynamic ? all : [all[0]]).forEach(function (s) {
+        st = s;
+        var b = buildPass(id, longest);
+        take(makeTurn(b.box, b.note, false));
+      });
+    });
+    found = { turnedIn: true, lie: true, letGo: true };
+    st = all[all.length - 1];
+    take(makeTurn(buildEnd(), null, false));
+    st = savedSt; hist = savedHist; found = savedFound;
+    st = fresh();
+    take(makeTurn(buildStart(), null, false));
+    st = savedSt;
+
+    mrEl.removeChild(probe);
+    setHeight(Math.ceil(max) + 2);
+  }
+
+  var resizeTimer = 0;
+  window.addEventListener('resize', function () {
+    window.clearTimeout(resizeTimer);
+    resizeTimer = window.setTimeout(measure, 150);
+  });
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(measure);
+
+  document.getElementById('mr-restart').addEventListener('click', showStart);
+
+  measure();
   showStart();
 }());

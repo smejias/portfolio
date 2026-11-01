@@ -1224,21 +1224,22 @@ body::before {
 .mr-link:disabled { color: var(--ink-3); text-decoration: none; cursor: default; }
 .mr-link:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
-.mr .turn { display: grid; grid-template-columns: minmax(0, 1fr); align-items: start; }
+.mr .turn { display: grid; grid-template-columns: minmax(0, 1fr); grid-template-rows: 1fr auto; align-items: start; min-height: var(--mr-h, 0); }
 
-.mr .pass { background: var(--card); border: var(--bw) solid var(--ink); border-radius: 6px 10px 7px 9px; box-shadow: 4px 4px 0 var(--line); padding: 22px 24px 24px; animation: mr-in 0.22s ease-out; position: relative; z-index: 1; }
+.mr .pass { background: var(--card); border: var(--bw) solid var(--ink); border-radius: 6px 10px 7px 9px; box-shadow: 4px 4px 0 var(--line); padding: 22px 24px 24px; animation: mr-in 0.22s ease-out; position: relative; z-index: 1; display: flex; flex-direction: column; align-self: stretch; }
 @keyframes mr-in { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
 .mr .eyebrow { font: 600 0.72rem/1.4 var(--f-mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); margin: 0 0 6px; }
 .mr .lead { color: var(--ink-2); margin: 0 0 12px; max-width: 38em; }
 .mr .trail { font: 600 0.72rem/1.5 var(--f-mono); letter-spacing: 0.03em; color: var(--ink-3); margin: 0 0 14px; padding-bottom: 10px; border-bottom: 1px dashed var(--line); }
 .mr .trail b { display: inline; color: var(--action); font-weight: 600; }
 
-.mr .say { margin: 0 0 12px; }
+.mr .say { margin: 0 0 10px; }
+.mr .say, .mr .narr { line-height: 1.5; }
 .mr .say .who { display: block; font: 700 0.68rem/1.6 var(--f-mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--mr-red); margin-bottom: 2px; }
 .mr .say p { margin: 0 0 6px; font-family: var(--f-display); font-size: 1.04rem; line-height: 1.5; }
 .mr .narr { font-style: italic; color: var(--ink-2); margin: 0 0 12px; }
-.mr .sysrow { display: block; }
-.mr .sys { display: inline-block; margin: 4px 0 12px; padding: 4px 10px; border: var(--bw) solid; border-radius: 4px 7px 5px 8px; font: 600 0.82rem/1.4 var(--f-mono); }
+.mr .sysrow { display: block; line-height: 1.3; }
+.mr .sys { display: inline-block; margin: 2px 0 10px; padding: 3px 10px; border: var(--bw) solid; border-radius: 4px 7px 5px 8px; font: 600 0.82rem/1.4 var(--f-mono); }
 .mr .sys.item { color: var(--mr-item); }
 .mr .sys.reward { color: var(--ok); }
 .mr .sys.battle { color: var(--mr-red); }
@@ -1270,6 +1271,7 @@ body::before {
   background: var(--note-bg);
   color: var(--note-ink);
   transform: rotate(-1deg);
+  align-self: start;
   box-shadow: 0 1px 0 var(--note-fold), 0 10px 18px -10px rgba(0, 0, 0, 0.45);
   font-family: var(--f-hand);
   font-weight: 600;
