@@ -933,8 +933,7 @@ dialog.lightbox::backdrop { background: rgba(10, 14, 20, 0.78); }
 .chips li:nth-child(4n+3) { background: color-mix(in srgb, var(--ok) 20%, var(--card)); }
 .chips li:nth-child(4n+4) { background: color-mix(in srgb, var(--mark) 90%, var(--card)); }
 
-.p-main { display: flex; flex-direction: column; gap: calc(var(--u) * 3); min-width: 0; }
-@media (min-width: 640px) { .p-main { gap: calc(var(--u) * 2); } }
+.p-main { display: flex; flex-direction: column; gap: calc(var(--u) * 2); min-width: 0; }
 .p-main section { display: flex; flex-direction: column; gap: 0; min-width: 0; }
 .p-main section > * { margin: 0 0 var(--u); }
 .p-main section > :last-child { margin-bottom: 0; }
