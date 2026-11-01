@@ -1266,7 +1266,7 @@ body::before {
   position: relative; z-index: 2;
   width: min(94%, 470px);
   margin: -8px 4px 0 auto;
-  padding: 26px 18px 18px;
+  padding: 28px 20px 22px;
   background: var(--note-bg);
   color: var(--note-ink);
   transform: rotate(-1deg);
@@ -1281,10 +1281,10 @@ body::before {
   box-shadow: 0 1px 0 var(--note-fold);
 }
 .mr .postit b { display: block; font: 600 0.66rem/1 var(--f-mono); letter-spacing: 0.1em; text-transform: uppercase; opacity: 0.7; margin-bottom: 8px; }
-.mr .postit p { margin: 0; font-size: 1.15rem; line-height: 1.2; max-width: none; }
+.mr .postit p { margin: 0; font-size: 1.4rem; line-height: 1.18; max-width: none; }
 .mr p { max-width: none; }
 @container (min-width: 640px) {
-  .mr .turn { grid-template-columns: minmax(0, 1fr) 232px; }
+  .mr .turn { grid-template-columns: minmax(0, 1fr) 256px; }
   .mr .postit { width: auto; margin: 30px 0 0 -12px; transform: rotate(1.8deg); }
 }
 @container (max-width: 520px) {
