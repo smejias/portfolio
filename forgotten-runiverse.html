@@ -102,8 +102,11 @@
       <section id="mining-rights">
         <h2>A branching quest: Mining Rights</h2>
         <p>Mining Rights is one of the first quests a player meets. It introduces the Red Mages, one of the game's seven schools of magic: ambitious, business-minded and a little cyberpunk. Their emissary, Alfus, sends the player to take back a mine from one of his own attendants, a corporate takeover in miniature. I used it to let players choose how to solve the problem, and to tempt them into acting like a Red Mage.</p>
-        <p>I rebuilt the quest so you can play it. It follows the real branches, and every step has a design note beside it with the reasons behind my decisions.</p>
-        <p><a class="btn btn--primary" href="mining-rights.html">Play Mining Rights →</a></p>
+        <p>You can play the quest right here. It follows the real branches, and each step has a design note with the reasons behind my decisions.</p>
+        <div class="mr" id="mr">
+          <div class="mr-bar"><button class="mr-link" id="mr-restart" type="button">Restart</button></div>
+          <div id="mr-log" aria-live="polite"></div>
+        </div>
         <ul class="rows">
           <li><b>Choices that fit the school</b><span>Taking a better deal, bending the truth and reading the fine print are what a Red Mage would do, so the branches express the faction instead of just describing it. Every branch pays and none ends the quest badly.</span></li>
           <li><b>The small print pays off</b><span>The contract looks like a joke item, but it decides the argument in the “I let him go” branch. It is also an item I could reuse in later quests.</span></li>
@@ -195,5 +198,6 @@
   </div>
 </footer>
 <script src="assets/js/main.js" defer></script>
+<script src="assets/js/mining-rights.js" defer></script>
 </body>
 </html>

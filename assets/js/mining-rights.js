@@ -1,106 +1,9 @@
-<!doctype html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Mining Rights, playable | Santi Mejías</title>
-<meta name="description" content="Play Mining Rights, a branching quest I designed for Forgotten Runiverse, with design notes explaining the reasoning behind each decision.">
-<meta name="theme-color" content="#F1F0E9" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#10151C" media="(prefers-color-scheme: dark)">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Mining Rights, playable | Santi Mejías">
-<meta property="og:description" content="Play Mining Rights, a branching quest I designed for Forgotten Runiverse, with design notes explaining the reasoning behind each decision.">
-<meta name="twitter:card" content="summary">
-<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@600&family=Figtree:wght@400..700&family=JetBrains+Mono:wght@400..500&family=Young+Serif&display=swap">
-<link rel="stylesheet" href="assets/css/style.css">
-</head>
-<body id="top">
-<a class="skip" href="#main">Skip to content</a>
-<header class="site-header">
-  <div class="wrap">
-    <a class="brand" href="index.html" aria-label="Santi Mejías, home"><b>Santi Mejías</b><span>Game Designer &amp; Producer</span></a>
-    <nav class="nav" aria-label="Main">
-      <ul>
-        <li><a href="index.html#work" data-nav="work">Work</a></li>
-        <li><a href="about.html" data-nav="about">About</a></li>
-        <li><a href="contact.html" data-nav="contact">Contact</a></li>
-      </ul>
-      <button class="theme-btn" type="button" data-theme-toggle aria-label="Switch between light and dark theme">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 3.5v17a8.5 8.5 0 0 0 0-17z" fill="currentColor"/></svg>
-      </button>
-    </nav>
-  </div>
-</header>
-<main id="main">
-
-  <section class="page-head">
-    <div class="wrap">
-      <a class="btn btn--sm back" href="forgotten-runiverse.html#mining-rights">← Forgotten Runiverse</a>
-      <h1>Mining Rights</h1>
-      <ul class="tags">
-        <li class="tag">Forgotten Runiverse</li>
-        <li class="tag">Quest design</li>
-        <li class="tag">Playable</li>
-      </ul>
-      <p class="p-lede">A quest I designed for the game, rebuilt so you can play it. Keep the design notes on to read the reasoning behind each decision.</p>
-    </div>
-  </section>
-
-  <div class="wrap">
-    <section class="mr" id="mr" aria-label="Mining Rights, playable quest">
-      <div class="mr-bar">
-        <div class="mr-hud" id="hud" aria-label="Your status"></div>
-        <label><input type="checkbox" id="notes" checked> Design notes</label>
-        <button class="mr-link" id="back" type="button" disabled>Back</button>
-        <button class="mr-link" id="restart" type="button">Restart</button>
-      </div>
-      <div id="log" aria-live="polite"></div>
-    </section>
-  </div>
-
-</main>
-<footer class="site-footer">
-  <div class="wrap">
-    <div>
-      <h2>Santi Mejías</h2>
-      <p>Game designer and producer based in Buenos Aires, Argentina (UTC−3). Open to remote work worldwide.</p>
-    </div>
-    <nav aria-label="Footer">
-      <p class="label">Pages</p>
-      <ul>
-        <li><a href="index.html#work">Work</a></li>
-        <li><a href="into-the-wild.html">Case study: Into the Wild</a></li>
-        <li><a href="school-work.html">School work</a></li>
-        <li><a href="about.html">About</a></li>
-        <li><a href="contact.html">Contact</a></li>
-      </ul>
-    </nav>
-    <div>
-      <p class="label">Elsewhere</p>
-      <ul>
-        <li><a href="https://www.linkedin.com/in/santiago-javier-mejias-/" target="_blank" rel="noopener">LinkedIn ↗</a></li>
-        <li><a href="https://calendar.app.google/2KfUpY6mjVkL8NZu5" target="_blank" rel="noopener">Book a meeting ↗</a></li>
-        <li><a href="assets/Santiago-Mejias-CV.pdf">Download CV (PDF)</a></li>
-      </ul>
-      <p class="mono addr">santiagojmejias@gmail.com</p>
-    </div>
-    <div class="fine">
-      <p>© 2026 Santi Mejías</p>
-      <p><a href="#top">Back to top ↑</a></p>
-    </div>
-  </div>
-</footer>
-<script src="assets/js/main.js" defer></script>
-<script>
 (function () {
   'use strict';
   var mrEl = document.getElementById('mr');
+  if (!mrEl) return;
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var logEl = document.getElementById('log');
-  var hudEl = document.getElementById('hud');
+  var logEl = document.getElementById('mr-log');
   var st;
   var found = {};          // endings found, kept across restarts
 
@@ -526,14 +429,8 @@
   // ----- engine -----
   var hist = [];
   function clone(o) { return JSON.parse(JSON.stringify(o)); }
-  var backBtn = document.getElementById('back');
   function val(x, s) { return typeof x === 'function' ? x(s) : x; }
 
-  function updateHud() {
-    var items = st.items.length ? st.items.join(', ') : 'nothing yet';
-    backBtn.disabled = hist.length < 2;
-    hudEl.innerHTML = '<span><b>GOLD</b> ' + st.gold + '</span><span><b>ITEMS</b> ' + esc(items) + '</span>';
-  }
   function esc(t) { return String(t).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
 
   function renderLines(lines) {
@@ -552,6 +449,31 @@
     return out;
   }
 
+  // the note is written onto the sticky note, very fast. The rest of the text is
+  // laid out but invisible, so the note never changes size while it is typed.
+  var CPS = 900;
+  function typeNote(p, text) {
+    if (reduce) { p.textContent = text; return; }
+    var shown = document.createElement('span');
+    var rest = document.createElement('span');
+    rest.setAttribute('aria-hidden', 'true');
+    rest.style.visibility = 'hidden';
+    rest.textContent = text;
+    p.appendChild(shown);
+    p.appendChild(rest);
+    var t0 = 0;
+    function step(now) {
+      if (!p.isConnected) return;
+      if (!t0) t0 = now;
+      var n = Math.min(text.length, Math.floor((now - t0) * CPS / 1000));
+      shown.textContent = text.slice(0, n);
+      rest.textContent = text.slice(n);
+      if (n < text.length) window.requestAnimationFrame(step);
+      else p.textContent = text;
+    }
+    window.setTimeout(function () { window.requestAnimationFrame(step); }, 160);
+  }
+
   function swap(box, note) {
     var turn = document.createElement('div');
     turn.className = 'turn';
@@ -560,7 +482,8 @@
       var pi = document.createElement('aside');
       pi.className = 'postit';
       pi.setAttribute('aria-label', 'Design note');
-      pi.innerHTML = '<b>Design note</b><p>' + esc(note) + '</p>';
+      pi.innerHTML = '<b>Design note</b><p></p>';
+      typeNote(pi.querySelector('p'), note);
       turn.appendChild(pi);
     }
     logEl.innerHTML = '';
@@ -578,7 +501,6 @@
 
   function draw() {
     var h = hist[hist.length - 1], id = h.id, said = h.said, p = P[id];
-    updateHud();
     if (p.custom) { return showEnd(); }
     var box = document.createElement('section');
     box.className = 'pass';
@@ -615,34 +537,36 @@
 
   function reveal(box, wrap) {
     var first = wrap.querySelector('button:not(.off)');
+    keepInView();
+    if (first && hist.length > 0) first.focus({ preventScroll: true });
+  }
+
+  function keepInView() {
     var top = mrEl.getBoundingClientRect().top;
     var headerH = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--header-h')) || 56;
     if (top < headerH || top > window.innerHeight * 0.4) {
       window.scrollTo({ top: window.pageYOffset + top - headerH - 12, behavior: reduce ? 'auto' : 'smooth' });
     }
-    if (first) first.focus({ preventScroll: true });
   }
 
   function showStart() {
     hist = [];
     logEl.innerHTML = '';
     st = fresh();
-    updateHud();
     var box = document.createElement('section');
     box.className = 'pass';
     box.innerHTML =
-      '<p class="eyebrow">Forgotten Runiverse</p><h2>Mining Rights</h2>' +
+      '<p class="eyebrow">Playable quest</p>' +
       '<p class="lead">Play one of the quests I designed. The Red Mages’ emissary wants a mine back from one of his own attendants. Every choice here is one the game offered, and the design notes explain why I built it that way.</p>' +
       '<p class="lead">In the game, this quest unlocks after the tutorial quest, The Gathering Tree. Here you play it as someone who finished it and helped the forest animals.</p>' +
       '<p class="lead">I wrote a draft of all the dialogue, along with each character\u2019s intentions and personality. Jon Olson, the narrative designer, then reviewed it. Some lines were rewritten completely or partly, and he approved the final dialogue.</p>' +
-      '<div class="choices"><button type="button" class="primary" id="go">Start the quest</button></div>';
+      '<div class="choices"><button type="button" id="go">Start the quest</button></div>';
     swap(box);
     document.getElementById('go').addEventListener('click', function () {
       st.tree = true;
       st.curse = true;
       show('a1', 'Start the quest');
     });
-    document.getElementById('go').focus({ preventScroll: true });
   }
 
   function showEnd() {
@@ -657,12 +581,12 @@
     }).join('');
     var box = document.createElement('section');
     box.className = 'pass';
-    box.innerHTML = '<div class="card"><h2>The end</h2><p style="margin:0">How you played it:</p><ul class="sum">' +
+    box.innerHTML = '<div class="card"><h3>The end</h3><p style="margin:0">How you played it:</p><ul class="sum">' +
       how.map(function (h) { return '<li>' + esc(h) + '</li>'; }).join('') + '</ul></div>' +
-      '<div class="card"><h2>Endings found: ' + done + ' of 3</h2><ul class="ends">' + ends + '</ul></div>' +
-      '<div class="choices"><button type="button" class="primary" id="again">Play again</button></div>';
+      '<div class="card"><h3>Endings found: ' + done + ' of 3</h3><ul class="ends">' + ends + '</ul></div>' +
+      '<div class="choices"><button type="button" class="btn" id="again">Play again</button></div>';
     swap(box);
-    document.getElementById('again').addEventListener('click', showStart);
+    document.getElementById('again').addEventListener('click', function () { showStart(); keepInView(); });
     reveal(box, box.querySelector('.choices'));
   }
 
@@ -672,13 +596,7 @@
     st = clone(hist[hist.length - 1].st);
     draw();
   }
-  backBtn.addEventListener('click', goBack);
-  document.getElementById('restart').addEventListener('click', showStart);
-  var notesBox = document.getElementById('notes');
-  notesBox.addEventListener('change', function () { mrEl.classList.toggle('notes-off', !notesBox.checked); });
+  document.getElementById('mr-restart').addEventListener('click', function () { showStart(); keepInView(); });
 
   showStart();
 }());
-</script>
-</body>
-</html>
