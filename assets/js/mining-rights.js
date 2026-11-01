@@ -451,7 +451,7 @@
   // the note is written onto the sticky note, very fast. The rest of the text is
   // laid out but invisible, so the note never changes size while it is typed.
   var CPS = 900;
-  function typeNote(p, text) {
+  function typeNote(p, text, delay) {
     if (reduce) { p.textContent = text; return; }
     var shown = document.createElement('span');
     var rest = document.createElement('span');
@@ -470,23 +470,48 @@
       if (n < text.length) window.requestAnimationFrame(step);
       else p.textContent = text;
     }
-    window.setTimeout(function () { window.requestAnimationFrame(step); }, 160);
+    window.setTimeout(function () { window.requestAnimationFrame(step); }, delay || 160);
   }
 
   // ---- building a card (used both to show it and to measure it) ----
+  // A long note is split into two or three sticky notes, at sentence boundaries.
+  function chunks(text) {
+    var sentences = text.match(/[^.!?]+[.!?]+["\u201d]?\s*|[^.!?]+$/g) || [text];
+    var n = Math.min(3, Math.max(1, Math.round(text.length / 170)));
+    if (n === 1 || sentences.length < 2) return [text];
+    n = Math.min(n, sentences.length);
+    var target = text.length / n, out = [], cur = '';
+    sentences.forEach(function (sn, i) {
+      var left = sentences.length - i;
+      if (cur && out.length < n - 1 && (cur.length + sn.length / 2 > target || left <= n - out.length - 1)) {
+        out.push(cur.trim()); cur = '';
+      }
+      cur += sn;
+    });
+    if (cur) out.push(cur.trim());
+    return out;
+  }
+
   function makeTurn(box, note, animate) {
     var turn = document.createElement('div');
     turn.className = 'turn';
     turn.appendChild(box);
+    var area = document.createElement('div');
+    area.className = 'notes';
     if (note) {
-      var pi = document.createElement('aside');
-      pi.className = 'postit';
-      pi.setAttribute('aria-label', 'Design note');
-      pi.innerHTML = '<b>Design note</b><p></p>';
-      var np = pi.querySelector('p');
-      if (animate) typeNote(np, note); else np.textContent = note;
-      turn.appendChild(pi);
+      var parts = chunks(note), before = 0;
+      parts.forEach(function (part, i) {
+        var pi = document.createElement('aside');
+        pi.className = 'postit postit--' + (i % 3);
+        pi.setAttribute('aria-label', 'Design note');
+        pi.innerHTML = '<b>Design note' + (parts.length > 1 ? ' ' + (i + 1) + '/' + parts.length : '') + '</b><p></p>';
+        var np = pi.querySelector('p');
+        if (animate) typeNote(np, part, 160 + before * 1000 / CPS); else np.textContent = part;
+        before += part.length;
+        area.appendChild(pi);
+      });
     }
+    turn.appendChild(area);
     return turn;
   }
 
@@ -547,9 +572,9 @@
     }).join('');
     var box = document.createElement('section');
     box.className = 'pass';
-    box.innerHTML = '<div class="card"><h3>The end</h3><p style="margin:0">How you played it:</p><ul class="sum">' +
+    box.innerHTML = '<div class="end-grid"><div class="card"><h3>The end</h3><p style="margin:0">How you played it:</p><ul class="sum">' +
       how.map(function (h) { return '<li>' + esc(h) + '</li>'; }).join('') + '</ul></div>' +
-      '<div class="card"><h3>Endings found: ' + done + ' of 3</h3><ul class="ends">' + ends + '</ul></div>' +
+      '<div class="card"><h3>Endings found: ' + done + ' of 3</h3><ul class="ends">' + ends + '</ul></div></div>' +
       '<div class="choices"><button type="button" class="primary" id="again">Play again</button></div>';
     return box;
   }
@@ -558,7 +583,8 @@
   function mount(turn) {
     logEl.innerHTML = '';
     logEl.appendChild(turn);
-    if (turn.offsetHeight > cardH + 1) setHeight(turn.offsetHeight);   // a card taller than predicted: grow once, never shrink
+    var ch = turn.querySelector('.pass').offsetHeight, nh = turn.querySelector('.notes').offsetHeight;
+    if (ch > cardH + 1 || nh > notesH + 1) setHeights(Math.max(ch, cardH), Math.max(nh, notesH));   // taller than predicted: grow, never shrink
   }
 
   function focusFirst(turn) {
@@ -609,10 +635,11 @@
   }
 
   // ---- every card gets the same height, so the page below never moves ----
-  var cardH = 0;
-  function setHeight(h) {
-    cardH = h;
-    logEl.style.setProperty('--mr-h', h + 'px');
+  var cardH = 0, notesH = 0;
+  function setHeights(c, n) {
+    cardH = c; notesH = n;
+    logEl.style.setProperty('--mr-card-h', c + 'px');
+    logEl.style.setProperty('--mr-notes-h', n + 'px');
   }
 
   function variants() {
@@ -647,16 +674,23 @@
 
     var savedSt = st, savedHist = hist, savedFound = found;
     var longest = '';
+    var all = variants();
     Object.keys(P).forEach(function (id) {
       var ch = P[id].choices;
-      if (typeof ch === 'function') return;
-      (ch || []).forEach(function (c) { if (c.t.length > longest.length) longest = c.t; });
+      if (!ch) return;
+      (typeof ch === 'function' ? all : [all[0]]).forEach(function (s) {
+        (typeof ch === 'function' ? ch(s) : ch).forEach(function (c) { if (c.t.length > longest.length) longest = c.t; });
+      });
     });
     hist = [{}, {}];                      // so the Back button is counted
-    var max = 0;
-    function take(turn) { probe.appendChild(turn); max = Math.max(max, turn.offsetHeight); probe.removeChild(turn); }
+    var maxCard = 0, maxNotes = 0;
+    function take(turn) {
+      probe.appendChild(turn);
+      maxCard = Math.max(maxCard, turn.querySelector('.pass').offsetHeight);
+      maxNotes = Math.max(maxNotes, turn.querySelector('.notes').offsetHeight);
+      probe.removeChild(turn);
+    }
 
-    var all = variants();
     Object.keys(P).forEach(function (id) {
       var p = P[id];
       if (p.custom) return;
@@ -668,7 +702,7 @@
       });
     });
     found = { turnedIn: true, lie: true, letGo: true };
-    st = all[all.length - 1];
+    st = fresh(); st.entry = 'front'; st.tents = true; st.gaines = 'turnedIn'; st.gold = 150;   // the longest summary
     take(makeTurn(buildEnd(), null, false));
     st = savedSt; hist = savedHist; found = savedFound;
     st = fresh();
@@ -676,7 +710,7 @@
     st = savedSt;
 
     mrEl.removeChild(probe);
-    setHeight(Math.ceil(max) + 2);
+    setHeights(Math.ceil(maxCard) + 1, Math.ceil(maxNotes) + 1);
   }
 
   var resizeTimer = 0;

@@ -1224,9 +1224,9 @@ body::before {
 .mr-link:disabled { color: var(--ink-3); text-decoration: none; cursor: default; }
 .mr-link:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
-.mr .turn { display: grid; grid-template-columns: minmax(0, 1fr); grid-template-rows: 1fr auto; align-items: start; min-height: var(--mr-h, 0); }
+.mr .turn { display: flex; flex-direction: column; }
 
-.mr .pass { background: var(--card); border: var(--bw) solid var(--ink); border-radius: 6px 10px 7px 9px; box-shadow: 4px 4px 0 var(--line); padding: 22px 24px 24px; animation: mr-in 0.22s ease-out; position: relative; z-index: 1; display: flex; flex-direction: column; align-self: stretch; }
+.mr .pass { background: var(--card); border: var(--bw) solid var(--ink); border-radius: 6px 10px 7px 9px; box-shadow: 4px 4px 0 var(--line); padding: 22px 24px 24px; animation: mr-in 0.22s ease-out; position: relative; z-index: 1; display: flex; flex-direction: column; min-height: var(--mr-card-h, 0); }
 @keyframes mr-in { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
 .mr .eyebrow { font: 600 0.72rem/1.4 var(--f-mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); margin: 0 0 6px; }
 .mr .lead { color: var(--ink-2); margin: 0 0 12px; max-width: 38em; }
@@ -1256,42 +1256,43 @@ body::before {
 
 .mr .card { background: var(--paper); border: 1px solid var(--line); border-radius: 6px; padding: 14px 16px; margin: 0 0 16px; }
 .mr .card h3 { font-size: 1.3rem; margin: 0 0 8px; }
+.mr .end-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.5fr); gap: 16px; align-items: start; }
+.mr .end-grid .card { margin: 0; }
 .mr ul.sum { margin: 6px 0 0; padding-left: 20px; }
 .mr .ends { list-style: none; margin: 8px 0 0; padding: 0; display: grid; gap: 8px; }
-.mr .ends li { padding: 8px 12px; border: 1.5px dashed var(--line); border-radius: 6px; color: var(--ink-3); }
+.mr .ends li { padding: 6px 12px; font-size: 0.92rem; line-height: 1.4; border: 1.5px dashed var(--line); border-radius: 6px; color: var(--ink-3); }
 .mr .ends li.got { border-style: solid; border-color: var(--ok); color: var(--ink); }
 .mr .ends li b { display: block; }
 
-/* the sticky note: under the card, stuck to its lower edge. In a wide player it sits beside it. */
+/* sticky notes: a row under the card, stuck to its lower edge. A long note is split into several. */
+.mr .notes { display: flex; flex-wrap: wrap; align-items: flex-start; gap: 14px 16px; margin-top: -6px; padding: 0 10px; min-height: var(--mr-notes-h, 0); }
 .mr .postit {
   position: relative; z-index: 2;
-  width: min(94%, 470px);
-  margin: -8px 4px 0 auto;
+  flex: 1 1 200px; max-width: 360px;
   padding: 28px 20px 22px;
   background: var(--note-bg);
   color: var(--note-ink);
-  transform: rotate(-1deg);
-  align-self: start;
   box-shadow: 0 1px 0 var(--note-fold), 0 10px 18px -10px rgba(0, 0, 0, 0.45);
   font-family: var(--f-hand);
   font-weight: 600;
   animation: mr-in 0.3s ease-out 0.08s both;
 }
+.mr .postit--0 { transform: rotate(-1.2deg); }
+.mr .postit--1 { transform: rotate(0.9deg); margin-top: 6px; }
+.mr .postit--2 { transform: rotate(-0.6deg); }
 .mr .postit::before {
   content: ""; position: absolute; top: -9px; left: 50%; width: 76px; height: 20px;
   transform: translateX(-50%) rotate(-3deg); background: var(--note-tape);
   box-shadow: 0 1px 0 var(--note-fold);
 }
 .mr .postit b { display: block; font: 600 0.66rem/1 var(--f-mono); letter-spacing: 0.1em; text-transform: uppercase; opacity: 0.7; margin-bottom: 8px; }
-.mr .postit p { margin: 0; font-size: 1.4rem; line-height: 1.18; max-width: none; }
 .mr p { max-width: none; }
-@container (min-width: 640px) {
-  .mr .turn { grid-template-columns: minmax(0, 1fr) 256px; }
-  .mr .postit { width: auto; margin: 30px 0 0 -12px; transform: rotate(1.8deg); }
-}
+.mr .postit p { margin: 0; font-size: 1.4rem; line-height: 1.18; max-width: none; }
 @container (max-width: 520px) {
+  .mr .end-grid { grid-template-columns: 1fr; }
   .mr .pass { padding: 18px 16px 20px; }
-  .mr .postit { width: 96%; margin-right: 0; }
+  .mr .notes { padding: 0 4px; }
+  .mr .postit { flex-basis: 100%; max-width: none; }
 }
 @media (prefers-reduced-motion: reduce) {
   .mr .pass, .mr .postit { animation: none; }
