@@ -382,40 +382,40 @@
 
   var NOTES = {
   "a1": "The Red Hats are bureaucrats, merchants and lawyers driven by rank, money and power. That was already in the lore, so Alfus's voice follows it. As a team we also tried to keep each line short, since players don't read much. Even with few words, each line shows the faction's personality.",
-  "decline": "I never lock the quest behind a first “no”. A player who just wasn't ready would lose content for no reason.",
-  "a2": "When the player comes back, Alfus reacts to it instead of repeating his pitch. It is a small line, but it tells the player the world noticed.",
-  "decline2": "Every refusal loops back to the offer. Nobody can get stuck here.",
-  "pitch": "The contract only asks the player to remove Gaines. It says nothing about what happens to him afterwards. That gap is deliberate, because the last step plays with it.",
-  "notReady": "Even “I'm not ready” returns to the offer. It costs the player nothing to read the terms and walk away.",
+  "decline": "Saying no doesn't lock the quest. A player who just wasn't ready shouldn't lose content for that.",
+  "a2": "When the player comes back, Alfus reacts to it instead of repeating the same pitch.",
+  "decline2": "Every refusal goes back to the offer, so the player can't get stuck.",
+  "pitch": "The contract only asks the player to remove Gaines and says nothing about what happens to him afterwards. I left that gap on purpose, because the last step uses it.",
+  "notReady": "Even saying “I'm not ready” goes back to the offer. The player can read the terms and walk away at no cost.",
   "contract": "The contract has no mechanical use. It looks like a joke item, but its fine print decides the argument at the end. Alfus hands over the Heat Wave recipe up front, so the player has the tool before knowing they need it. Heat Wave already existed in the game, and I reused it instead of asking a teammate to create a new item for this quest.",
-  "attendants": "Two short lines that show the hierarchy of the Red Hats. The attendants also talk about Gaines, so the player hears opinions about him before meeting him.",
-  "craft": "Crafting was a core part of the game's loop. Players grinded materials, rolled for quality like in a gacha and could share recipes. I wanted it to have another use besides combat and selling. If a crafted spell can open a different way through a quest, players have a reason to craft everything they find.",
-  "dirs": "Alfus only gives directions once the contract is signed, so the player always arrives at the mine with the quest already in hand.",
+  "attendants": "Two short lines that show the hierarchy of the Red Hats. The attendants also talk about Gaines, so the player hears what they think of him before meeting him.",
+  "craft": "Crafting was a core part of the game's loop. Players had to grind materials, each craft had a quality roll like a gacha, and recipes could be shared. I wanted it to have another use besides combat and selling. If a crafted spell can open a different way through a quest, players have a reason to craft everything they find.",
+  "dirs": "Alfus only gives directions once the contract is signed, so the player always arrives at the mine with the quest already started.",
   "entrance": "The mine has two ways in. The front is a fight. The other is a reward for having helped the forest animals earlier.",
   "guardFight": "Combat decides this in the game. In this demo you choose the result so you can see both.",
   "guardLost": "In the open world, losing a fight teleports you to the last hub, because HP only exists in combat. Inside a quest I could choose, so the guards throw you out at the entrance, a small nod to the Team Rocket hideouts. It spares the player a long walk, and HP refills after every fight anyway.",
-  "animal": "I like it when one quest quietly pays off another. One of our pillars was that players should explore, interact with everything and be curious about the world, so rewarding that felt natural to me. The burrow also skips the whole camp.",
+  "animal": "I like it when one quest rewards something the player did in another. One of our pillars was that players should explore, interact with everything and be curious about the world, so rewarding that felt natural to me. The burrow also skips the whole camp.",
   "inside": "Until then, spells were only used in combat. That never made sense to me, since a wizard should be able to use their powers in the world too, and I wanted the world to feel magical. So in most of my quests, spells and crafted items matter outside combat. It had to be Heat Wave, a wide-area flame that sets the tents on fire.",
   "tents": "NPCs couldn't walk, so the enemies in the mine are static. I wanted a Pokémon-style stealth puzzle but the system didn't allow it, and I didn't want the scene to be only fighting. So I added the tents. Burn them and the group splits, grunts first, then the captain alone. This needed an inventory check for the spell, a requirement I asked the developers to add.",
   "captain": "The captain offers the player a last chance to leave, and leaving just sends them back to the entrance.",
-  "gaines": "The boss doesn't have to be fought. Taking his deal is the Red Mage answer, so I didn't make it the weaker choice. It is another way through the same quest.",
+  "gaines": "The boss doesn't have to be fought. Taking his deal is what a Red Mage would do, so I didn't make it the worse option.",
   "gLost": "It works like the guard. You are sent to the entrance, but nothing is undone and the fights you won stay won. I never wanted the player to feel trapped or frustrated.",
-  "gWon": "Turning Gaines in is the straightforward result, and the only one where Alfus can send him to the Capital Review Board.",
+  "gWon": "Turning Gaines in is the direct route. It is the only branch where Alfus can send him to the Capital Review Board.",
   "gDeal": "Gaines pays and leaves, still free, which decides which answers Alfus can hear later. I planned to bring Gaines back in future content for the Red Hats' city, so this choice would matter there.",
   "report": "What the player can say depends on what they did with Gaines, so the answers always match what actually happened. Rewards were never shown in advance, not even in the quest menu. I wanted players to explore out of curiosity about the story, not to chase a payout, and it meant I never had to match the story to a promised amount.",
   "rTruth": "Turning him in and telling the truth pays the most. Alfus gives 150 gold and a one-time Hip Shades recipe. The shades already existed and fit the Red Mages, since Gaines wears dark glasses. Balancing items was already hard in an MMO, so I gave new meaning to what existed instead of asking the item designer for more. I learned that on projects like Frozen.",
   "rLie": "Alfus is happy either way, so the lie pays the full amount. He suspects (“further investigation is needed”) but has no proof. From here it rejoins the lines of the first branch. When the result is the same, I don't think every branch needs its own dialogue.",
-  "rLetGo": "Alfus is annoyed you let him go, but you completed the contract, so he has to pay. He pays a little less, as if a clause let him adjust the amount. I left that implicit, and since rewards were never shown, the payout could follow the story. Here the contract's fine print gets the last word.",
+  "rLetGo": "Alfus is annoyed you let him go, but you completed the contract, so he has to pay. He pays a little less, as if a clause let him adjust the amount. I left that implicit, and since rewards were never shown, the payout could follow the story. This is where the contract's fine print matters.",
   "hedge": "Every ending points to the next job. We barely used quest markers, so a line of dialogue guides the player instead, and if they talk to the character again they get a small hint about where to find more. That was a guideline from the creative director. The three branches also rejoin here. I only write separate interactions when the result differs.",
   "epilogue": "In many quests I left traces of what the player did, like a burned camp you find again when you return to the mine. I wanted players to remember a quest when they walk through that place again, a small moment of recalling something they lived earlier in the game as they move through the world. It gives the world weight, even at a small scale.",
   "epA": "Attendant A reacts differently depending on what the player did with Gaines.",
   "epB": "This one doesn't change. Not every NPC needs a branch.",
-  "epAlfus": "Alfus ends by pointing at the Red path. It is an invitation, and it commits the player to nothing."
+  "epAlfus": "Alfus ends by inviting the player to follow the Red path. It doesn't commit them to anything."
 };
   NOTES.captainFight = function (s) {
     return s.tents
-      ? 'Because the tents burned, the grunts are already down and the captain fights alone. This is where the earlier choice shows up as a shortcut.'
-      : 'The tents were left alone, so the captain and both grunts attack together. This is where the earlier choice shows up as a cost.';
+      ? 'Because the tents burned, the grunts are already down and the captain fights alone. Burning the tents split the fight in two.'
+      : 'The tents were left alone, so the captain and both grunts attack together. Without the fire, the fight is not split.';
   };
   Object.keys(NOTES).forEach(function (k) { if (P[k]) P[k].note = NOTES[k]; });
 
