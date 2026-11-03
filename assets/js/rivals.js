@@ -59,4 +59,26 @@
       }, 650);
     });
   }
+
+  /* Scroll behaviour: condensed top bar, staggered card reveals, wedges drawing in. */
+  var top = document.querySelector('.top');
+  if (top) {
+    var cond = function () { top.classList.toggle('is-scrolled', window.scrollY > 40); };
+    window.addEventListener('scroll', cond, { passive: true });
+    cond();
+  }
+  if (!reduce && 'IntersectionObserver' in window) {
+    var root = document.documentElement;
+    root.classList.add('js');
+    document.querySelectorAll('.cards li .wcard').forEach(function (el, i) {
+      el.classList.add('reveal'); el.style.setProperty('--d', (i * 0.12) + 's');
+    });
+    document.querySelectorAll('.work h2, .contact h2').forEach(function (el) { el.classList.add('reveal-h'); });
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        if (en.isIntersecting) { en.target.classList.add('in'); io.unobserve(en.target); }
+      });
+    }, { rootMargin: '0px 0px -12% 0px', threshold: 0.01 });
+    document.querySelectorAll('.reveal, .reveal-h, .wedge').forEach(function (el) { io.observe(el); });
+  }
 })();
