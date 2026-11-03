@@ -17,6 +17,7 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@600&family=Figtree:wght@400..700&family=JetBrains+Mono:wght@400..500&family=Young+Serif&display=swap">
 <link rel="stylesheet" href="assets/css/style.css">
 <link rel="stylesheet" href="assets/css/carousel.css">
+<link rel="stylesheet" href="assets/css/bento.css">
 <script>document.documentElement.className+=" deck-on";</script>
 </head>
 <body id="top">
@@ -40,14 +41,13 @@
 <div class="deck-track" id="deck-track">
 
   <section class="hero section--first view" id="intro" data-label="Hello">
-    <div class="wrap hero-grid">
+    <div class="wrap hero-bento">
       <div class="hero-copy">
         <p class="eyebrow">Hello there!</p>
         <h1>Santiago Mejías</h1>
         <p class="role"><b>Game Designer &amp; Producer</b><span>Systems&nbsp;· Narrative&nbsp;· Quests</span></p>
         <p class="lede"><strong>7+ years</strong> and <strong>7+ shipped titles</strong> across mobile F2P, MMORPGs, and licensed IP. Building prototypes in Godot and expanding into Unreal Engine 5.</p>
         <p class="lede">Particularly interested in the intersection of <mark>systems</mark> and <mark>narrative</mark>: how mechanics can carry story and story can give meaning to systems.</p>
-        <p class="avail"><i aria-hidden="true"></i><span>Open to full-time roles and select freelance <span class="nowrap">projects&nbsp;· Remote</span></span></p>
         <div class="cta-row">
           <a class="btn btn--primary" href="#work">View work <span aria-hidden="true">→</span></a>
           <a class="link-quiet" href="https://calendar.app.google/2KfUpY6mjVkL8NZu5" target="_blank" rel="noopener">Book a meeting ↗</a>
@@ -57,18 +57,17 @@
       </div>
 
       <div class="hero-photo">
-        <figure class="polaroid">
-          <figure class="shot" style="--ratio:4 / 5">
-  <div class="shot-frame">
-    <div class="shot-empty"><span class="tag">Image slot</span><span>Your portrait, 4:5, at least 900 px wide</span><code>assets/img/santi-portrait.jpg</code></div>
-    <img data-base="assets/img/santi-portrait" src="assets/img/santi-portrait.jpg" alt="Portrait of Santiago Mejías" loading="lazy" decoding="async">
-  </div>
-</figure>
+        <figure class="cutout">
+          <img src="assets/img/santi-cutout.webp" width="565" height="702" alt="Santiago Mejías smiling, wearing an orange beanie and a light bomber jacket" decoding="async">
         </figure>
+        <p class="avail"><i aria-hidden="true"></i><span>Open to full-time roles and select freelance <span class="nowrap">projects&nbsp;· Remote</span></span></p>
+        <svg class="seal" viewBox="0 0 120 120" aria-hidden="true" focusable="false">
+          <defs><path id="seal-ring" d="M60,60 m-45,0 a45,45 0 1,1 90,0 a45,45 0 1,1 -90,0"/></defs>
+          <circle class="seal-bg" cx="60" cy="60" r="58"/>
+          <text><textPath href="#seal-ring" textLength="280" lengthAdjust="spacing">GAME DESIGNER &amp; PRODUCER · BUENOS AIRES · 2026 ·</textPath></text>
+          <circle class="seal-dot" cx="60" cy="60" r="11"/>
+        </svg>
       </div>
-    </div>
-
-    <div class="wrap hero-stats">
       <div class="stats" data-reveal>
         <div class="stat"><b data-count="7" data-suffix="+">7+</b><span>Years in the industry</span></div>
         <div class="stat"><b data-count="7" data-suffix="+">7+</b><span>Shipped titles</span></div>
@@ -76,6 +75,7 @@
         <div class="stat"><b data-count="175" data-suffix="M+">175M+</b><span>Google Play downloads</span><small>Lifetime, titles I worked on</small></div>
       </div>
     </div>
+
   </section>
 
   <section class="section view" id="work" data-label="Work">
