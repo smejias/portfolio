@@ -1,12 +1,25 @@
-/* Home: header border on scroll, copy-email button. */
+/* Home: active tab follows the section in view, copy-email button. */
 (function () {
   'use strict';
-  var top = document.querySelector('.top');
-  if (top) {
-    var onScroll = function () { top.classList.toggle('is-scrolled', window.scrollY > 8); };
-    window.addEventListener('scroll', onScroll, { passive: true });
-    onScroll();
+
+  var tabs = {};
+  document.querySelectorAll('.tab[data-sec]').forEach(function (a) { tabs[a.getAttribute('data-sec')] = a; });
+  var order = ['top', 'work', 'hire'];
+  var sections = { top: document.querySelector('.hero'), work: document.getElementById('work'), hire: document.getElementById('hire') };
+
+  function setActive(id) {
+    Object.keys(tabs).forEach(function (k) { tabs[k].classList.toggle('is-active', k === id); });
   }
+  function onScroll() {
+    var line = window.innerHeight * 0.35, current = 'top';
+    order.forEach(function (id) {
+      var el = sections[id];
+      if (el && el.getBoundingClientRect().top <= line) current = id;
+    });
+    setActive(current);
+  }
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
 
   document.querySelectorAll('[data-copy]').forEach(function (btn) {
     var label = btn.textContent;
