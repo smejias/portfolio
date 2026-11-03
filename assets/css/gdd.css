@@ -98,3 +98,7 @@
 /* ---------- Contact ---------- */
 
 .cta-band .actions .link-quiet { font-size: 1.05rem; }
+
+/* ---------- Titles in Knewave (trial) ---------- */
+
+h1, h2, h3, h4 { font-family: "Knewave", var(--f-display); letter-spacing: 0; }
