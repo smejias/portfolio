@@ -1,7 +1,7 @@
 /* ==========================================================================
    Home as a game design document. Loaded after style.css, only by index.html.
    Same notebook (paper grid, blue ink, orange for clickable, hand notes,
-   rubber stamps); the new pieces come from the craft itself: a character sheet, a core-loop diagram, project spec cards and a
+   rubber stamps); the new pieces come from the craft itself: a character sheet, project spec cards and a
    quest flow. Light theme only.
    ========================================================================== */
 
@@ -10,22 +10,7 @@
 .hero { padding-block: var(--u) calc(var(--u) * 2); }
 .g-hero { align-items: start; }
 @media (min-width: 900px) { .g-hero { grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: 0 64px; } }
-.g-hero .hero-copy > .loop, .g-hero .hero-copy > .cta-row { margin-top: var(--u); }
-
-/* core loop: his own sentence, drawn as the loop it describes */
-.loop { margin: 0; display: grid; gap: 14px; max-width: 34em; }
-.loop figcaption { color: var(--ink-2); line-height: 1.6; font-size: 1.02rem; }
-.loop figcaption .label { margin-bottom: 4px; color: var(--accent); }
-.loop svg { width: min(100%, 440px); height: auto; overflow: visible; }
-.loop .node { fill: var(--card); stroke: var(--ink); stroke-width: 1.5; }
-.loop .node--b { fill: var(--accent); stroke: var(--ink); }
-.loop .node-t { font: 600 12px/1 var(--f-mono); letter-spacing: 0.12em; text-anchor: middle; fill: var(--ink); }
-.loop .node--b + .node-t { fill: var(--on-accent); }
-.loop svg { margin-top: 4px; }
-.loop .arc { fill: none; stroke: var(--accent); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 1; stroke-dashoffset: 0; }
-.loop .hand-t { font: 600 20px/1 var(--f-hand); fill: var(--accent); text-anchor: middle; }
-.js .loop .arc { stroke-dasharray: 1; transition: stroke-dashoffset 0.9s cubic-bezier(0.65, 0, 0.35, 1) 0.5s; }
-.js .loop:not(.in) .arc { stroke-dashoffset: 1; }
+.g-hero .hero-copy > .cta-row { margin-top: var(--u); }
 
 /* character sheet */
 .sheet {
