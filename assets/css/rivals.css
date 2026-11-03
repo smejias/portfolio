@@ -44,6 +44,7 @@ a{color:inherit}
 /* Top bar */
 .top{position:fixed;top:16px;left:0;z-index:60;height:56px;width:calc(38vw + var(--t)*var(--hero-h) - 20px);min-width:560px;display:flex;align-items:stretch;gap:12px;background:var(--bar);padding:0 18px 0 max(24px,4vw);clip-path:polygon(0 0,100% 0,calc(100% - 10px) 100%,0 100%)}
 .brand{display:flex;align-items:center;font-family:var(--f-display);font-style:italic;font-weight:800;font-size:24px;text-transform:uppercase;color:#fff;text-decoration:none;white-space:nowrap;margin-right:auto}
+.top nav{display:flex;align-items:stretch}
 .top ul{display:flex;align-items:stretch;list-style:none;margin:0;padding:0}
 .tab{position:relative;isolation:isolate;display:flex;align-items:center;height:100%;padding:0 26px;font-family:var(--f-display);font-style:italic;font-weight:700;font-size:19px;letter-spacing:.05em;text-transform:uppercase;color:#fff;text-decoration:none}
 .tab::before{content:"";position:absolute;inset:0;z-index:-1;background:transparent;transform:skewX(var(--slash));transition:background .15s ease}
@@ -149,6 +150,14 @@ mark{background:linear-gradient(transparent 60%,var(--yellow) 60%);color:inherit
   .role{margin:16px 0}
   .lede{font-size:16px;margin-bottom:10px}
   .stats b{font-size:52px}
+}
+
+/* Medium desktop: keep the photo clear of the button stack */
+@media (max-width:1320px) and (min-width:901px){
+  .hero-photo{left:45%;height:min(54%,540px)}
+  .hero-cta{max-width:290px}
+  .hero-cta .btn{min-width:0;width:100%;font-size:20px;padding:12px 22px}
+  .avail{font-size:13px;white-space:nowrap}
 }
 
 /* Tablet and phone */
