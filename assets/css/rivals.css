@@ -178,7 +178,7 @@ mark{background:linear-gradient(transparent 60%,var(--yellow) 60%);color:inherit
 /* Tablet and phone */
 @media (max-width:1100px) and (min-width:901px){
   .wcard h3{font-size:32px}
-  .top{min-width:0}
+  .top{min-width:max-content}
   .tab{padding:0 16px}
 }
 @media (max-width:900px){

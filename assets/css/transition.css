@@ -1,0 +1,12 @@
+/* Diagonal page wipe (cross-document View Transitions). Browsers without support just navigate normally. */
+@view-transition{navigation:auto}
+::view-transition-old(root),::view-transition-new(root){mix-blend-mode:normal}
+::view-transition-old(root){animation:none}
+::view-transition-new(root){animation:wipe .6s cubic-bezier(.7,0,.2,1) both}
+@keyframes wipe{
+  from{clip-path:polygon(0 0,0 0,calc(-.1763*100vh) 100%,0 100%)}
+  to{clip-path:polygon(0 0,calc(100% + .1763*100vh) 0,100% 100%,0 100%)}
+}
+@media (prefers-reduced-motion:reduce){
+  @view-transition{navigation:none}
+}

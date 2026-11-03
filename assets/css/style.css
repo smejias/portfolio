@@ -1162,14 +1162,7 @@ body::before {
    already skips baseline-nudging anything under a transform, so this never fights the grid. */
 .tilt { transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1); will-change: transform; }
 
-/* ---------- Page turn ---------- */
-/* Cross-document view transition between pages (Chromium today; a plain jump everywhere
-   else, which is exactly the old behaviour, so there is nothing to fall back to by hand). */
-@view-transition { navigation: auto; }
-::view-transition-old(root) { animation: page-out 0.45s cubic-bezier(0.65, 0, 0.35, 1) both; }
-::view-transition-new(root) { animation: page-in 0.45s cubic-bezier(0.65, 0, 0.35, 1) both; }
-@keyframes page-out { to { opacity: 0; transform: translateX(-2.5%); } }
-@keyframes page-in { from { opacity: 0; transform: translateX(2.5%); } }
+/* Page turn: the diagonal wipe lives in transition.css (shared with the home). */
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
