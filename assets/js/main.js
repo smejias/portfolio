@@ -269,6 +269,7 @@
   var CAN_HOVER = window.matchMedia && window.matchMedia('(hover: hover) and (pointer: fine)').matches;
 
   function initTilt(scope) {
+    return; /* retired with the Rivals restyle (notebook-only effect) */
     if (reduce || !CAN_HOVER) return;
     var els = $$('.stage-card, .principles li, .games li, .koster', scope).filter(function (el) { return !el.__tilt; });
     els.forEach(function (el) {
@@ -609,6 +610,7 @@
 
   var rhythmFrame = 0;
   function scheduleRhythm() {
+    return; /* retired: the ruled-paper grid is gone */
     if (rhythmFrame) window.cancelAnimationFrame(rhythmFrame);
     rhythmFrame = window.requestAnimationFrame(function () { rhythmFrame = 0; rhythm(); });
   }
