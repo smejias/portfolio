@@ -68,20 +68,22 @@
   grid-template-columns: none;
 }
 .fichas .work::before { left: 16px; }
-.ficha-head {
-  display: flex; justify-content: space-between; gap: 12px; margin: 0; height: var(--u); padding: 0 16px;
-  font: 600 0.66rem/var(--u) var(--f-mono); text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent);
+.fichas .ficha-head {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px; margin: 0; height: calc(var(--u) * 1.5); padding: 0 16px;
+  font: 600 0.66rem/1 var(--f-mono); text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent);
   border-bottom: 1.5px dashed var(--line);
 }
-.ficha-head span:last-child { color: var(--ink-3); font-weight: 500; }
+.fichas .ficha-head span { white-space: nowrap; }
+.fichas .ficha-head span:last-child { color: var(--ink-3); font-weight: 500; }
 .fichas .work-media { padding: 14px 14px 0; }
 .fichas .work-media::before { inset: 14px 14px 0; }
 .fichas .shot-frame { background-image: none; }
 @media (hover: hover) and (pointer: fine) {
   .fichas .work:hover .work-media .shot, .fichas .work:focus-within .work-media .shot { translate: 0 -8px; rotate: -1deg; }
 }
-.fichas .work-body { padding: 16px 16px 18px; gap: 12px; flex: 1; }
-.fichas .work h3 { font-size: 1.45rem; }
+.fichas .work-body { padding: 16px 16px 18px; gap: 12px; flex: 1; container-type: inline-size; }
+/* game names always on one line: the size follows the card width */
+.fichas .work h3 { font-size: min(1.45rem, 7.4cqi); white-space: nowrap; }
 .specs { margin: 0; width: 100%; display: grid; border-block: 1px dashed var(--line); }
 .specs > div { display: grid; grid-template-columns: 6.2em minmax(0, 1fr); gap: 10px; align-items: baseline; padding: 5px 0; }
 .specs > div + div { border-top: 1px dashed var(--line-soft); }
