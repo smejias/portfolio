@@ -1,12 +1,11 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Santi Mejías | Game Designer &amp; Producer</title>
 <meta name="description" content="Santiago Mejías is a game designer and producer with 7+ years and 7+ shipped titles across mobile F2P, MMORPGs and licensed IP. Systems, narrative and quest design.">
-<meta name="theme-color" content="#F1F0E9" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#10151C" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#F1F0E9">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Santi Mejías | Game Designer &amp; Producer">
 <meta property="og:description" content="Santiago Mejías is a game designer and producer with 7+ years and 7+ shipped titles across mobile F2P, MMORPGs and licensed IP. Systems, narrative and quest design.">
@@ -16,6 +15,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@600&family=Figtree:wght@400..700&family=JetBrains+Mono:wght@400..500&family=Young+Serif&display=swap">
 <link rel="stylesheet" href="assets/css/style.css">
+<link rel="stylesheet" href="assets/css/gdd.css">
 </head>
 <body id="top">
 <a class="skip" href="#main">Skip to content</a>
@@ -28,184 +28,175 @@
         <li><a href="about.html" data-nav="about">About</a></li>
         <li><a href="contact.html" data-nav="contact">Contact</a></li>
       </ul>
-      <button class="theme-btn" type="button" data-theme-toggle aria-label="Switch between light and dark theme">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 3.5v17a8.5 8.5 0 0 0 0-17z" fill="currentColor"/></svg>
-      </button>
     </nav>
   </div>
 </header>
+
 <main id="main">
 
+  <!-- Cover page of the document -->
   <section class="hero section--first">
-    <div class="wrap hero-grid">
-      <div class="hero-copy">
-        <p class="eyebrow">Hello there!</p>
-        <h1>Santiago Mejías</h1>
-        <p class="role"><b>Game Designer &amp; Producer</b><span>Systems&nbsp;· Narrative&nbsp;· Quests</span></p>
-        <p class="lede"><strong>7+ years</strong> and <strong>7+ shipped titles</strong> across mobile F2P, MMORPGs, and licensed IP. Building prototypes in Godot and expanding into Unreal Engine 5.</p>
-        <p class="lede">Particularly interested in the intersection of <mark>systems</mark> and <mark>narrative</mark>: how mechanics can carry story and story can give meaning to systems.</p>
-        <p class="avail"><i aria-hidden="true"></i><span>Open to full-time roles and select freelance <span class="nowrap">projects&nbsp;· Remote</span></span></p>
-        <div class="cta-row">
-          <a class="btn btn--primary" href="index.html#work">View work <span aria-hidden="true">↓</span></a>
-          <a class="link-quiet" href="https://calendar.app.google/2KfUpY6mjVkL8NZu5" target="_blank" rel="noopener">Book a meeting ↗</a>
-          <a class="link-quiet" href="https://www.linkedin.com/in/santiago-javier-mejias-/" target="_blank" rel="noopener">LinkedIn ↗</a>
-          <a class="btn" href="assets/Santiago-Mejias-CV.pdf">Download CV</a>
+    <div class="wrap">
+      <p class="doc-bar" aria-hidden="true"><span>Game design document</span><span class="doc-mid">Portfolio · Santiago Mejías</span><span>Rev. 2026 · Buenos Aires</span></p>
+
+      <div class="hero-grid g-hero">
+        <div class="hero-copy">
+          <p class="eyebrow">Hello there!</p>
+          <h1>Santiago Mejías</h1>
+          <p class="role"><b>Game Designer &amp; Producer</b><span>Systems&nbsp;· Narrative&nbsp;· Quests</span></p>
+          <p class="lede"><strong>7+ years</strong> and <strong>7+ shipped titles</strong> across mobile F2P, MMORPGs, and licensed IP. Building prototypes in Godot and expanding into Unreal Engine 5.</p>
+
+          <figure class="loop draw" data-free>
+            <figcaption><span class="label">Core loop</span>Particularly interested in the intersection of <mark>systems</mark> and <mark>narrative</mark>: how mechanics can carry story and story can give meaning to systems.</figcaption>
+            <svg viewBox="0 0 440 156" role="img" aria-label="Diagram: mechanics carry story, story gives meaning to mechanics, in a loop">
+              <path pathLength="1" class="arc" d="M96 52 C 150 12, 290 12, 344 52"/>
+              <path pathLength="1" class="arc head" d="M332 40 L345 53 L327 55"/>
+              <path pathLength="1" class="arc" d="M344 104 C 290 144, 150 144, 96 104"/>
+              <path pathLength="1" class="arc head" d="M108 116 L95 103 L113 101"/>
+              <rect class="node" x="2" y="56" width="138" height="44" rx="6"/>
+              <text class="node-t" x="71" y="83">MECHANICS</text>
+              <rect class="node node--b" x="300" y="56" width="138" height="44" rx="6"/>
+              <text class="node-t" x="369" y="83">STORY</text>
+              <text class="hand-t" x="220" y="14">carry</text>
+              <text class="hand-t" x="220" y="156">give meaning to</text>
+            </svg>
+          </figure>
+
+          <div class="cta-row">
+            <a class="btn btn--primary" href="#work">View work <span aria-hidden="true">→</span></a>
+            <a class="btn" href="assets/Santiago-Mejias-CV.pdf">Download CV</a>
+            <a class="link-quiet" href="https://calendar.app.google/2KfUpY6mjVkL8NZu5" target="_blank" rel="noopener">Book a meeting ↗</a>
+            <a class="link-quiet" href="https://www.linkedin.com/in/santiago-javier-mejias-/" target="_blank" rel="noopener">LinkedIn ↗</a>
+          </div>
         </div>
-      </div>
 
-      <div class="hero-photo">
-        <figure class="polaroid">
-          <figure class="shot" style="--ratio:4 / 5">
-  <div class="shot-frame">
-    <div class="shot-empty"><span class="tag">Image slot</span><span>Your portrait, 4:5, at least 900 px wide</span><code>assets/img/santi-portrait.jpg</code></div>
-    <img data-base="assets/img/santi-portrait" src="assets/img/santi-portrait.jpg" alt="Portrait of Santiago Mejías" loading="lazy" decoding="async">
-  </div>
-</figure>
-        </figure>
-      </div>
-    </div>
-
-    <div class="wrap hero-stats">
-      <div class="stats" data-reveal>
-        <div class="stat"><b data-count="7" data-suffix="+">7+</b><span>Years in the industry</span></div>
-        <div class="stat"><b data-count="7" data-suffix="+">7+</b><span>Shipped titles</span></div>
-        <div class="stat"><b data-count="15" data-suffix="+">15+</b><span>Quests designed and built</span><small>Forgotten Runiverse</small></div>
-        <div class="stat"><b data-count="175" data-suffix="M+">175M+</b><span>Google Play downloads</span><small>Lifetime, titles I worked on</small></div>
+        <aside class="sheet" aria-label="Character sheet" data-free>
+          <div class="sheet-head"><span>Character sheet</span><span title="7+ years in the industry">Lv. 7+</span></div>
+          <div class="sheet-portrait">
+            <img src="assets/img/santi-cutout.webp" width="565" height="702" alt="Santiago Mejías smiling, wearing an orange beanie" fetchpriority="high">
+            <span class="sheet-note" aria-hidden="true">that's me!</span>
+          </div>
+          <dl class="sheet-stats">
+            <div><dt>Class</dt><dd>Game Designer &amp; Producer</dd></div>
+            <div><dt>Specialty</dt><dd>Systems · Narrative · Quests</dd></div>
+            <div><dt>Shipped</dt><dd><b>7+</b> titles</dd></div>
+            <div><dt>Quests built</dt><dd><b>15+</b> in Forgotten Runiverse</dd></div>
+            <div><dt>Reach</dt><dd><b>175M+</b> Google Play downloads</dd></div>
+            <div><dt>Engines</dt><dd>Godot · Unity · Unreal 5</dd></div>
+          </dl>
+          <p class="avail"><i aria-hidden="true"></i><span>Open to full-time roles and select freelance <span class="nowrap">projects&nbsp;· Remote</span></span></p>
+        </aside>
       </div>
     </div>
   </section>
 
+  <!-- Selected work -->
   <section class="section" id="work">
     <div class="wrap">
       <div class="sec-head">
         <h2>Selected work</h2>
+        <span class="hand">three games, three roles</span>
       </div>
 
-      <div class="work-list">
-
-        <article class="work" data-reveal="card">
+      <div class="work-list fichas">
+        <article class="work ficha" data-reveal="card">
+          <p class="ficha-head"><span>Quest design</span><span>2024–2025</span></p>
           <div class="work-media">
-            <figure class="shot" style="--ratio:16 / 10">
-  <div class="shot-frame">
-    <div class="shot-empty"><span class="tag">Image slot</span><span>Key art or in-game shot of Forgotten Runiverse</span><code>assets/img/forgotten-runiverse-cover.jpg</code></div>
-    <img data-base="assets/img/forgotten-runiverse-cover" src="assets/img/forgotten-runiverse-cover.jpg" alt="Forgotten Runiverse key art" loading="lazy" decoding="async">
-  </div>
-</figure>
+            <figure class="shot" style="--ratio:16 / 10"><div class="shot-frame"><img src="assets/img/web/fr-cover.webp" width="1600" height="900" alt="Forgotten Runiverse key art" loading="lazy"></div></figure>
           </div>
           <div class="work-body">
-            <p class="meta">Bisonic&nbsp;· PC (Web3 MMORPG)&nbsp;· 2024–2025</p>
             <h3><a href="forgotten-runiverse.html">Forgotten Runiverse</a></h3>
-            <p class="role-line">Quest Designer</p>
-            <p>Web3 MMORPG. Led design and engine implementation of 15+ open world quests, FTUE analysis, and narrative design process improvements.</p>
+            <dl class="specs">
+              <div><dt>Studio</dt><dd>Bisonic</dd></div>
+              <div><dt>Platform</dt><dd>PC · Web3 MMORPG</dd></div>
+              <div><dt>Role</dt><dd>Quest Designer</dd></div>
+            </dl>
+            <p>Led design and engine implementation of 15+ open world quests, FTUE analysis, and narrative design process improvements.</p>
             <ul class="tags"><li class="tag">Shipped</li><li class="tag">MMORPG</li><li class="tag">Quest design</li></ul>
             <span class="btn btn--sm more">Read more <span aria-hidden="true">→</span></span>
           </div>
         </article>
 
-        <article class="work" data-reveal="card">
+        <article class="work ficha" data-reveal="card">
+          <p class="ficha-head"><span>Systems &amp; economy</span><span>2023–2024</span></p>
           <div class="work-media">
-            <figure class="shot" style="--ratio:16 / 10">
-  <div class="shot-frame">
-    <div class="shot-empty"><span class="tag">Image slot</span><span>Key art or in-game shot of Civ Royale</span><code>assets/img/civ-royale-cover.jpg</code></div>
-    <img data-base="assets/img/civ-royale-cover" src="assets/img/civ-royale-cover.jpg" alt="Civ Royale key art" loading="lazy" decoding="async">
-  </div>
-</figure>
+            <figure class="shot" style="--ratio:16 / 10"><div class="shot-frame"><img src="assets/img/web/cr-cover.webp" width="1200" height="675" alt="Civ Royale key art" loading="lazy"></div></figure>
           </div>
           <div class="work-body">
-            <p class="meta">Roamer Games&nbsp;· iOS / Android&nbsp;· 2023–2024</p>
             <h3><a href="civ-royale.html">Civ Royale</a></h3>
-            <p class="role-line">Game Designer</p>
-            <p>Mobile 4X strategy game. Designed core mechanics, executed level design in Unity, created Season Pass systems and general economy.</p>
+            <dl class="specs">
+              <div><dt>Studio</dt><dd>Roamer Games</dd></div>
+              <div><dt>Platform</dt><dd>iOS / Android · 4X strategy</dd></div>
+              <div><dt>Role</dt><dd>Game Designer</dd></div>
+            </dl>
+            <p>Designed core mechanics, executed level design in Unity, created Season Pass systems and general economy.</p>
             <ul class="tags"><li class="tag">Shipped</li><li class="tag">Mobile 4X</li><li class="tag">Systems design</li><li class="tag">Level design</li></ul>
             <span class="btn btn--sm more">Read more <span aria-hidden="true">→</span></span>
           </div>
         </article>
 
-        <article class="work" data-reveal="card">
+        <article class="work ficha" data-reveal="card">
+          <p class="ficha-head"><span>Live ops &amp; narrative</span><span>2019–2022</span></p>
           <div class="work-media">
-            <figure class="shot" style="--ratio:16 / 10">
-  <div class="shot-frame">
-    <div class="shot-empty"><span class="tag">Image slot</span><span>Cover image</span><code>assets/img/frozen-adventures-cover.jpg</code></div>
-    <img data-base="assets/img/frozen-adventures-cover" src="assets/img/frozen-adventures-cover.jpg" alt="Frozen Adventures gameplay" loading="lazy" decoding="async">
-  </div>
-</figure>
+            <figure class="shot" style="--ratio:16 / 10"><div class="shot-frame"><img src="assets/img/web/fa-cover.webp" width="1200" height="675" alt="Disney Frozen Adventures key art" loading="lazy"></div></figure>
           </div>
           <div class="work-body">
-            <p class="meta">Jam City&nbsp;· iOS / Android&nbsp;· 2019–2022</p>
             <h3><a href="frozen-adventures.html">Disney Frozen Adventures</a></h3>
-            <p class="role-line">QA Lead → QA Manager → Product Manager → Game Designer</p>
-            <p>Mobile match-3 for Disney. Designed narrative content, season events and sales, Live Ops features, and economy balancing across multiple roles.</p>
-            <ul class="tags"><li class="tag">Shipped</li><li class="tag">Disney</li><li class="tag">Live ops</li><li class="tag">Economy</li></ul>
+            <dl class="specs">
+              <div><dt>Studio</dt><dd>Jam City</dd></div>
+              <div><dt>Platform</dt><dd>iOS / Android · Match-3</dd></div>
+              <div><dt>Role</dt><dd>QA Lead → QA Manager → Product Manager → Game Designer</dd></div>
+            </dl>
+            <p>Designed narrative content, season events and sales, Live Ops features, and economy balancing across multiple roles.</p>
+            <ul class="tags"><li class="tag">Shipped</li><li class="tag">Disney</li><li class="tag">Live Ops</li><li class="tag">Economy</li></ul>
             <span class="btn btn--sm more">Read more <span aria-hidden="true">→</span></span>
           </div>
         </article>
-
       </div>
     </div>
   </section>
 
+  <!-- Featured case study as a quest flow -->
   <section class="section" id="case-study">
     <div class="wrap">
       <div class="sec-head">
         <h2>Featured case study</h2>
         <span class="hand">how one small quest gets built</span>
       </div>
-      <div class="teaser teaser--fade" data-reveal="card">
-        <div class="teaser-copy">
-          <p class="label">Forgotten Runiverse&nbsp;· 2024</p>
-          <h3>Into the Wild</h3>
-          <p>An optional exploration quest with a trapped wizard, a time portal and three ways to solve it. The case study covers the pitch, the flow, the interaction design and the hidden layer for players who keep talking to NPCs after the quest is done.</p>
-          <div class="cta-row">
-            <a class="btn btn--primary" href="into-the-wild.html">Read the case study <span aria-hidden="true">→</span></a>
-            <span class="start-note" aria-hidden="true">
-              <svg viewBox="0 0 44 26" focusable="false"><path pathLength="1" d="M42 18C34 24 20 22 9 11"/><path pathLength="1" class="head" d="M8 18L8.5 10.5L15.5 9.5"/></svg>
-              <span>start here</span>
-            </span>
+
+      <div class="quest" data-free>
+        <div class="quest-top">
+          <div class="teaser-copy">
+            <p class="label">Forgotten Runiverse&nbsp;· 2024</p>
+            <h3>Into the Wild</h3>
+            <p>An optional exploration quest with a trapped wizard, a time portal and three ways to solve it. The case study covers the pitch, the flow, the interaction design and the hidden layer for players who keep talking to NPCs after the quest is done.</p>
+            <div class="cta-row">
+              <a class="btn btn--primary" href="into-the-wild.html">Read the case study <span aria-hidden="true">→</span></a>
+            </div>
           </div>
+          <figure class="quest-map">
+            <img src="assets/img/web/itw-map.webp" width="1000" height="869" alt="Top-down map of the quest area, with the quest's steps numbered and joined by lines" loading="lazy">
+            <figcaption>quest map, steps 1 → 7</figcaption>
+          </figure>
         </div>
-        <ol class="trail draw" aria-label="Structure of the quest">
-          <li>Discovery hooks<small>notes, creatures, a worried friend</small></li>
-          <li>Core objective<small>free the wizard with yellow magic</small></li>
-          <li>Three ways to solve it<small>earlier quest, player forges, exploration</small></li>
-          <li>Reward<small>a recipe that reuses an existing asset</small></li>
-          <li class="is-hidden">Hidden layer<small>no marker, no objective, for the curious</small></li>
+
+        <ol class="qflow" aria-label="Structure of the quest">
+          <li><b>Discovery hooks</b><small>notes, creatures, a worried friend</small></li>
+          <li><b>Core objective</b><small>free the wizard with yellow magic</small></li>
+          <li><b>Three ways to solve it</b><small>earlier quest, player forges, exploration</small></li>
+          <li><b>Reward</b><small>a recipe that reuses an existing asset</small></li>
+          <li class="is-hidden"><b>Hidden layer</b><small>no marker, no objective, for the curious</small></li>
         </ol>
       </div>
     </div>
   </section>
 
-  <!-- Personal work: remove the hidden attribute once there is a Godot prototype to show. -->
-  <section class="section" id="prototypes" hidden>
-    <div class="wrap">
-      <div class="sec-head">
-        <h2>On the desk</h2>
-        <span class="hand">prototypes in Godot</span>
-      </div>
-      <article class="work">
-        <div class="work-media">
-          <figure class="shot" style="--ratio:16 / 10">
-  <div class="shot-frame">
-    <div class="shot-empty"><span class="tag">Image slot</span><span>GIF or screenshot of the prototype</span><code>assets/img/prototype-1.jpg</code></div>
-    <img data-base="assets/img/prototype-1" src="assets/img/prototype-1.jpg" alt="Prototype screenshot" loading="lazy" decoding="async">
-  </div>
-</figure>
-        </div>
-        <div class="work-body">
-          <p class="meta">Personal project&nbsp;· Godot&nbsp;· 2026</p>
-          <h3>Prototype title</h3>
-          <p>One paragraph on the question the prototype answers and what you learned building it.</p>
-          <ul class="tags"><li class="tag">Prototype</li><li class="tag">Godot</li></ul>
-          <a class="link-quiet" href="#">Play it on itch.io ↗</a>
-        </div>
-      </article>
-    </div>
-  </section>
-
+  <!-- Teammates -->
   <section class="section" id="testimonials">
     <div class="wrap">
       <div class="sec-head">
         <h2>What teammates say</h2>
-        <span class="hand">from people I worked with</span>
+        <span class="hand">playtest feedback, kind of</span>
       </div>
       <div class="quotes" data-reveal>
         <figure class="quote"><blockquote>Santiago is one of the best game designers I know. At every decision point he considers player experience and how each action integrates into the larger experience. He's also highly organized, a real wizard with a spreadsheet, and good at developing clear communication between departments.</blockquote><figcaption><b>Jon Olson</b><span>Narrative Designer/Writer, colleague at Bisonic</span></figcaption></figure>
@@ -216,6 +207,7 @@
     </div>
   </section>
 
+  <!-- Contact -->
   <section class="cta-band" id="hire">
     <div class="wrap">
       <div>
@@ -230,6 +222,7 @@
   </section>
 
 </main>
+
 <footer class="site-footer">
   <div class="wrap">
     <div>

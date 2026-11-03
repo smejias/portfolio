@@ -1,0 +1,168 @@
+/* ==========================================================================
+   Home as a game design document. Loaded after style.css, only by index.html.
+   Same notebook (paper grid, blue ink, orange for clickable, hand notes,
+   rubber stamps); the new pieces come from the craft itself: a document
+   header, a character sheet, a core-loop diagram, project spec cards and a
+   quest flow. Light theme only.
+   ========================================================================== */
+
+/* ---------- Document header strip ---------- */
+
+.doc-bar {
+  display: flex; justify-content: space-between; gap: 16px; margin: 0 0 calc(var(--u) * 2);
+  height: var(--u); padding: 0 2px;
+  font: 500 0.68rem/var(--u) var(--f-mono); text-transform: uppercase; letter-spacing: 0.12em; color: var(--ink-3);
+  border-block: 1.5px solid var(--ink);
+}
+.doc-bar span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+@media (max-width: 759px) { .doc-bar .doc-mid { display: none; } }
+@media (max-width: 420px) { .doc-bar span:last-child { display: none; } }
+
+/* ---------- Hero ---------- */
+
+.hero { padding-block: var(--u) calc(var(--u) * 2); }
+.g-hero { align-items: start; }
+@media (min-width: 900px) { .g-hero { grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: 0 64px; } }
+.g-hero .hero-copy > .loop, .g-hero .hero-copy > .cta-row { margin-top: var(--u); }
+
+/* core loop: his own sentence, drawn as the loop it describes */
+.loop { margin: 0; display: grid; gap: 14px; max-width: 34em; }
+.loop figcaption { color: var(--ink-2); line-height: 1.6; font-size: 1.02rem; }
+.loop figcaption .label { margin-bottom: 4px; color: var(--accent); }
+.loop svg { width: min(100%, 440px); height: auto; overflow: visible; }
+.loop .node { fill: var(--card); stroke: var(--ink); stroke-width: 1.5; }
+.loop .node--b { fill: var(--accent); stroke: var(--ink); }
+.loop .node-t { font: 600 12px/1 var(--f-mono); letter-spacing: 0.12em; text-anchor: middle; fill: var(--ink); }
+.loop .node--b + .node-t { fill: var(--on-accent); }
+.loop svg { margin-top: 4px; }
+.loop .arc { fill: none; stroke: var(--accent); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 1; stroke-dashoffset: 0; }
+.loop .hand-t { font: 600 20px/1 var(--f-hand); fill: var(--accent); text-anchor: middle; }
+.js .loop .arc { stroke-dasharray: 1; transition: stroke-dashoffset 0.9s cubic-bezier(0.65, 0, 0.35, 1) 0.5s; }
+.js .loop:not(.in) .arc { stroke-dashoffset: 1; }
+
+/* character sheet */
+.sheet {
+  position: relative; margin-top: 10px;
+  background: var(--card); border: 1.5px solid var(--ink); border-radius: 6px;
+  box-shadow: 8px 8px 0 var(--accent-soft), var(--shadow); transform: rotate(0.8deg);
+  transition: transform 0.35s ease;
+}
+.sheet:hover { transform: rotate(0deg) translateY(-3px); }
+.sheet::before {  /* tape */
+  content: ""; position: absolute; z-index: 3; top: -13px; left: 50%; width: 88px; height: 26px;
+  background: var(--accent-soft); border: 1px solid var(--line); transform: translateX(-50%) rotate(-2deg);
+}
+.sheet-head {
+  display: flex; justify-content: space-between; align-items: center; height: var(--u); padding: 0 16px;
+  font: 600 0.68rem/1 var(--f-mono); text-transform: uppercase; letter-spacing: 0.12em; color: var(--ink-2);
+  border-bottom: 1.5px solid var(--ink);
+}
+.sheet-head span:last-child { color: var(--accent); }
+.sheet-portrait {
+  position: relative; height: clamp(250px, 26vw, 320px); overflow: hidden; isolation: isolate;
+  border-bottom: 1.5px solid var(--ink);
+  background-color: var(--paper);
+  background-image: linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size: 14px 14px;
+}
+.sheet-portrait::before {  /* ink sun behind the head */
+  content: ""; position: absolute; z-index: -1; width: 62%; aspect-ratio: 1; left: 30%; top: 12%;
+  border-radius: 50%; background: var(--accent); border: 1.5px solid var(--ink);
+}
+.sheet-portrait img { position: absolute; bottom: 0; left: 26%; height: 100%; width: auto; max-width: none; }
+.sheet-note {
+  position: absolute; left: 14px; top: 34%; font: 600 1.45rem/1 var(--f-hand); color: var(--accent); rotate: -8deg;
+}
+.sheet-note::after {  /* little arrow toward the face */
+  content: ""; position: absolute; left: 62%; top: 110%; width: 46px; height: 26px;
+  border-bottom: 2px solid currentColor; border-right: 2px solid currentColor; border-radius: 0 0 30px 0; rotate: -12deg;
+}
+.sheet-stats { margin: 0; padding: 6px 16px; display: grid; }
+.sheet-stats > div { display: grid; grid-template-columns: 7.5em minmax(0, 1fr); gap: 12px; align-items: baseline; padding: 6px 0; border-bottom: 1px dashed var(--line); }
+.sheet-stats > div:last-child { border-bottom: 0; }
+.sheet-stats dt { font: 500 0.66rem/1.4 var(--f-mono); text-transform: uppercase; letter-spacing: 0.1em; color: var(--ink-3); }
+.sheet-stats dd { margin: 0; font-size: 0.95rem; line-height: 1.4; font-weight: 550; color: var(--ink); }
+.sheet-stats dd b { font: 400 1.15rem/1 var(--f-display); color: var(--accent); }
+.sheet .avail { margin: 0 16px 16px; width: auto; animation: none; line-height: 1.4; padding-block: 7px; }
+.sheet .avail i { margin-top: 5px; }
+
+/* ---------- Project spec cards ("fichas") ---------- */
+
+.fichas { display: grid; gap: calc(var(--u) * 2) 28px; grid-template-columns: minmax(0, 1fr); padding-top: 24px; }
+@media (min-width: 720px) and (max-width: 1019px) { .fichas { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (min-width: 1020px) { .fichas { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+.fichas .work {
+  display: flex; flex-direction: column; gap: 0; padding: 0; align-items: stretch;
+  grid-template-columns: none;
+}
+.fichas .work::before { left: 16px; }
+.ficha-head {
+  display: flex; justify-content: space-between; gap: 12px; margin: 0; height: var(--u); padding: 0 16px;
+  font: 600 0.66rem/var(--u) var(--f-mono); text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent);
+  border-bottom: 1.5px dashed var(--line);
+}
+.ficha-head span:last-child { color: var(--ink-3); font-weight: 500; }
+.fichas .work-media { padding: 14px 14px 0; }
+.fichas .work-media::before { inset: 14px 14px 0; }
+.fichas .shot-frame { background-image: none; }
+@media (hover: hover) and (pointer: fine) {
+  .fichas .work:hover .work-media .shot, .fichas .work:focus-within .work-media .shot { translate: 0 -8px; rotate: -1deg; }
+}
+.fichas .work-body { padding: 16px 16px 18px; gap: 12px; flex: 1; }
+.fichas .work h3 { font-size: 1.45rem; }
+.specs { margin: 0; width: 100%; display: grid; border-block: 1px dashed var(--line); }
+.specs > div { display: grid; grid-template-columns: 6.2em minmax(0, 1fr); gap: 10px; align-items: baseline; padding: 5px 0; }
+.specs > div + div { border-top: 1px dashed var(--line-soft); }
+.specs dt { font: 500 0.64rem/1.5 var(--f-mono); text-transform: uppercase; letter-spacing: 0.1em; color: var(--ink-3); }
+.specs dd { margin: 0; font-size: 0.9rem; line-height: 1.45; font-weight: 600; color: var(--ink); }
+.fichas .work-body p { font-size: 0.97rem; line-height: 1.55; }
+.fichas .work .more { margin-top: auto; }
+
+/* ---------- Case study as a quest flow ---------- */
+
+.quest {
+  background: var(--card); border: 1.5px solid var(--ink); border-radius: 6px;
+  padding: clamp(20px, 3vw, 40px); box-shadow: 8px 8px 0 var(--accent-soft);
+}
+.quest-top { display: grid; gap: 32px; grid-template-columns: minmax(0, 1fr); align-items: center; }
+@media (min-width: 900px) { .quest-top { grid-template-columns: minmax(0, 6fr) minmax(0, 5fr); gap: 56px; } }
+.quest .teaser-copy h3 { font-size: clamp(2rem, 1.4rem + 2vw, 2.8rem); line-height: 1.1; }
+.quest .teaser-copy p:not(.label) { font-size: 1.05rem; color: var(--ink-2); }
+.quest-map { position: relative; margin: 0; transform: rotate(1.4deg); }
+.quest-map img { display: block; width: 100%; height: auto; aspect-ratio: 4 / 3; object-fit: cover; border: 1.5px solid var(--ink); border-radius: 4px; }
+.quest-map::before {
+  content: ""; position: absolute; z-index: 2; top: -12px; left: 18%; width: 80px; height: 24px;
+  background: var(--accent-soft); border: 1px solid var(--line); transform: rotate(-4deg);
+}
+.quest-map figcaption { margin-top: 6px; font: 600 1.2rem/1 var(--f-hand); color: var(--accent); text-align: right; }
+
+.qflow { list-style: none; margin: calc(var(--u) * 1.5) 0 0; padding: 0; counter-reset: step; display: grid; gap: 18px; }
+.qflow li { counter-increment: step; position: relative; padding-left: 46px; display: flex; flex-direction: column; gap: 2px; }
+.qflow li::before {
+  content: counter(step); position: absolute; left: 0; top: -2px; width: 30px; height: 30px; box-sizing: border-box;
+  display: grid; place-items: center; border: 2px solid var(--accent); border-radius: 50%; background: var(--card);
+  font: 700 0.78rem/1 var(--f-mono); color: var(--accent);
+}
+.qflow li:first-child::before { content: "!"; background: var(--accent); color: var(--on-accent); }
+.qflow li.is-hidden::before { content: "?"; border-style: dashed; }
+.qflow li::after {  /* dashed path to the next node */
+  content: ""; position: absolute; left: 14px; top: 32px; bottom: -18px; border-left: 2px dashed var(--accent);
+}
+.qflow li:last-child::after { display: none; }
+.qflow b { font-weight: 650; line-height: 1.35; }
+.qflow small { font: 500 0.76rem/1.45 var(--f-mono); color: var(--ink-3); }
+.qflow li.is-hidden b { color: var(--ink-2); }
+@media (min-width: 900px) {
+  .qflow { grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 20px; padding-top: calc(var(--u) * 0.5); border-top: 1px dashed var(--line); }
+  .qflow li { padding-left: 0; padding-top: 44px; padding-right: 6px; }
+  .qflow li::before { top: 0; }
+  .qflow li::after { left: 38px; right: -14px; top: 14px; bottom: auto; border-left: 0; border-top: 2px dashed var(--accent); }
+}
+
+/* ---------- Teammates ---------- */
+
+.quote { box-shadow: 6px 6px 0 var(--accent-soft); }
+
+/* ---------- Contact ---------- */
+
+.cta-band .actions .link-quiet { font-size: 1.05rem; }

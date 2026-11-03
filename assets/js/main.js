@@ -501,7 +501,7 @@
   }
 
   function snapBoxes(u) {
-    var els = $$(SNAP).filter(isRendered);
+    var els = $$(SNAP).filter(isRendered).filter(function (el) { return !el.closest('[data-free]'); });
     els.forEach(function (el) { el.style.minHeight = ''; });
     els.map(function (el) { return { el: el, d: depthOf(el) }; })
       .sort(function (a, b) { return b.d - a.d; })
@@ -549,7 +549,7 @@
       while ((tn = walker.nextNode())) {
         if (!/\S/.test(tn.nodeValue)) continue;
         var el = tn.parentElement;
-        if (!el || el.closest('svg, script, style, [hidden], [aria-hidden="true"]')) continue;
+        if (!el || el.closest('svg, script, style, [hidden], [aria-hidden="true"], [data-free]')) continue;  /* data-free: blocks laid out on their own grid */
         var owner = el;
         while (owner && /^inline|^contents/.test(getComputedStyle(owner).display)) owner = owner.parentElement;
         if (!owner || seen.indexOf(owner) !== -1) continue;
