@@ -16,6 +16,8 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@600&family=Figtree:wght@400..700&family=JetBrains+Mono:wght@400..500&family=Young+Serif&display=swap">
 <link rel="stylesheet" href="assets/css/style.css">
+<link rel="stylesheet" href="assets/css/carousel.css">
+<script>document.documentElement.className+=" deck-on";</script>
 </head>
 <body id="top">
 <a class="skip" href="#main">Skip to content</a>
@@ -34,9 +36,10 @@
     </nav>
   </div>
 </header>
-<main id="main">
+<main id="main" class="deck" role="region" aria-roledescription="carousel" aria-label="Portfolio sections">
+<div class="deck-track" id="deck-track">
 
-  <section class="hero section--first">
+  <section class="hero section--first view" id="intro" data-label="Hello">
     <div class="wrap hero-grid">
       <div class="hero-copy">
         <p class="eyebrow">Hello there!</p>
@@ -46,7 +49,7 @@
         <p class="lede">Particularly interested in the intersection of <mark>systems</mark> and <mark>narrative</mark>: how mechanics can carry story and story can give meaning to systems.</p>
         <p class="avail"><i aria-hidden="true"></i><span>Open to full-time roles and select freelance <span class="nowrap">projects&nbsp;· Remote</span></span></p>
         <div class="cta-row">
-          <a class="btn btn--primary" href="index.html#work">View work <span aria-hidden="true">↓</span></a>
+          <a class="btn btn--primary" href="#work">View work <span aria-hidden="true">→</span></a>
           <a class="link-quiet" href="https://calendar.app.google/2KfUpY6mjVkL8NZu5" target="_blank" rel="noopener">Book a meeting ↗</a>
           <a class="link-quiet" href="https://www.linkedin.com/in/santiago-javier-mejias-/" target="_blank" rel="noopener">LinkedIn ↗</a>
           <a class="btn" href="assets/Santiago-Mejias-CV.pdf">Download CV</a>
@@ -75,7 +78,7 @@
     </div>
   </section>
 
-  <section class="section" id="work">
+  <section class="section view" id="work" data-label="Work">
     <div class="wrap">
       <div class="sec-head">
         <h2>Selected work</h2>
@@ -144,7 +147,7 @@
     </div>
   </section>
 
-  <section class="section" id="case-study">
+  <section class="section view" id="case-study" data-label="Case study">
     <div class="wrap">
       <div class="sec-head">
         <h2>Featured case study</h2>
@@ -175,7 +178,7 @@
   </section>
 
   <!-- Personal work: remove the hidden attribute once there is a Godot prototype to show. -->
-  <section class="section" id="prototypes" hidden>
+  <section class="section view" id="prototypes" data-label="On the desk" hidden>
     <div class="wrap">
       <div class="sec-head">
         <h2>On the desk</h2>
@@ -201,7 +204,7 @@
     </div>
   </section>
 
-  <section class="section" id="testimonials">
+  <section class="section view" id="testimonials" data-label="Teammates">
     <div class="wrap">
       <div class="sec-head">
         <h2>What teammates say</h2>
@@ -216,7 +219,7 @@
     </div>
   </section>
 
-  <section class="cta-band" id="hire">
+  <section class="cta-band view" id="hire" data-label="Work together">
     <div class="wrap">
       <div>
         <h2>Let's work together</h2>
@@ -229,6 +232,7 @@
     </div>
   </section>
 
+</div>
 </main>
 <footer class="site-footer">
   <div class="wrap">
@@ -262,5 +266,6 @@
   </div>
 </footer>
 <script src="assets/js/main.js" defer></script>
+<script src="assets/js/carousel.js" defer></script>
 </body>
 </html>
