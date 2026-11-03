@@ -87,7 +87,7 @@ mark{background:linear-gradient(transparent 60%,var(--yellow) 60%);color:inherit
 .event-body{position:absolute;z-index:1;left:0;right:0;bottom:4px;display:block;padding:0 15px}
 .event-body b{display:block;font-family:var(--f-display);font-style:italic;font-weight:800;font-size:36px;line-height:.95;text-transform:uppercase;color:var(--red);white-space:nowrap;font-size:clamp(30px,2.5vw,36px)}
 .event-body small{display:block;margin-top:6px;font-size:14px;color:#C9C8FF}
-.event-body em{display:block;margin:4px 0 0 -4px;font-family:var(--f-display);font-style:italic;font-weight:700;font-size:clamp(14px,1.18vw,17px);line-height:1.2;letter-spacing:.04em;text-transform:uppercase;color:var(--yellow)}
+.event-body em{display:block;margin:4px 0 0 -4px;font-family:var(--f-display);font-style:italic;font-weight:700;font-size:clamp(13px,1.1vw,16px);line-height:1.2;letter-spacing:.04em;text-transform:uppercase;color:var(--yellow)}
 
 /* Stats band */
 .stats{position:absolute;left:0;right:0;bottom:0;z-index:4;height:var(--band-h);background:var(--red);color:#fff}
@@ -205,6 +205,30 @@ mark{background:linear-gradient(transparent 60%,var(--yellow) 60%);color:inherit
   .brand{font-size:19px}
   .tab{padding:0 9px;font-size:15px}
   .btn{font-size:20px}
+}
+/* Entrance: one short sequence on load. Backwards fill only, so hover transforms keep working and the page is complete if animation is off. */
+@keyframes in-left{from{opacity:0;transform:translateX(-40px)}}
+@keyframes in-up{from{opacity:0;transform:translateY(28px)}}
+@keyframes in-right{from{opacity:0;transform:translateX(64px)}}
+@keyframes in-bar{from{transform:translateX(-100%)}}
+@keyframes in-band{from{transform:translateY(100%)}}
+@keyframes in-plate{from{transform:skewX(var(--slash)) scaleX(0)}}
+@keyframes in-fade{from{opacity:0}}
+@keyframes in-panel{from{clip-path:polygon(100% 0,100% 0,100% 100%,100% 100%)}}
+@media (prefers-reduced-motion:no-preference){
+  .top{animation:in-bar .5s cubic-bezier(.2,.8,.2,1) backwards}
+  .hero h1 .l1{animation:in-left .55s cubic-bezier(.2,.8,.2,1) .15s backwards}
+  .hero h1 .l2{animation:in-left .55s cubic-bezier(.2,.8,.2,1) .27s backwards}
+  .role{animation:in-fade .3s ease .5s backwards}
+  .role::before{transform-origin:left center;animation:in-plate .45s cubic-bezier(.2,.8,.2,1) .42s backwards}
+  .lede{animation:in-up .5s ease .62s backwards}
+  .hero-photo{animation:in-up .7s cubic-bezier(.2,.8,.2,1) .35s backwards}
+  .event{animation:in-right .6s cubic-bezier(.2,.8,.2,1) .6s backwards}
+  .hero-cta{animation:in-up .5s ease .8s backwards}
+  .stats{animation:in-band .55s cubic-bezier(.2,.8,.2,1) .45s backwards}
+}
+@media (prefers-reduced-motion:no-preference) and (min-width:901px){
+  .hero-right{animation:in-panel .75s cubic-bezier(.2,.8,.2,1) .05s backwards}
 }
 @media (prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}

@@ -38,4 +38,25 @@
       else fallback();
     });
   });
+
+  /* Stats count up once, after the band slides in. */
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (!reduce) {
+    document.querySelectorAll('.stats b').forEach(function (el) {
+      var m = /^(\d+)(.*)$/.exec(el.textContent.trim());
+      if (!m) return;
+      var end = parseInt(m[1], 10), suffix = m[2];
+      el.textContent = '0' + suffix;
+      setTimeout(function () {
+        var t0 = null, dur = 1100;
+        function step(ts) {
+          if (t0 === null) t0 = ts;
+          var p = Math.min(1, (ts - t0) / dur), e = 1 - Math.pow(1 - p, 3);
+          el.textContent = Math.round(end * e) + suffix;
+          if (p < 1) requestAnimationFrame(step);
+        }
+        requestAnimationFrame(step);
+      }, 650);
+    });
+  }
 })();
