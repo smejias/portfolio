@@ -61,7 +61,7 @@ a{color:inherit}
 .hero h1 span{display:block}
 .hero h1 .l1{color:var(--ink)}
 .hero h1 .l2{color:var(--red);padding-left:.3em}
-.role{position:relative;isolation:isolate;display:inline-block;margin:22px 0 22px;padding:6px 22px;font-family:var(--f-display);font-style:italic;font-weight:700;font-size:24px;letter-spacing:.04em;text-transform:uppercase;color:#fff}
+.role{position:relative;isolation:isolate;display:inline-block;margin:22px 0 22px;padding:6px 22px;font-family:var(--f-display);font-style:italic;font-weight:700;font-size:24px;letter-spacing:.04em;text-transform:uppercase;color:var(--ink)}
 .role::before{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(90deg,var(--red),var(--yellow));transform:skewX(var(--slash))}
 .lede{max-width:470px;margin:0 0 14px}
 .lede strong{font-weight:700}
