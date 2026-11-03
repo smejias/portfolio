@@ -74,10 +74,13 @@ mark{background:linear-gradient(transparent 60%,var(--yellow) 60%);color:inherit
 .hero-cta .links a{text-decoration:underline;text-underline-offset:4px;text-decoration-thickness:2px}
 .hero-cta .links a:hover{color:var(--yellow)}
 
-/* Case study as an event card: square, full-bleed image, yellow hairline */
+/* Case study as an event card: square, full-bleed image; yellow outline only on hover, focus and click (same as the work cards) */
 .event{position:absolute;top:38px;right:max(32px,4vw);width:clamp(250px,19.7vw,320px);aspect-ratio:1;display:block;color:#fff;text-decoration:none;transition:transform .15s ease}
-.event:hover{transform:translate(-3px,-3px)}
-.event-in{position:absolute;inset:0;display:block;overflow:hidden;background:var(--bar);border:1px solid var(--yellow);box-shadow:0 6px 18px rgba(0,0,0,.35)}
+.event::before{content:"";position:absolute;inset:-4px;background:var(--yellow);opacity:0;transition:opacity .15s ease}
+.event:hover,.event:focus-visible{transform:translateY(-6px)}
+.event:active{transform:translateY(-3px)}
+.event:hover::before,.event:focus-visible::before,.event:active::before{opacity:1}
+.event-in{position:absolute;inset:0;display:block;overflow:hidden;background:var(--bar);box-shadow:0 6px 18px rgba(0,0,0,.35)}
 .event-in img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 .event-in::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(52,55,140,0) 0%,var(--bar) 100%)}
 .event-tag{position:absolute;z-index:2;left:-23px;top:-6px;padding:2px 12px;background:var(--yellow);color:var(--ink);font-family:var(--f-display);font-style:italic;font-weight:700;font-size:15px;letter-spacing:.05em;line-height:24px;text-transform:uppercase}
