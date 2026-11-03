@@ -69,12 +69,15 @@ a{color:inherit}
 .lede strong{font-weight:700}
 mark{background:linear-gradient(transparent 60%,var(--yellow) 60%);color:inherit;padding:0 2px}
 
-.hero-cta{position:absolute;z-index:3;right:max(32px,4vw);bottom:calc(var(--band-h) + 32px);display:flex;flex-direction:column;align-items:flex-end;gap:16px;width:max-content;max-width:340px;color:#fff}
-.avail{display:flex;align-items:center;gap:10px;margin:0 0 2px;font-size:14px;font-weight:600;text-align:right}
+.hero-cta{position:relative;z-index:3;margin-top:30px;display:grid;grid-template-columns:auto auto;justify-content:start;align-items:center;gap:16px;color:var(--ink)}
+.hero-cta .avail,.hero-cta .links{grid-column:1/-1}
+.hero-cta .btn{min-width:210px}
+@media (min-width:901px){.hero-cta .btn--light{color:var(--yellow)}.hero-cta .btn--light::before{background:var(--ink)}}
+.avail{display:flex;align-items:center;gap:10px;margin:0 0 2px;font-size:14px;font-weight:600}
 .avail i{width:10px;height:10px;border-radius:50%;background:#3DDC84;flex:none}
 .hero-cta .links{display:flex;gap:22px;font-weight:600;font-size:15px}
 .hero-cta .links a{text-decoration:underline;text-underline-offset:4px;text-decoration-thickness:2px}
-.hero-cta .links a:hover{color:var(--yellow)}
+.hero-cta .links a:hover{color:var(--indigo)}
 
 /* Case study as an event card: square, full-bleed image; yellow outline only on hover, focus and click (same as the work cards) */
 .event{position:absolute;top:38px;right:max(32px,4vw);width:clamp(250px,19.7vw,320px);aspect-ratio:1;display:block;color:#fff;text-decoration:none;transition:transform .15s ease}
@@ -150,8 +153,10 @@ mark{background:linear-gradient(transparent 60%,var(--yellow) 60%);color:inherit
 .foot a{text-decoration:none}.foot a:hover{color:var(--yellow)}
 
 /* Short screens */
-@media (max-height:780px) and (min-width:901px){
+@media (max-height:880px) and (min-width:901px){
   :root{--band-h:108px}
+  .hero-cta{margin-top:18px;gap:12px}
+  .hero-cta .btn{padding:11px 26px}
   .hero h1{font-size:clamp(80px,9.6vw,140px)}
   .hero-left{padding-top:104px}
   .role{margin:16px 0}
@@ -161,10 +166,12 @@ mark{background:linear-gradient(transparent 60%,var(--yellow) 60%);color:inherit
 
 /* Medium desktop: keep the photo clear of the button stack */
 @media (max-width:1320px) and (min-width:901px){
-  .hero-photo{left:48.4%;height:min(47%,470px)}
-  .hero-cta{max-width:290px}
-  .hero-cta .btn{min-width:0;width:100%;font-size:20px;padding:12px 22px}
+  .hero-cta .btn{min-width:0;font-size:20px}
   .avail{font-size:13px;white-space:nowrap}
+}
+@media (max-width:1200px) and (min-width:901px){
+  .hero-cta{grid-template-columns:auto;max-width:290px}
+  .hero-cta .btn{width:100%}
 }
 
 /* Tablet and phone */
@@ -179,13 +186,12 @@ mark{background:linear-gradient(transparent 60%,var(--yellow) 60%);color:inherit
   .brand{font-size:21px}
   .tab{padding:0 12px;font-size:16px}
   .hero{min-height:0;display:flex;flex-direction:column}
-  .hero-left{order:1;width:auto;padding:84px 20px 30px}
+  .hero-left{order:1;width:auto;padding:84px 20px 40px}
   .hero h1{font-size:clamp(76px,23vw,150px)}
   .role{font-size:21px;margin:18px 0}
-  .hero-cta{position:static;order:2;align-items:stretch;padding:0 20px 40px;max-width:none;width:100%;color:var(--ink)}
-  .hero-cta .btn{width:100%}
-  .avail{text-align:left;margin:4px 0 0}
-  .hero-cta .links a:hover{color:var(--indigo)}
+  .hero-cta{grid-template-columns:minmax(0,1fr);margin-top:26px}
+  .hero-cta .btn{width:100%;min-width:0}
+  .avail{margin:4px 0 0}
   .hero-right{order:3;position:relative;inset:auto;margin-top:-26px;padding:72px 20px 0;display:flex;flex-direction:column;align-items:center;clip-path:polygon(0 38px,100% 0,100% 100%,0 100%)}
   .event{position:relative;top:auto;right:auto;width:min(100%,340px);order:1;margin-left:23px}
   .hero-photo{position:relative;left:auto;bottom:auto;height:min(360px,86vw);margin-top:26px;order:2}
