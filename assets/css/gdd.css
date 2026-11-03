@@ -99,8 +99,8 @@
 
 .cta-band .actions .link-quiet { font-size: 1.05rem; }
 
-/* ---------- Titles: marker for the big ones, Figtree bold for card titles ---------- */
+/* ---------- Titles in Bricolage Grotesque (variant) ---------- */
 
-h1, h2 { font-family: "Permanent Marker", var(--f-display); letter-spacing: 0; }
-h3, h4 { font-family: var(--f-body); font-weight: 700; letter-spacing: -0.01em; }
+h1, h2, h3, h4 { font-family: "Bricolage Grotesque", var(--f-body); font-weight: 800; letter-spacing: -0.02em; }
+h1 { line-height: 1; }
 .fichas .work h3 { font-size: min(1.55rem, 7.6cqi); }
