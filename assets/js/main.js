@@ -605,6 +605,7 @@
   function initLoopVideos(scope) {
     if (!window.matchMedia || !window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     $$('video[data-loop]', scope).forEach(function (v) { v.removeAttribute('autoplay'); v.pause(); });
+    $$('iframe[data-yt]', scope).forEach(function (f) { f.src = f.src.replace('autoplay=1', 'autoplay=0'); });
   }
 
   function init(scope) {
