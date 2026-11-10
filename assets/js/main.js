@@ -371,7 +371,7 @@
   /* ---------- Project tag stamps ---------- */
   /* The tags in a project's header stamp down once, in order, the first time they scroll into view. */
   function initStamps(scope) {
-    var els = $$('.hero-card .tag, .work .tags .tag, .t-roles .tag', scope).filter(function (el) { return !el.__st; });
+    var els = $$('.hero-card .tag, .page-head .tags .tag, .work .tags .tag, .pcard .tags .tag, .t-roles .tag', scope).filter(function (el) { return !el.__st; });
     els.forEach(function (el) {
       el.__st = true;
       var i = Array.prototype.indexOf.call(el.parentNode.children, el);
@@ -482,7 +482,7 @@
           `translate`, which never changes the layout.
      Text inside boxes with a solid background hides the rules, so it is left alone. */
 
-  var SNAP = '.work, .teaser, .hero-card, .quote, .pull, .koster, .facts, .principles li, .stage-card, ' +
+  var SNAP = '.site-header, .cutout, .case-text, .pcard, .case-shot, .tl, .band, .work, .teaser, .hero-card, .quote, .pull, .koster, .facts, .principles li, .stage-card, ' +
              '.games li, .t-card, .avail, .contact-cta, .stats, .polaroid, .shot-frame, .vid, .cta-band, .email-box';
   var BASELINE_GAP = 2;   /* px between a baseline and the rule under it */
   var nudged = [];
@@ -558,7 +558,7 @@
         if (/flex|grid/.test(display) && owner === el) continue;   /* anonymous flex item */
         if (!isRendered(owner) || !onPaper(el) || isTilted(el)) continue;
         if (owner.parentElement && owner.parentElement.classList.contains('cta-row')) continue;  /* sits beside buttons */
-        if (owner.matches('.side-block h2')) continue;  /* small caps label: the 28px nudge would push it into the chips below */
+        if (owner.matches('.side-block h2, .sec-head h2, .sec-head .hand')) continue;  /* small caps label: the 28px nudge would push it into the chips below */
         owners.push({ el: owner, node: tn });
       }
     });
