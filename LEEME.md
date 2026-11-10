@@ -12,7 +12,7 @@ Sitio estático de varias páginas. No necesita instalar nada ni un servidor con
 | `school-work.html` | Proyectos de la facultad (Image Campus), separados del trabajo profesional |
 | `about.html`, `contact.html`, `404.html` | Sobre mí, contacto y página de error |
 | `assets/css/style.css` | Todo el diseño. Los colores y tipografías están al principio, como variables |
-| `assets/js/main.js` | Animaciones, tema claro/oscuro, botón de copiar mail y visor de imágenes |
+| `assets/js/main.js` | Animaciones, botón de copiar mail y visor de imágenes |
 | `assets/img/` | Acá van tus imágenes (ver más abajo) |
 | `assets/Santiago-Mejias-CV.pdf` | Tu CV en PDF, con el que enlazan los botones "Download CV". Para cambiarlo, reemplazá el archivo por otro con el mismo nombre |
 
@@ -96,7 +96,7 @@ Después de tener el dominio, conviene agregar una imagen de vista previa (`og:i
 
 ## 7. Notas técnicas
 
-- El diseño se adapta a celular, tablet y escritorio, y tiene modo claro y oscuro (sigue la preferencia del sistema y hay un botón).
+- El diseño se adapta a celular, tablet y escritorio, y usa un único tema claro.
 - **Alineación con los renglones del fondo.** La celda del fondo mide `--u` (28 px, al inicio de `style.css`). Los textos sobre el papel tienen interlineado de una celda y los espacios entre bloques son múltiplos de `--u`. `main.js` (sección "Rhythm") redondea la altura de tarjetas, imágenes y diagramas a celdas enteras y apoya la línea base de cada texto justo sobre su renglón. Se recalcula sola al cargar las fuentes y al cambiar el tamaño de la ventana.
   - Si agregás bloques nuevos, usá múltiplos de `var(--u)` en márgenes, paddings y separaciones (`calc(var(--u) * 2)`, por ejemplo). Si cambiás `--u`, todo se reacomoda.
   - Quedan fuera de la regla los textos dentro de tarjetas, botones y etiquetas (tienen fondo sólido y tapan las líneas) y las notas manuscritas inclinadas, que están así a propósito.

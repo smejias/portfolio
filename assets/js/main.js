@@ -12,36 +12,6 @@
   function $(sel, ctx) { return (ctx || doc).querySelector(sel); }
   function $$(sel, ctx) { return Array.prototype.slice.call((ctx || doc).querySelectorAll(sel)); }
 
-  /* ---------- Theme ---------- */
-  var THEME_KEY = 'sm-theme';
-  try {
-    var saved = window.localStorage.getItem(THEME_KEY);
-    if (!root.getAttribute('data-theme') && (saved === 'light' || saved === 'dark')) {
-      root.setAttribute('data-theme', saved);
-    }
-  } catch (e) { /* storage unavailable */ }
-
-  function effectiveTheme() {
-    var t = root.getAttribute('data-theme');
-    if (t) return t;
-    return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-  }
-
-  var fadeTimer;
-  doc.addEventListener('click', function (ev) {
-    var btn = ev.target.closest && ev.target.closest('[data-theme-toggle]');
-    if (!btn) return;
-    var next = effectiveTheme() === 'dark' ? 'light' : 'dark';
-    if (!reduce) {
-      root.classList.add('theme-fade');
-      window.clearTimeout(fadeTimer);
-      fadeTimer = window.setTimeout(function () { root.classList.remove('theme-fade'); }, 520);
-    }
-    root.setAttribute('data-theme', next);
-    btn.setAttribute('aria-pressed', next === 'dark' ? 'true' : 'false');
-    try { window.localStorage.setItem(THEME_KEY, next); } catch (e) { /* ignore */ }
-  });
-
   /* ---------- Copy to clipboard ---------- */
   function selectText(node) {
     if (!node || !window.getSelection) return;

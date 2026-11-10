@@ -49,55 +49,9 @@
   --dash: repeating-linear-gradient(90deg, var(--line) 0 6px, transparent 6px 10px);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    color-scheme: dark;
-    --paper: #10151C;
-    --paper-2: #171E28;
-    --card: #1A222D;
-    --ink: #E8E6DD;
-    --ink-2: #B9BEC7;
-    --ink-3: #8F97A3;
-    --line: rgba(232, 230, 221, 0.22);
-    --line-soft: rgba(232, 230, 221, 0.10);
-    --grid: rgba(143, 166, 255, 0.075);
-    --accent: #8FA6FF;
-    --accent-soft: rgba(143, 166, 255, 0.16);
-    --mark: rgba(143, 166, 255, 0.42);
-    --on-accent: #10151C;
-    --action: #FF9B62;
-    --action-soft: rgba(255, 155, 98, 0.16);
-    --on-action: #10151C;
-    --band-action: #8C3208;
-    --on-band-action: #FFF3EA;
-    --ok: #5FD09A;
-    --shadow: 0 1px 0 rgba(0, 0, 0, 0.4), 0 14px 26px -16px rgba(0, 0, 0, 0.8);
-  }
-}
 
-:root[data-theme="dark"] {
-  color-scheme: dark;
-  --paper: #10151C;
-  --paper-2: #171E28;
-  --card: #1A222D;
-  --ink: #E8E6DD;
-  --ink-2: #B9BEC7;
-  --ink-3: #8F97A3;
-  --line: rgba(232, 230, 221, 0.22);
-  --line-soft: rgba(232, 230, 221, 0.10);
-  --grid: rgba(143, 166, 255, 0.075);
-  --accent: #8FA6FF;
-  --accent-soft: rgba(143, 166, 255, 0.16);
-  --mark: rgba(143, 166, 255, 0.42);
-  --on-accent: #10151C;
-  --action: #FF9B62;
-  --action-soft: rgba(255, 155, 98, 0.16);
-  --on-action: #10151C;
-  --band-action: #8C3208;
-  --on-band-action: #FFF3EA;
-  --ok: #5FD09A;
-  --shadow: 0 1px 0 rgba(0, 0, 0, 0.4), 0 14px 26px -16px rgba(0, 0, 0, 0.8);
-}
+
+
 
 /* ---------- Base ---------- */
 
@@ -308,13 +262,9 @@ mark {
 .nav a:not(.btn):hover, .nav a[aria-current="page"] { background-size: 100% 2px; }
 .nav a:not(.btn):hover { color: var(--action); }
 
-.theme-btn {
-  display: inline-grid; place-items: center; width: 36px; height: 36px;
-  background: transparent; color: var(--ink); border: 1.5px solid var(--ink); border-radius: 50%;
-  cursor: pointer; transition: background 0.15s ease;
-}
-.theme-btn:hover { background: var(--action-soft); }
-.theme-btn svg { width: 18px; height: 18px; }
+
+
+
 
 @media (max-width: 520px) {
   .brand span { display: none; }
@@ -323,8 +273,6 @@ mark {
   .nav { gap: 8px; }
   .nav ul { gap: 10px; }
   .nav a:not(.btn) { font-size: 0.88rem; }
-  .theme-btn { width: 32px; height: 32px; }
-  .theme-btn svg { width: 16px; height: 16px; }
 }
 
 /* ---------- Sections ---------- */
@@ -390,8 +338,8 @@ mark {
   .avail { line-height: 18px; padding-block: 9px; }
   .avail i { margin-top: 4.5px; }
 }
-@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .avail { background: color-mix(in srgb, var(--ok) 38%, var(--card)); } }
-:root[data-theme="dark"] .avail { background: color-mix(in srgb, var(--ok) 38%, var(--card)); }
+
+
 @media (prefers-reduced-motion: reduce) { .avail { animation: none; } }
 
 .hero-photo { display: flex; justify-content: center; width: 100%; }
@@ -466,7 +414,7 @@ mark {
    would mark up a printout. The SVG viewBox is the IMAGE's own size and the SVG uses `slice`,
    the same mapping as object-fit: cover, so a mark stays on the thing it points at however the
    frame is cropped or stretched by the rhythm pass. Every mark is an ink stroke over a paper
-   halo so it reads on both light and dark screenshots. main.js (initDraw) adds .in on scroll. */
+   halo so it reads on any screenshot. main.js (initDraw) adds .in on scroll. */
 .annot { position: absolute; inset: 0; z-index: 2; pointer-events: none; display: none; }
 .shot.has-img .annot { display: block; }
 .annot svg { position: absolute; inset: 0; width: 100%; height: 100%; }
@@ -516,10 +464,7 @@ dialog.lightbox::backdrop { background: rgba(10, 14, 20, 0.78); }
 }
 .shot.has-img .shot-frame:focus-visible { outline: 3px solid var(--action); outline-offset: 3px; }
 
-/* theme switch: colours cross-fade only while toggling */
-.theme-fade, .theme-fade *, .theme-fade *::before, .theme-fade *::after {
-  transition: background-color .45s ease, color .45s ease, border-color .45s ease, fill .45s ease, stroke .45s ease, box-shadow .45s ease !important;
-}
+
 
 /* ---------- Work cards ---------- */
 
@@ -597,8 +542,8 @@ dialog.lightbox::backdrop { background: rgba(10, 14, 20, 0.78); }
     -webkit-mask-image: linear-gradient(90deg, transparent, #000 55%); mask-image: linear-gradient(90deg, transparent, #000 55%);
   }
 }
-@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .teaser::before { filter: saturate(0.6) brightness(0.65); } }
-:root[data-theme="dark"] .teaser::before { filter: saturate(0.6) brightness(0.65); }
+
+
 .teaser-copy { display: flex; flex-direction: column; gap: 14px; align-items: flex-start; }
 .teaser-copy p, .teaser-copy .label { margin: 0; }
 .teaser-copy p { max-width: 46ch; line-height: 1.6; }
@@ -674,8 +619,8 @@ dialog.lightbox::backdrop { background: rgba(10, 14, 20, 0.78); }
   .t-card .t-roles { min-height: 56px; align-content: flex-start; }
   .t-card::before { inset: 0 0 auto 0; height: 92px; opacity: 0.85; -webkit-mask-image: linear-gradient(0deg, transparent, #000 60%); mask-image: linear-gradient(0deg, transparent, #000 60%); }
 }
-@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .t-card::before { filter: saturate(0.75) brightness(0.8); } }
-:root[data-theme="dark"] .t-card::before { filter: saturate(0.75) brightness(0.8); }
+
+
 .t-item.is-design .t-card { box-shadow: 5px 5px 0 var(--accent-soft); }
 .t-top { min-height: 28px; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
 .t-range { font: 500 0.7rem/var(--u) var(--f-mono); letter-spacing: 0.06em; color: var(--ink-2); white-space: nowrap; }
@@ -843,8 +788,8 @@ dialog.lightbox::backdrop { background: rgba(10, 14, 20, 0.78); }
   .page-head--card .p-lede { max-width: 26em; }
   .page-head--card h1 { max-width: var(--title-max, none); }
 }
-@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .page-head--card .hero-card::before { filter: saturate(0.65) brightness(0.65); } }
-:root[data-theme="dark"] .page-head--card .hero-card::before { filter: saturate(0.65) brightness(0.65); }
+
+
 
 /* floating character decoration (decorative, never affects layout) */
 .page-head .wrap { position: relative; }
@@ -912,8 +857,7 @@ dialog.lightbox::backdrop { background: rgba(10, 14, 20, 0.78); }
   .p-side.is-stuck .facts--project::before { display: none; }
   .facts--project { transition: margin-top 0.35s cubic-bezier(0.2, 0.8, 0.2, 1); }
 }
-@media (min-width: 960px) and (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .pf-head::before { filter: saturate(0.65) brightness(0.65); } }
-@media (min-width: 960px) { :root[data-theme="dark"] .pf-head::before { filter: saturate(0.65) brightness(0.65); } }
+
 @media (prefers-reduced-motion: reduce) { .pf-head, .facts--project { transition: none; } }
 /* Forgotten Runiverse: the character idles in the corner of the project card (it follows the scroll on desktop, where the card is sticky) */
 .facts--has-char::after {
@@ -1153,7 +1097,7 @@ dialog.lightbox::backdrop { background: rgba(10, 14, 20, 0.78); }
 }
 
 @media print {
-  .site-header, .theme-btn, .skip { display: none; }
+  .site-header, .skip { display: none; }
   body { background: #fff; }
 }
 
@@ -1174,26 +1118,8 @@ dialog.lightbox::backdrop { background: rgba(10, 14, 20, 0.78); }
   margin-block: var(--u);
   scroll-margin-top: calc(var(--header-h) + 12px);
 }
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) .mr {
-    --mr-red: #FF8A80;
-    --mr-gold: #E8C45B;
-    --mr-item: #C79BF0;
-    --note-bg: #5E4F14;
-    --note-ink: #FFF0B3;
-    --note-fold: rgba(0, 0, 0, 0.35);
-    --note-tape: rgba(255, 255, 255, 0.16);
-  }
-}
-:root[data-theme="dark"] .mr {
-  --mr-red: #FF8A80;
-  --mr-gold: #E8C45B;
-  --mr-item: #C79BF0;
-  --note-bg: #5E4F14;
-  --note-ink: #FFF0B3;
-  --note-fold: rgba(0, 0, 0, 0.35);
-  --note-tape: rgba(255, 255, 255, 0.16);
-}
+
+
 
 .mr-bar { display: flex; justify-content: flex-end; padding-bottom: 6px; font-size: 0.85rem; }
 .mr-link { background: none; border: 0; padding: 2px; font: inherit; color: var(--action); text-decoration: underline; cursor: pointer; }
@@ -1322,7 +1248,7 @@ dialog.lightbox::backdrop { background: rgba(10, 14, 20, 0.78); }
 }
 .nav a:not(.btn):hover { background-size: 100% 2px; background-position: 0 100%; background-image: linear-gradient(var(--action), var(--action)); color: var(--action); }
 .nav .btn { margin: 0; }
-.theme-btn { border-width: 2px; }
+
 @media (max-width: 520px) {
   .site-header .wrap { padding: 7px 16px; gap: 0 14px; }
   .nav, .nav ul { gap: 0 14px; }
